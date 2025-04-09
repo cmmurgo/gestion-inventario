@@ -49,7 +49,8 @@ INSERT INTO `users` (`id`, `email`, `password`) VALUES
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD COLUMN `role` VARCHAR(50) NOT NULL DEFAULT 'user';
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
