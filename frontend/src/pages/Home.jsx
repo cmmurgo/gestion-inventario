@@ -1,34 +1,54 @@
-// src/Layout.jsx
-import { Link, Outlet } from 'react-router-dom';
-//import './Layout.css'; // Estilos personalizados si necesitás
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Layout() {
+function Home() {
+  const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+
+    if (!token) {
+      navigate('/');
+    } else {
+      setUserRole(role);
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    navigate('/');
+  };
+
   return (
-    <div className="d-flex">
-      {/* Sidebar */}
-      <div className="bg-dark text-white vh-100 p-3" style={{ width: '220px' }}>
-        <h4 className="text-center mb-4">Grupo N°5</h4>
-        <nav className="nav flex-column">
-          <Link className="nav-link text-white" to="/home">Inicio</Link>
-          <Link className="nav-link text-white" to="/usuarios">Usuarios</Link>
-          <Link className="nav-link text-white" to="/clientes">Clientes</Link>
-          {/* Agregá más links según necesites */}
-        </nav>
-      </div>
-
-      {/* Contenido Principal */}
-      <div className="flex-grow-1">
-        {/* Topbar */}
-        <div className="bg-primary text-white p-3 d-flex justify-content-between">
-          <span>SISTEMA DE GESTIÓN DE INVENTARIO</span>
-          <span className="me-2">USUARIO: María Perez</span>
-        </div>
-
-        {/* Vista principal */}
-        <div className="p-4">
-          <Outlet />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 text-center">
+          <div className="card shadow p-4">
+            <h2 className="mb-4">Bienvenido</h2>
+  
+            {userRole === 'admin' && (
+              <button
+                onClick={() => navigate('/register')}
+                className="btn btn-success mb-3 w-100"
+              >
+                Registrar nuevo usuario
+              </button>
+            )}
+  
+            <button
+              onClick={handleLogout}
+              className="btn btn-outline-danger w-100"
+            >
+              Cerrar sesión
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default Home;
