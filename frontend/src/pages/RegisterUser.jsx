@@ -27,9 +27,8 @@ function RegisterUser() {
   const handleRegister = async () => {
     try {
       const token = localStorage.getItem('token');
-      // await axios.post('http://192.168.100.9:3000/api/auth/register', { 
-      // await axios.post('https://gestion-inventario-1.onrender.com/api/auth/register', { 
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+      await axios.post('http://localhost:3001/api/auth/register', {       
+      // await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
             email, password, role },
         {
           headers: {
