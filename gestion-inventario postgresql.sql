@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 -- Insertar los datos
 INSERT INTO users (id, email, password, role) VALUES
-(1, 'cmmurgo@gmail.com', '$2b$10$pGiXjmcr6BGZOmu75j0kXuPTQtWvVvu3GnXipeRGYXaKEWPhrg4rK', 'user');
+(1, 'cmmurgo@gmail.com', '$2b$10$pGiXjmcr6BGZOmu75j0kXuPTQtWvVvu3GnXipeRGYXaKEWPhrg4rK', 'admin');
 
 -- Ajustar secuencia para SERIAL (si usás PostgreSQL 10+)
 SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
