@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../assets/logo.png';
 import { useUser } from '../context/UserContext.jsx';
+import { API_URL } from '../api';
 
 function Login() {
   const { setUser } = useUser()
@@ -14,7 +15,7 @@ function Login() {
   const handleLogin = async () => {
     setErrorMessage('');
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', {
+      const response = await axios.post(`${API_URL}/api/auth/login`, {
         email,
         password,
       });

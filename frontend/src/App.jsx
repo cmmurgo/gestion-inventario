@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Plantilla from './pages/Plantilla.jsx';
 import IndexUsuarios from './pages/Usuarios/index';
 import CrearUsuario from './pages/Usuarios/CrearUsuario.jsx';
+import EditarUsuario from './pages/Usuarios/EditarUsuario.jsx';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="usuarios" element={<IndexUsuarios />} />
         <Route path="usuarios/crear" element={<CrearUsuario />} />
+        <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
       </Route>
       </Routes>
     </BrowserRouter>

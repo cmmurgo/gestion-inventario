@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../api';
 
 export default function Usuarios() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function Usuarios() {
   useEffect(() => {
     const token = localStorage.getItem('token');
 
-    fetch('http://localhost:3001/api/usuarios', {
+    fetch(`${API_URL}/api/usuarios`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       }
@@ -28,6 +29,11 @@ export default function Usuarios() {
   const handleNuevoUsuario = () => {
     navigate('/usuarios/crear');
   };
+
+  const handleEditarUsuario = (id) => {
+    navigate(`/usuarios/editar/${id}`);
+  };
+
 
   return (
     <div className="container py-4">
@@ -66,7 +72,7 @@ export default function Usuarios() {
                   <td>{usuario.rol}</td>
                   <td>
                     <button className="btn btn-link text-primary me-2"><FaEye /></button>
-                    <button className="btn btn-link text-warning me-2"><FaEdit /></button>
+                    <button className="btn btn-link text-warning me-2"   onClick={() => handleEditarUsuario(usuario.id)}><FaEdit /></button>
                     <button className="btn btn-link text-danger"><FaTrash /></button>
                     </td>
                 </tr>
