@@ -86,7 +86,6 @@ export default function Usuarios() {
       {/* Acciones abajo */}
       <div className="d-flex justify-content-between mt-3">
         <button className="btn btn-success" onClick={handleNuevoUsuario}>NUEVO USUARIO</button>
-        <button className="btn btn-dark" onClick={() => navigate(-1)}>Volver</button>
       </div>
 
       {/* Paginación */}

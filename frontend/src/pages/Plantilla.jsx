@@ -17,6 +17,7 @@ import icono_promociones from '../assets/promociones.png';
 import icono_perdidas from '../assets/perdidas.png';
 import icono_inventario from '../assets/inventario.png';
 import icono_salir from '../assets/salir.png';
+import './Plantilla.css';
 
 export default function Plantilla() {
   const { user } = useUser();
@@ -74,50 +75,50 @@ export default function Plantilla() {
             style={{ width: '220px' }}
           >     
             <nav className="nav flex-column">
-              <Link className="nav-link custom-link" to="/home">
+              <Link className="custom-link boton-con-recuadro" to="/home">
                 <img src={icono_home} alt="icono_home" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Inicio
               </Link>
-              <Link className="nav-link custom-link" to="/usuarios">
+              <Link className="custom-link boton-con-recuadro" to="/usuarios">
                 <img src={icono_usuario} alt="icono_usuario" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Usuarios
               </Link>
-              <Link className="nav-link custom-link" to="/clientes">
+              <Link className="custom-link boton-con-recuadro" to="/clientes">
                 <img src={icono_clientes} alt="icono_clientes" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Cientes
               </Link>
-              <Link className="nav-link custom-link" to="/ventas">
+              <Link className="custom-link boton-con-recuadro" to="/ventas">
                 <img src={icono_ventas} alt="icono_ventas" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Ventas
               </Link>
-              <Link className="nav-link custom-link" to="/compras">
+              <Link className="custom-link boton-con-recuadro" to="/compras">
                 <img src={icono_compras} alt="icono_compras" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Ordenes de Compra
               </Link>
-              <Link className="nav-link custom-link" to="/proveedores">
+              <Link className="custom-link boton-con-recuadro" to="/proveedores">
                 <img src={icono_proveedores} alt="icono_proveedores" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Proveedores
               </Link>
-              <Link className="nav-link custom-link" to="/productos">
+              <Link className="custom-link boton-con-recuadro" to="/productos">
                 <img src={icono_productos} alt="icono_productos" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Productos
               </Link>
-              <Link className="nav-link custom-link" to="/promociones">
+              <Link className="custom-link boton-con-recuadro" to="/promociones">
                 <img src={icono_promociones} alt="icono_promociones" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Promociones
               </Link>
-              <Link className="nav-link custom-link" to="/perdidas">
+              <Link className="custom-link boton-con-recuadro" to="/perdidas">
                 <img src={icono_perdidas} alt="icono_perdidas" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Pérdidas
               </Link>
-              <Link className="nav-link custom-link" to="/inventario">
+              <Link className="custom-link boton-con-recuadro" to="/inventario">
                 <img src={icono_inventario} alt="icono_inventario" style={{ height: '35px', marginRight: '15px' }} className="me-2" />
                 Inventario
               </Link>
              
               <button
                   onClick={handleLogout}
-                  className="nav-link custom-link text-start border-0 bg-transparent"
+                  className="custom-link boton-con-recuadro"
                   style={{ cursor: 'pointer' }}
                 >
                   <img src={icono_salir} alt="icono_salir" style={{ height: '35px', marginRight: '15px' }} className="me-2" />

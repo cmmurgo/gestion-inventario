@@ -50,7 +50,7 @@ function RegisterUser() {
       const token = localStorage.getItem('token');
       const userData = { nombre, email, password, rol };
      
-        await axios.put(`http://localhost:3001/api/usuarios/${id}`, userData, {
+        await axios.put(`${API_URL}/api/usuarios/${id}`, userData, {
             headers: {
             Authorization: `Bearer ${token}`,
             },
@@ -118,7 +118,7 @@ function RegisterUser() {
       )}
 
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
-        <button className="btn btn-dark" onClick={() => navigate('/home')}>Volver</button>
+        <button className="btn btn-dark" onClick={() => navigate('/usuarios')}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>
           {id ? 'GUARDAR CAMBIOS' : 'GUARDAR'}
         </button>

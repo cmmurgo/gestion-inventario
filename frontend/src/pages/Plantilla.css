@@ -1,0 +1,9 @@
+.boton-con-recuadro {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
