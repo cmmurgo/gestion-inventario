@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import logo from '../assets/logo.png';
+import { useUser } from '../context/UserContext.jsx';
 
 function Login() {
+  const { setUser } = useUser()
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,8 +14,7 @@ function Login() {
   const handleLogin = async () => {
     setErrorMessage('');
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', {     //Para Local 
-      //const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { //Para Produccion 
+      const response = await axios.post('http://localhost:3001/api/auth/login', {
         email,
         password,
       });
@@ -20,6 +22,7 @@ function Login() {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userRole', response.data.user.role);
+        setUser(response.data.user)  
         navigate('/home');
       } else {
         setErrorMessage('Usuario o contraseña incorrectos');
@@ -34,41 +37,55 @@ function Login() {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card shadow">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-4">Iniciar sesión</h2>
-              <div className="mb-3">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Contraseña"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
-              </div>
-              {errorMessage && (
-                <div className="alert alert-danger py-2 text-center">
-                  {errorMessage}
-                </div>
-              )}
-              <button onClick={handleLogin} className="btn btn-primary w-100">
-                Entrar
-              </button>
+    <div className="min-vh-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: '#e0e0e0' }}>
+      <div className="bg-white p-4 rounded-4 shadow" style={{ width: '100%', maxWidth: '400px' }}>
+        <div className="text-center mb-4">
+          <div style={{ backgroundColor: '#6a0dad', padding: '20px' }} className="d-flex align-items-center justify-content-center">
+            <img src={logo} alt="Logo" style={{ height: '80px', marginRight: '20px' }} />
+            <div>
+              <h5 className="text-white mb-0">SISTEMA DE GESTIÓN</h5>
+              <h5 className="text-white">DE INVENTARIO</h5>
             </div>
-          </div>
+          </div>      
         </div>
+
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control bg-light border-0"
+            placeholder="usuario"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          />
+        </div>
+
+        <div className="mb-3">
+          <input
+            type="password"
+            className="form-control bg-light border-0"
+            placeholder="contraseña"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+        </div>
+
+        <div className="mb-3 text-center text-muted" style={{ fontSize: '0.9rem' }}>
+          ¿Olvidó su contraseña?
+        </div>
+
+        {errorMessage && (
+          <div className="alert alert-danger py-2 text-center">
+            {errorMessage}
+          </div>
+        )}
+
+        <button
+          onClick={handleLogin}
+          className="btn w-100 text-white"
+          style={{ backgroundColor: '#7209b7' }}
+        >
+          Ingresar
+        </button>
       </div>
     </div>
   );

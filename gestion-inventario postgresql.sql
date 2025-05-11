@@ -2,18 +2,20 @@
 BEGIN;
 
 -- Crear la tabla
-CREATE TABLE users (
+CREATE TABLE usuario (
   id SERIAL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE,
   email VARCHAR(100) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  role VARCHAR(50) NOT NULL DEFAULT 'user'
+  clave VARCHAR(255) NOT NULL,
+  rol VARCHAR(50) NOT NULL DEFAULT 'user',
+  fecha_baja TIMESTAMP
 );
 
 -- Insertar los datos
-INSERT INTO users (id, email, password, role) VALUES
-(1, 'cmmurgo@gmail.com', '$2b$10$pGiXjmcr6BGZOmu75j0kXuPTQtWvVvu3GnXipeRGYXaKEWPhrg4rK', 'admin');
+INSERT INTO usuario (id,nombre, email, clave, rol, fecha_baja) VALUES
+(1, 'Marcelo Murgo','cmmurgo@gmail.com', '$2b$10$pGiXjmcr6BGZOmu75j0kXuPTQtWvVvu3GnXipeRGYXaKEWPhrg4rK', 'admin', null);
 
--- Ajustar secuencia para SERIAL (si usás PostgreSQL 10+)
-SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+-- Ajustar secuencia para SERIAL
+SELECT setval('usuario_id_seq', (SELECT MAX(id) FROM usuario));
 
 COMMIT;
