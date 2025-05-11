@@ -36,25 +36,3 @@ exports.login = async (req, res) => {
   }
 };
 
-// Función para el registro
-exports.register = async (req, res) => {
-  const { nombre, email, password, rol } = req.body;
-
-  if (!nombre || !email || !password || !rol) {
-    return res.status(400).json({ message: 'Faltan datos' });
-  }
-
-  try {
-    const existing = await authModel.getUserByEmail(email);
-
-    if (existing) {
-      return res.status(400).json({ message: 'El usuario ya existe' });
-    }
-
-    await authModel.createUser({ nombre, email, password, rol });
-    res.status(201).json({ message: 'Usuario registrado correctamente' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al registrar el usuario' });
-  }
-};
