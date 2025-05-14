@@ -103,13 +103,15 @@ function RegisterUser() {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">ROL:</label>
-          <input
-            type="text"
+        <label className="form-label">ROL:</label>
+          <select
             className="form-control"
             value={rol}
             onChange={(e) => setRole(e.target.value)}
-          />
+          >
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>  
         </div>
       </div>
 

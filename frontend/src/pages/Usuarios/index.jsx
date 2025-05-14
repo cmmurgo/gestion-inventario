@@ -22,6 +22,8 @@ export default function Usuarios() {
 
   const modalRef = useRef(null);
 
+  const [rol, setRol] = useState('');
+
   // Cálculo de paginación sobre los usuarios filtrados
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -56,6 +58,14 @@ export default function Usuarios() {
     setUsuariosFiltrados(filtrados);
     setCurrentPage(1); // Reinicia la página actual al aplicar nuevo filtro
   }, [idFiltro, nombreFiltro, usuarios]);
+
+  useEffect(() => {
+    const userRole = localStorage.getItem('userRole');
+    if (userRole) {
+      setRol(userRole);
+    }
+  }, []);
+  //localStorage.setItem('userRole', response.data.user.role);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -109,6 +119,10 @@ export default function Usuarios() {
 
   const handleEditarUsuario = (id) => {
     navigate(`/usuarios/editar/${id}`);
+  };
+
+  const handleVerUsuario = (id) => {
+    navigate(`/usuarios/ver/${id}`);
   };
 
   const handleEliminarClick = (id) => {
@@ -169,23 +183,29 @@ export default function Usuarios() {
                   <td>{usuario.id}</td>
                   <td>{usuario.nombre}</td>
                   <td>{usuario.email}</td>
-                  <td>{usuario.rol}</td>
+                  <td>{usuario.rol === 'admin' ? 'Administrador' : 'Usuario'}</td>
                   <td>
-                    <button className="btn btn-link text-primary me-2">
+                    <button className="btn btn-link text-primary me-2"
+                      onClick={() => handleVerUsuario(usuario.id)}
+                    >
                       <FaEye />
                     </button>
-                    <button
-                      className="btn btn-link text-warning me-2"
-                      onClick={() => handleEditarUsuario(usuario.id)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="btn btn-link text-danger"
-                      onClick={() => handleEliminarClick(usuario.id)}
-                    >
-                      <FaTrash />
-                    </button>
+                    {rol === 'admin' && (
+                      <>
+                        <button
+                          className="btn btn-link text-warning me-2"
+                          onClick={() => handleEditarUsuario(usuario.id)}
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          className="btn btn-link text-danger"
+                          onClick={() => handleEliminarClick(usuario.id)}
+                        >
+                          <FaTrash />
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))
@@ -197,12 +217,14 @@ export default function Usuarios() {
           </tbody>
         </table>
       </div>
-
-      <div className="d-flex justify-content-between mt-3">
-        <button className="btn btn-success" onClick={handleNuevoUsuario}>
-          NUEVO USUARIO
-        </button>
-      </div>
+     
+      {rol === 'admin' && (
+        <div className="d-flex justify-content-between mt-3">
+          <button className="btn btn-success" onClick={handleNuevoUsuario}>
+            NUEVO USUARIO
+          </button>
+        </div>
+      )}
 
       <div className="mt-4 d-flex justify-content-center">
         <nav>
