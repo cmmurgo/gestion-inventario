@@ -70,10 +70,6 @@ function Login() {
           />
         </div>
 
-        <div className="mb-3 text-center text-muted" style={{ fontSize: '0.9rem' }}>
-          ¿Olvidó su contraseña?
-        </div>
-
         {errorMessage && (
           <div className="alert alert-danger py-2 text-center">
             {errorMessage}
