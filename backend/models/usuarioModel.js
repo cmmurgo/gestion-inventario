@@ -24,10 +24,11 @@ exports.create = async ({ nombre, email, password, rol }) => {
   );
 };
 
-exports.update = async (id, { nombre, email, rol }) => {
+exports.update = async (id, { nombre, email, password, rol }) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
   await pool.query(
-    'UPDATE usuario SET nombre = $1, email = $2, rol = $3 WHERE id = $4',
-    [nombre, email, rol, id]
+    'UPDATE usuario SET nombre = $1, email = $2, clave = $3, rol = $4 WHERE id = $5',
+    [nombre, email, hashedPassword, rol, id]
   );
 };
 
