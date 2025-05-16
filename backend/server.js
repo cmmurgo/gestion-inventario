@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/usuarios');
+const clientRoutes = require('./routes/clientes');
 
 // Middlewares primero
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(express.json());
 // Luego las rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', userRoutes);
+app.use('/api/clientes', clientRoutes);
 
 // Puerto
 const PORT = process.env.PORT || 3001;
