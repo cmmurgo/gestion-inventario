@@ -11,7 +11,10 @@ function RegisterUser() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rol, setRole] = useState('user');
+  const [mensaje, setMensaje] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [tipoMensaje, setTipoMensaje] = useState('');
+  const [mostrarMensaje, setMostrarMensaje] = useState(false);
   const [userRole, setUserRole] = useState('');
 
   // Validar login y cargar usuario si es edición
@@ -46,6 +49,24 @@ function RegisterUser() {
   }, [navigate, id]);
 
   const handleGuardar = async () => {
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMensaje('Ingrese un email válido');
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      return;
+    }
+  
+    if (password.length < 8) {
+      setMensaje('La contraseña debe tener al menos 8 caracteres');
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const userData = { nombre, email, password, rol };
@@ -61,7 +82,7 @@ function RegisterUser() {
       setPassword('');
       setRole('user');
       setErrorMessage('');
-      navigate('/home');
+      navigate('/usuarios');
     } catch (error) {
       console.error(error);
       setErrorMessage('Error al guardar usuario');
@@ -115,9 +136,13 @@ function RegisterUser() {
         </div>
       </div>
 
-      {errorMessage && (
-        <p className="text-danger mt-2">{errorMessage}</p>
-      )}
+      <div
+        className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`}
+        role="alert"
+        style={{ opacity: mostrarMensaje ? 1 : 0, transition: 'opacity 0.5s ease' }} // Añadir transición de opacidad
+      >
+        {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
+      </div>
 
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/usuarios')}>Volver</button>
