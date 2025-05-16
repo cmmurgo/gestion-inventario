@@ -46,10 +46,10 @@ exports.getUserById = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { nombre, email, rol } = req.body;
+  const { nombre, email, password, rol } = req.body;
 
   try {
-    await usuarioModel.update(id, { nombre, email, rol });
+    await usuarioModel.update(id, { nombre, email, password, rol });
     res.json({ message: 'Usuario actualizado correctamente' });
   } catch (error) {
     console.error(error);

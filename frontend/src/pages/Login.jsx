@@ -70,11 +70,9 @@ function Login() {
           />
         </div>
 
-        {errorMessage && (
-          <div className="alert alert-danger py-2 text-center">
-            {errorMessage}
-          </div>
-        )}
+         {errorMessage && (
+        <p className="text-danger mt-2">{errorMessage}</p>
+      )}     
 
         <button
           onClick={handleLogin}
