@@ -16,19 +16,23 @@ function RegisterUser() {
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const [userIdLogueado, setUserIdLogueado] = useState('');
+
 
   // Validar login y cargar usuario si es edición
   useEffect(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('userRole');
+    const userId = localStorage.getItem('userId');
+    setUserIdLogueado(userId);
 
     if (!token) {
       navigate('/');
     } else {
       setUserRole(role);
-      if (role !== 'admin') {
-        navigate('/home');
-      }
+      // if (role !== 'admin') {
+      //   navigate('/home');
+      // }
 
       if (id) {   
         axios.get(`${API_URL}/api/usuarios/${id}`, {
@@ -61,6 +65,14 @@ function RegisterUser() {
   
     if (password.length < 8) {
       setMensaje('La contraseña debe tener al menos 8 caracteres');
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      return;
+    }
+
+    if (userRole !== 'admin' && userIdLogueado !== id) {
+      setMensaje('No tiene permisos para editar usuarios');
       setTipoMensaje('error');
       setMostrarMensaje(true);
       setTimeout(() => setMostrarMensaje(false), 3000);
@@ -124,16 +136,18 @@ function RegisterUser() {
         </div>
 
         <div className="mb-3">
-        <label className="form-label">ROL:</label>
+          <label className="form-label">ROL:</label>
           <select
             className="form-control"
             value={rol}
             onChange={(e) => setRole(e.target.value)}
+            disabled={userRole !== 'admin'}
           >
             <option value="user">Usuario</option>
             <option value="admin">Administrador</option>
-          </select>  
+          </select>
         </div>
+
       </div>
 
       <div
