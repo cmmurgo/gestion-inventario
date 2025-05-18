@@ -24,10 +24,10 @@ function VerCliente() {
       navigate('/');
     } else {
       setUserRole(role);
-      if (role !== 'admin') {
-        navigate('/home');
-        return;
-      }
+      // if (role !== 'admin') {
+      //   navigate('/home');
+      //   return;
+      // }
 
       if (id) {
         axios.get(`${API_URL}/api/clientes/${id}`, {
