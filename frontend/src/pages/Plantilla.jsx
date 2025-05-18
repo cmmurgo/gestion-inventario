@@ -45,6 +45,10 @@ export default function Plantilla() {
     navigate('/');
   };
 
+  const handleClick = () => {
+    navigate(`/usuarios/editar/${user?.id}`);
+  };
+
   return (
     <div className="app-container">
       {/* Topbar */}
@@ -62,7 +66,9 @@ export default function Plantilla() {
         </div>
 
         {/* Sección derecha: usuario */}
-        <span>USUARIO: {user?.name }</span>
+        <span onClick={handleClick} style={{ cursor: 'pointer', color: 'white', textDecoration: 'underline' }}>
+           USUARIO: {user?.name}
+       </span>
       </div>
 
 

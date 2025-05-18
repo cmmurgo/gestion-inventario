@@ -4,13 +4,15 @@ import axios from 'axios';
 import logo from '../assets/logo.png';
 import { useUser } from '../context/UserContext.jsx';
 import { API_URL } from '../api';
+import RecuperarContrasena from './RecuperarContrasena';
 
 function Login() {
-  const { setUser } = useUser()
+  const { setUser } = useUser();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   const handleLogin = async () => {
     setErrorMessage('');
@@ -23,7 +25,8 @@ function Login() {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('userRole', response.data.user.role);
-        setUser(response.data.user)  
+        localStorage.setItem('userId', response.data.user.id);
+        setUser(response.data.user);
         navigate('/home');
       } else {
         setErrorMessage('Usuario o contraseña incorrectos');
@@ -47,7 +50,7 @@ function Login() {
               <h5 className="text-white mb-0">SISTEMA DE GESTIÓN</h5>
               <h5 className="text-white">DE INVENTARIO</h5>
             </div>
-          </div>      
+          </div>
         </div>
 
         <div className="mb-3">
@@ -70,9 +73,15 @@ function Login() {
           />
         </div>
 
-         {errorMessage && (
-        <p className="text-danger mt-2">{errorMessage}</p>
-      )}     
+        {errorMessage && (
+          <p className="text-danger mt-2">{errorMessage}</p>
+        )}
+
+        <p className="mt-3 text-center">
+          <a href="#" onClick={(e) => { e.preventDefault(); setMostrarModal(true); }}>
+            ¿Olvidó su contraseña?
+          </a>
+        </p>
 
         <button
           onClick={handleLogin}
@@ -82,6 +91,31 @@ function Login() {
           Ingresar
         </button>
       </div>
+
+      {/* Modal */}
+      {mostrarModal && (
+        <>
+          <div className="modal show fade d-block" tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Recuperar contraseña</h5>
+                  <button type="button" className="btn-close" onClick={() => setMostrarModal(false)}></button>
+                </div>
+                <div className="modal-body">
+                  <RecuperarContrasena />
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setMostrarModal(false)}>
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop fade show"></div>
+        </>
+      )}
     </div>
   );
 }
