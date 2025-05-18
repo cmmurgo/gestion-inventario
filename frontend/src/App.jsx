@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Plantilla from './pages/Plantilla.jsx';
@@ -10,26 +10,31 @@ import IndexClientes from './pages/Clientes/index';
 import CrearCliente from './pages/Clientes/CrearCliente.jsx';
 import EditarCliente from './pages/Clientes/EditarCliente.jsx';
 import VerCliente from './pages/Clientes/VerCliente.jsx';
+import RecuperarContrasena from './pages/RecuperarContrasena';
 import './App.css';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/" element={<Plantilla />}>
-        <Route path="/home" element={<Home />} />
-        <Route path="usuarios" element={<IndexUsuarios />} />
-        <Route path="usuarios/crear" element={<CrearUsuario />} />
-        <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
-        <Route path="usuarios/ver/:id" element={<VerUsuario />} />
-        <Route path="clientes" element={<IndexClientes />} />
-        <Route path="clientes/crear" element={<CrearCliente />} />
-        <Route path="clientes/editar/:id" element={<EditarCliente />} />
-        <Route path="clientes/ver/:id" element={<VerCliente />} />  
-      </Route>
-      </Routes>
-    </BrowserRouter>
+  return (   
+    <Routes>
+    {/* Rutas públicas */}
+    <Route path="/" element={<Login />} />
+    <Route path="/recuperar" element={<RecuperarContrasena />} />
+  
+    {/* Rutas privadas con plantilla */}
+    <Route path="/" element={<Plantilla />}>
+      <Route path="home" element={<Home />} />
+      <Route path="usuarios" element={<IndexUsuarios />} />
+      <Route path="usuarios/crear" element={<CrearUsuario />} />
+      <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
+      <Route path="usuarios/ver/:id" element={<VerUsuario />} />
+      <Route path="clientes" element={<IndexClientes />} />
+      <Route path="clientes/crear" element={<CrearCliente />} />
+      <Route path="clientes/editar/:id" element={<EditarCliente />} />
+      <Route path="clientes/ver/:id" element={<VerCliente />} />
+    </Route>
+  </Routes>
+  
+
   );
 }
 

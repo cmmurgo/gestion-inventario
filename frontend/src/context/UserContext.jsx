@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setUser({ name: decoded.nombre, role: decoded.role });
+        setUser({ id: decoded.id, name: decoded.nombre, role: decoded.role });
       } catch (e) {
         console.error('Token inválido', e);
         localStorage.removeItem('token');
