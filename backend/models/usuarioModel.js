@@ -16,6 +16,18 @@ exports.existsByEmail = async (email) => {
   return result.rows.length > 0;
 };
 
+exports.findByEmail = async (email) => {
+  const result = await pool.query('SELECT * FROM usuario WHERE email = $1', [email]); 
+  return result.rows[0]; // Devuelve el primer usuario encontrado, es para el recupero de contraseña
+};
+
+exports.updatePasswordByEmail = async (email, hashedPassword) => {
+  await pool.query(
+    'UPDATE usuario SET clave = $1 WHERE email = $2',
+    [hashedPassword, email]
+  );
+};
+
 exports.create = async ({ nombre, email, password, rol }) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   await pool.query(

@@ -21,9 +21,9 @@ function VerUsuario() {
       navigate('/');
     } else {
       setUserRole(role);
-      if (role !== 'admin') {
-        navigate('/home');
-      }
+      // if (role !== 'admin') {
+      //   navigate('/home');
+      // }
 
       if (id) {
         axios.get(`${API_URL}/api/usuarios/${id}`, {
