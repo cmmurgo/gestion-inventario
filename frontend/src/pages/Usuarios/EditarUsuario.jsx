@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../api';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function RegisterUser() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function RegisterUser() {
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [userIdLogueado, setUserIdLogueado] = useState('');
-
+  const modalRef = useRef(null);
 
   // Validar login y cargar usuario si es edición
   useEffect(() => {
@@ -89,12 +90,13 @@ function RegisterUser() {
             },
         });    
 
-      setNombre('');
-      setEmail('');
-      setPassword('');
-      setRole('user');
-      setErrorMessage('');
-      navigate('/usuarios');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      const modal = bootstrap.Modal.getInstance(modalRef.current);
+      if (modal) modal.hide();
+      setMensaje('Registro exitoso');
+      setTipoMensaje('success');
+  
     } catch (error) {
       console.error(error);
       setErrorMessage('Error al guardar usuario');
@@ -150,11 +152,7 @@ function RegisterUser() {
 
       </div>
 
-      <div
-        className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`}
-        role="alert"
-        style={{ opacity: mostrarMensaje ? 1 : 0, transition: 'opacity 0.5s ease' }} // Añadir transición de opacidad
-      >
+      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`}>
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 

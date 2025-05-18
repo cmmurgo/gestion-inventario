@@ -170,17 +170,13 @@ export default function Clientes() {
                   <td>
                     <button className="btn btn-link text-primary me-2" onClick={() => handleVerCliente(cliente.id)}>
                       <FaEye />
+                    </button>  
+                    <button className="btn btn-link text-warning me-2" onClick={() => handleEditarCliente(cliente.id)}>
+                      <FaEdit />
                     </button>
-                    {rol === 'admin' && (
-                      <>
-                        <button className="btn btn-link text-warning me-2" onClick={() => handleEditarCliente(cliente.id)}>
-                          <FaEdit />
-                        </button>
-                        <button className="btn btn-link text-danger" onClick={() => handleEliminarClick(cliente.id)}>
-                          <FaTrash />
-                        </button>
-                      </>
-                    )}
+                    <button className="btn btn-link text-danger" onClick={() => handleEliminarClick(cliente.id)}>
+                      <FaTrash />
+                    </button>   
                   </td>
                 </tr>
               ))

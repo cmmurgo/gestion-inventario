@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../api';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function RegisterCliente() {
   const navigate = useNavigate();
@@ -14,6 +15,10 @@ function RegisterCliente() {
   const [direccion, setDireccion] = useState('');
   const [cuit_cuil, setCuitCuil] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  const [tipoMensaje, setTipoMensaje] = useState('');
+  const [mostrarMensaje, setMostrarMensaje] = useState(false);
+  const modalRef = useRef(null);
 
   // Validar token y cargar cliente si hay ID
   useEffect(() => {
@@ -25,10 +30,10 @@ function RegisterCliente() {
       return;
     }
 
-    if (role !== 'admin') {
-      navigate('/home');
-      return;
-    }
+    // if (role !== 'admin') {
+    //   navigate('/home');
+    //   return;
+    // }
 
     if (id) {
       axios.get(`${API_URL}/api/clientes/${id}`, {
@@ -67,15 +72,13 @@ function RegisterCliente() {
         });
       }
 
-      // Limpiar y redirigir
-      setNombre('');
-      setApellido('');
-      setEmail('');
-      setTelefono('');
-      setDireccion('');
-      setCuitCuil('');
-      setErrorMessage('');
-      navigate('/clientes');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      const modal = bootstrap.Modal.getInstance(modalRef.current);
+      if (modal) modal.hide();
+      setMensaje('Registro exitoso');
+      setTipoMensaje('success');
+     
     } catch (error) {
       console.error(error);
       setErrorMessage('Error al guardar cliente');
@@ -150,6 +153,10 @@ function RegisterCliente() {
       {errorMessage && (
         <p className="text-danger mt-2">{errorMessage}</p>
       )}
+
+      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`}>
+        {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
+      </div>
 
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/clientes')}>Volver</button>
