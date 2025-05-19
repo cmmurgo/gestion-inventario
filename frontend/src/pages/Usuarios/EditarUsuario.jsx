@@ -34,6 +34,16 @@ function RegisterUser() {
       // if (role !== 'admin') {
       //   navigate('/home');
       // }
+      if (role !== 'admin' && id && id !== userId) {
+        setMensaje('Acción no permitida: solo puede editar sus propios datos');
+        setTipoMensaje('error');
+        setMostrarMensaje(true);
+        setTimeout(() => {
+          setMostrarMensaje(false);
+          navigate('/home'); // o donde quieras redirigir
+        }, 3000);
+        return;
+      }
 
       if (id) {   
         axios.get(`${API_URL}/api/usuarios/${id}`, {
