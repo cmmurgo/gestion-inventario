@@ -74,7 +74,7 @@ CREATE TABLE producto (
     id_promocion INT,
     codigo_barra BIGINT,
     fecha_baja DATE,
-    CONSTRAINT fk_promocion FOREIGN KEY (id_promocion) REFERENCES Promocion(id)
+    CONSTRAINT fk_promocion FOREIGN KEY (id_promocion) REFERENCES promocion(id)
 );
 
 INSERT INTO producto (nombre, categoria, descripcion, precio_costo, precio_venta, stock_minimo, id_promocion, codigo_barra, fecha_baja) VALUES
@@ -87,7 +87,7 @@ CREATE TABLE venta (
     fecha DATE,
     id_cliente INT,
     fecha_baja DATE,
-    CONSTRAINT fk_cliente FOREIGN KEY (id_cliente) REFERENCES Cliente(id)
+    CONSTRAINT fk_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id)
 );
 
 INSERT INTO venta (fecha, id_cliente, fecha_baja) VALUES
@@ -101,8 +101,8 @@ CREATE TABLE detalle_venta (
     cantidad INT,
     fecha_baja DATE,
     PRIMARY KEY (id_venta, id_producto),
-    CONSTRAINT fk_detalle_venta_venta FOREIGN KEY (id_venta) REFERENCES Venta(id),
-    CONSTRAINT fk_detalle_venta_producto FOREIGN KEY (id_producto) REFERENCES Producto(id)
+    CONSTRAINT fk_detalle_venta_venta FOREIGN KEY (id_venta) REFERENCES venta(id),
+    CONSTRAINT fk_detalle_venta_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, fecha_baja) VALUES
@@ -117,7 +117,7 @@ CREATE TABLE perdida (
     fecha DATE,
     cantidad INT,
     fecha_baja DATE,
-    CONSTRAINT fk_perdida_producto FOREIGN KEY (id_producto) REFERENCES Producto(id)
+    CONSTRAINT fk_perdida_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO perdida (id_producto, fecha, cantidad, fecha_baja) VALUES
@@ -131,7 +131,7 @@ CREATE TABLE orden_compra (
     fecha DATE,
     estado VARCHAR(50),
     fecha_baja DATE,
-    CONSTRAINT fk_orden_proveedor FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id)
+    CONSTRAINT fk_orden_proveedor FOREIGN KEY (id_proveedor) REFERENCES proveedor(id)
 );
 
 INSERT INTO orden_compra (id_proveedor, fecha, estado, fecha_baja) VALUES
@@ -145,8 +145,8 @@ CREATE TABLE detalle_orden_compra (
     cantidad INT,
     fecha_baja DATE,
     PRIMARY KEY (id_orden_compra, id_producto),
-    CONSTRAINT fk_detalle_oc_oc FOREIGN KEY (id_orden_compra) REFERENCES OrdenDeCompra(id),
-    CONSTRAINT fk_detalle_oc_producto FOREIGN KEY (id_producto) REFERENCES Producto(id)
+    CONSTRAINT fk_detalle_oc_oc FOREIGN KEY (id_orden_compra) REFERENCES orden_compra(id),
+    CONSTRAINT fk_detalle_oc_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO detalle_orden_compra (id_orden_compra, id_producto, cantidad, fecha_baja) VALUES
@@ -162,7 +162,7 @@ CREATE TABLE movimientos (
     cantidad INT,
     fecha DATE,
     fecha_baja DATE,
-    CONSTRAINT fk_movimiento_producto FOREIGN KEY (id_producto) REFERENCES Producto(id)
+    CONSTRAINT fk_movimiento_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES
