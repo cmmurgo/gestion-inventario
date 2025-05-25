@@ -11,13 +11,14 @@ import CrearCliente from './pages/Clientes/CrearCliente.jsx';
 import EditarCliente from './pages/Clientes/EditarCliente.jsx';
 import VerCliente from './pages/Clientes/VerCliente.jsx';
 import RecuperarContrasena from './pages/RecuperarContrasena';
+import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
 import './App.css';
 
 function App() {
   return (   
     <Routes>
     {/* Rutas públicas */}
-    <Route path="/" element={<Login />} />
+    <Route path="/login" element={<Login />} />
     <Route path="/recuperar" element={<RecuperarContrasena />} />
   
     {/* Rutas privadas con plantilla */}
@@ -31,6 +32,7 @@ function App() {
       <Route path="clientes/crear" element={<CrearCliente />} />
       <Route path="clientes/editar/:id" element={<EditarCliente />} />
       <Route path="clientes/ver/:id" element={<VerCliente />} />
+      <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
     </Route>
   </Routes>
   
