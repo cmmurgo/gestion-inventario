@@ -6,6 +6,7 @@ import ingresosImg from '../assets/total_ingresos.png';
 import gastosImg from '../assets/total_gastos.png';
 import inventarioImg from '../assets/codigo_barras.png';
 import graficoImg from '../assets/grafico.png';
+import { useNavigate } from 'react-router-dom';
 
 const data = [
   { icon: ventasImg, value: 5, label: 'Total Ventas' },
@@ -17,6 +18,13 @@ const data = [
 ];
 
 export default function Home() {
+
+  const navigate = useNavigate();
+
+  const handleCodigoBarra = () => {
+    navigate('/inventario/codigo-barra');
+  };
+
   return (
     <div className="container-md py-4">
       <div className="row g-4 mb-4">
@@ -26,7 +34,7 @@ export default function Home() {
               <button
                 className="d-flex align-items-center bg-white shadow rounded-4 p-3 w-100 border-0 text-start"
                 style={{ cursor: 'pointer' }}
-                onClick={() => console.log('Ir a Inventario')}
+                onClick={handleCodigoBarra}            
               >
                 <img
                   src={item.icon}

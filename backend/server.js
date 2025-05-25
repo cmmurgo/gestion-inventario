@@ -6,6 +6,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/usuarios');
 const clientRoutes = require('./routes/clientes');
+const inventarioRoutes = require('./routes/inventario');
 
 // Middlewares primero
 app.use(cors());
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', userRoutes);
 app.use('/api/clientes', clientRoutes);
+app.use('/api/inventario', inventarioRoutes);
 
 // Exportar app para pruebas
 module.exports = app;
