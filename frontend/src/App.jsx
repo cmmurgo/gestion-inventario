@@ -18,7 +18,7 @@ function App() {
   return (   
     <Routes>
     {/* Rutas públicas */}
-    <Route path="/login" element={<Login />} />
+    <Route path="/" element={<Login />} />
     <Route path="/recuperar" element={<RecuperarContrasena />} />
   
     {/* Rutas privadas con plantilla */}
