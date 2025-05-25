@@ -22,7 +22,7 @@ export default function CodigoBarra() {
       setError(null);
       setProducto(null);
 
-      const response = await fetch(`${API_URL}/api/productos/barcode/${codigo}`);
+      const response = await fetch(`${API_URL}/api/inventario/producto/${codigo}`);
 
       if (!response.ok) {
         setError('Producto no encontrado');
