@@ -13,7 +13,7 @@ CREATE TABLE usuario (
 
 -- Insertar los datos
 INSERT INTO usuario (id,nombre, email, clave, rol, fecha_baja) VALUES
-(1, 'Marcelo Murgo','cmmurgo@gmail.com', '$2b$10$pGiXjmcr6BGZOmu75j0kXuPTQtWvVvu3GnXipeRGYXaKEWPhrg4rK', 'admin', null);
+(1, 'Marcelo Murgo','cmmurgo@gmail.com', '$2b$10$Dg/pOEjkYFP2F5vtFJugped7tRoaUoVkHAiG/JM1wD.N/gaQHNHOC', 'admin', null);
 
 CREATE TABLE cliente (
     id SERIAL PRIMARY KEY,
@@ -145,8 +145,8 @@ CREATE TABLE detalle_orden_compra (
     cantidad INT,
     fecha_baja DATE,
     PRIMARY KEY (id_orden_compra, id_producto),
-    CONSTRAINT fk_detalle_oc_oc FOREIGN KEY (id_orden_compra) REFERENCES OrdenDeCompra(id),
-    CONSTRAINT fk_detalle_oc_producto FOREIGN KEY (id_producto) REFERENCES Producto(id)
+    CONSTRAINT fk_detalle_oc_oc FOREIGN KEY (id_orden_compra) REFERENCES orden_compra(id),
+    CONSTRAINT fk_detalle_oc_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO detalle_orden_compra (id_orden_compra, id_producto, cantidad, fecha_baja) VALUES
@@ -172,3 +172,4 @@ INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha
 (4, 2, 'compra', 1, '2025-05-10', NULL);
 
 
+COMMIT;

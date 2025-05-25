@@ -12,5 +12,16 @@ const pool = new Pool({
   ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
+/*
+console.log('Conectando a la base:', process.env.DB_NAME);
+
+pool.query('SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\'')
+  .then(res => {
+    console.log('Tablas encontradas en la base:', res.rows.map(r => r.table_name));
+  })
+  .catch(err => {
+    console.error('Error al listar tablas:', err.message);
+  });*/
+
 module.exports = pool;
 
