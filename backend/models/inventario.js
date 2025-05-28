@@ -1,6 +1,6 @@
 const pool = require('../config/db'); 
 
-const buscarProductoPorCodigo = async (codigo) => {
+exports.buscarProductoPorCodigo = async (codigo) => {
   const result = await pool.query(
     'SELECT * FROM producto WHERE codigo_barra = $1 AND fecha_baja IS NULL',
     [codigo]
@@ -8,6 +8,9 @@ const buscarProductoPorCodigo = async (codigo) => {
   return result.rows[0];
 };
 
-module.exports = {
-  buscarProductoPorCodigo,
+exports.getAllProductos = async () => {
+  const result = await pool.query(
+    'SELECT id, nombre FROM producto WHERE fecha_baja IS NULL ORDER BY id'
+  );
+  return result.rows;
 };
