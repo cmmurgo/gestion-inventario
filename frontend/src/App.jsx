@@ -10,6 +10,10 @@ import IndexClientes from './pages/Clientes/index';
 import CrearCliente from './pages/Clientes/CrearCliente.jsx';
 import EditarCliente from './pages/Clientes/EditarCliente.jsx';
 import VerCliente from './pages/Clientes/VerCliente.jsx';
+import IndexPerdidas from './pages/Perdidas/index';
+import CrearPerdida from './pages/Perdidas/CrearPerdida.jsx';
+import EditarPerdida from './pages/Perdidas/EditarPerdida.jsx';
+import VerPerdida from './pages/Perdidas/VerPerdida.jsx';
 import RecuperarContrasena from './pages/RecuperarContrasena';
 import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
 import './App.css';
@@ -32,6 +36,10 @@ function App() {
       <Route path="clientes/crear" element={<CrearCliente />} />
       <Route path="clientes/editar/:id" element={<EditarCliente />} />
       <Route path="clientes/ver/:id" element={<VerCliente />} />
+      <Route path="perdidas" element={<IndexPerdidas />} />
+      <Route path="perdidas/crear" element={<CrearPerdida />} />
+      <Route path="perdidas/editar/:id" element={<EditarPerdida />} />
+      <Route path="perdidas/ver/:id" element={<VerPerdida />} />
       <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
     </Route>
   </Routes>
