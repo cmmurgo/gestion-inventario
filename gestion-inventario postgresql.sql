@@ -115,14 +115,15 @@ CREATE TABLE perdida (
     id SERIAL PRIMARY KEY,
     id_producto INT,
     fecha DATE,
+    motivo VARCHAR(100),
     cantidad INT,
     fecha_baja DATE,
     CONSTRAINT fk_perdida_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
-INSERT INTO perdida (id_producto, fecha, cantidad, fecha_baja) VALUES
-(2, '2025-05-11', 1, NULL),
-(1, '2025-05-13', 2, NULL);
+INSERT INTO perdida (id_producto, fecha, motivo, cantidad, fecha_baja) VALUES
+(2, '2025/05/25', 'falla de fábrica', 1, NULL),
+(1, '2025/05/20', 'envase roto', 2, NULL);
 
 
 CREATE TABLE orden_compra (
@@ -166,9 +167,9 @@ CREATE TABLE movimientos (
 );
 
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES
-(1, 1, 'venta', 100, '2025-05-09', NULL),
-(2, 2, 'compra', 50, '2025-05-10', NULL),
-(3, 1, 'perdida', 2, '2025-05-10', NULL),
+(1, 1, 'compra', -10, '2025-05-09', NULL),
+(2, 2, 'venta', 50, '2025-05-10', NULL),
+(3, 1, 'perdida', -2, '2025-05-10', NULL),
 (4, 2, 'compra', 1, '2025-05-10', NULL);
 
 

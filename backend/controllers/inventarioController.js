@@ -1,6 +1,6 @@
 const inventarioModel = require('../models/inventario');
 
-const getProductoPorCodigo = async (req, res) => {
+exports.getProductoPorCodigo = async (req, res) => {
   try {
     const codigo = req.params.codigo.trim();
     const producto = await inventarioModel.buscarProductoPorCodigo(codigo);
@@ -16,6 +16,12 @@ const getProductoPorCodigo = async (req, res) => {
   }
 };
 
-module.exports = {
-  getProductoPorCodigo,
+exports.getProductos = async (req, res) => {
+  try {
+    const producto = await inventarioModel.getAllProductos();
+    res.json(producto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los productos' });
+  }
 };
