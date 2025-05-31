@@ -180,6 +180,7 @@ function EditarVenta() {
           detalles={detalles}
           setDetalles={setDetalles}
           abrirModalProducto={abrirModalProducto}
+          esEdicion={false}
         />
 
       <div className="mt-3 text-end">
