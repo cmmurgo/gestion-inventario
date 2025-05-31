@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
 import { API_URL } from '../../api';
-import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import DetalleProductos from './DetalleProductos';
+import { FaEye } from 'react-icons/fa';
 
-const EditarVenta = () => {
-  const { id } = useParams();
+function VerVenta() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const [venta, setVenta] = useState({});
+  const [clientes, setClientes] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [fecha, setFecha] = useState('');
+  const [idCliente, setIdCliente] = useState('');
   const [detalles, setDetalles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [mensaje, setMensaje] = useState('');
+  const [tipoMensaje, setTipoMensaje] = useState('');
+  const [mostrarMensaje, setMostrarMensaje] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [modalProductoVisible, setModalProductoVisible] = useState(false);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -19,219 +29,187 @@ const EditarVenta = () => {
       navigate('/');
       return;
     }
-    cargarVenta(token);
-    cargarDetalles(token);
+
+    const cargarDatos = async () => {
+      try {
+        const [resVenta, resClientes, resProductos] = await Promise.all([
+          axios.get(`${API_URL}/api/ventas/${id}`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/api/clientes`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${API_URL}/api/inventario/productos`, { headers: { Authorization: `Bearer ${token}` } })
+       
+        ]);
+      
+        setClientes(resClientes.data);
+        setProductos(resProductos.data);
+        setFecha(resVenta.data.fecha.split('T')[0]);
+        setIdCliente(resVenta.data.id_cliente);
+        setDetalles(resVenta.data.detalles);  
+      
+      } catch (error) {
+        console.error('Error al cargar los datos:', error);
+        alert('Error al cargar los datos de la venta.');
+      }
+    };
+
+    cargarDatos();
   }, [id, navigate]);
 
-  const cargarVenta = async (token) => {
+  useEffect(() => {
+    calcularTotal(detalles);
+  }, [detalles]);
+
+  const calcularTotal = (detalles) => {
+    const totalCalculado = detalles.reduce((acc, item) => {
+      const cantidad = parseFloat(item.cantidad) || 0;
+      const precio = parseFloat(item.precio_unitario || item.precio_venta || 0); // ajustá según tu modelo
+      return acc + cantidad * precio;
+    }, 0);
+    setTotal(totalCalculado);
+  };
+
+  const abrirModalCliente = async () => {
+    if (!idCliente) return;
     try {
-      const res = await axios.get(`${API_URL}/api/ventas/${id}`, {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/api/clientes/${idCliente}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setVenta(res.data);
+      setClienteSeleccionado(res.data);
+      setModalVisible(true);
     } catch (error) {
-      console.error('Error al cargar la venta:', error);
-      alert('Error al cargar la venta. Por favor, intente nuevamente.');
+      console.error('Error al obtener datos del cliente:', error);
     }
   };
 
-  const cargarDetalles = async (token) => {
+  const abrirModalProducto = async (idProducto) => {
+    if (!idProducto) return;
     try {
-      const res = await axios.get(`${API_URL}/api/ventas/detalle/${id}`, {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/api/inventario/productos/${idProducto}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setDetalles(res.data);
+      setProductoSeleccionado(res.data);
+      setModalProductoVisible(true);
     } catch (error) {
-      console.error('Error al cargar los detalles:', error);
-      alert('Error al cargar los detalles. Por favor, intente nuevamente.');
+      console.error('Error al obtener datos del producto:', error);
     }
   };
 
-  const guardarCambios = async () => {
-    const token = localStorage.getItem('token');
-    try {
-      await axios.put(`${API_URL}/api/ventas/${id}`, venta, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('Cambios guardados');
-      // Recargar datos actualizados después de guardar
-      cargarVenta(token);
-    } catch (error) {
-      console.error('Error al guardar los cambios:', error);
-      alert('Error al guardar los cambios.');
-    }
-  };
 
-  const verCliente = () => {
-    if (venta.id_cliente) {
-      navigate(`/clientes/ver/${venta.id_cliente}`);
-    } else {
-      alert('No hay cliente asignado a esta venta');
-    }
-  };
-
-  const totalPages = Math.ceil(detalles.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentDetallesVentas = detalles.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
-
-  const normalizeFecha = (fecha) => {
-    if (!fecha) return '';
-    return fecha.split('T')[0]; 
-  };
- 
   return (
-    <div style={{ maxWidth: '900px', margin: 'auto', fontFamily: 'Arial' }}>
-      <h2>VENTA ID: {venta.id ?? 'Cargando...'}</h2>
+    <div style={{ padding: '2rem' }}>
+      <h4>VER VENTA: #{id} </h4>
+      <div style={{ background: '#eee', padding: '2rem' }}>
+        <div className="mb-3 d-flex justify-content-between" style={{ gap: '1rem' }}>
+          <div style={{ flex: 1 }}>
+            <label className="form-label">FECHA:</label>
+            <input
+              type="date"
+              className="form-control"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              disabled
+            />
+          </div>
 
-      {/* CABECERA */}
-      <div style={styles.cabecera}>
-  {/* Inputs uno debajo del otro */}
-  <div style={styles.colInputs}>
-    <div style={styles.formRow}>
-      <label>FECHA:</label>
-      <input
-        type="date"
-        value={normalizeFecha(venta.fecha) || ''}
-        disabled
-        onChange={(e) => setVenta({ ...venta, fecha: e.target.value })}
-      />
-    </div>
-    <div style={styles.formRow}>
-      <label>CUIL/CUIT CLIENTE:</label>
-      <input
-        type="text"
-        value={venta.cuit_cuil || ''}
-        disabled
-        onChange={(e) => setVenta({ ...venta, cuit_cuil: e.target.value })}
-      />
-    </div>
-    <div style={styles.formRow}>
-      <label>ID CLIENTE:</label>
-      
-      <input type="text" value={venta.id_cliente || ''} disabled />
-    </div>
-  </div>
+          <div style={{ flex: 2 }}>
+            <label className="form-label">CLIENTE:</label>
+            <div className="d-flex align-items-center gap-2">
+              <select
+                className="form-control"
+                value={idCliente}
+                onChange={(e) => setIdCliente(e.target.value)}
+                disabled
+              >
+                <option value="">Seleccionar cliente</option>
+                {clientes.map(c => (
+                  <option key={c.id} value={c.id}>{c.cliente_nombre_completo}</option>
+                ))}
+              </select>
+              {idCliente && (
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={abrirModalCliente}
+                  title="Ver datos del cliente"
+                >
+                  <FaEye />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
 
-  {/* Botones uno debajo del otro al costado */}
-  <div style={styles.colBotones}>
-    <button className="btn btn-primary mb-2" onClick={verCliente}>
-      INFORMACIÓN COMPLETA DEL CLIENTE
-    </button>
-  
-  </div>
-</div>
+        <hr />
+        <DetalleProductos
+          productos={productos}
+          detalles={detalles}
+          setDetalles={setDetalles}
+          abrirModalProducto={abrirModalProducto}
+          esEdicion={true}
+        />
 
-
-      {/* DETALLES */}
-      <h3>DETALLES DE VENTA:</h3>
-      <div className="table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
-
-       <table className="table table-bordered text-center align-middle">   
-        <thead className="table-light">
-          <tr>
-            <th>ID</th>
-            <th>PRODUCTO</th>
-            <th>CANTIDAD</th>
-            <th>PRECIO VENTA ($)</th>
- 
-          </tr>
-        </thead>
-        <tbody>
-          {currentDetallesVentas.length > 0 ? (
-            currentDetallesVentas.map((detalle, index) => (
-                <tr key={detalle.id ?? `detalle-${index}`}>
-                <td>{detalle.id_producto}</td>
-                <td>{detalle.descripcion}</td>
-                <td>{detalle.cantidad}</td>
-                <td>{detalle.precio_venta}</td>
-
-              </tr>
-            ))
-          ) : (
-            <tr key="no-detalles">
-              <td colSpan="5">No se encontraron detalles de venta.</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+      <div className="mt-3 text-end">
+        <h5>Total: ${total.toFixed(2)}</h5>
       </div>
 
-      {/* Paginación */}
-      {totalPages > 1 && (
-        <div className="mt-4 d-flex justify-content-center">
-          <nav>
-            <ul className="pagination mb-0">
-              <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  {'<'}
-                </button>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  key={`pagina-${i}`}
-                  className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() => handlePageChange(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                </li>
-              ))}
-              <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                <button
-                  className="page-link"
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  {'>'}
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      )}
+        {/* Modales iguales a CrearVenta */}
+        {modalVisible && clienteSeleccionado && (
+          <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Datos del cliente</h5>
+                  <button type="button" className="btn-close" onClick={() => setModalVisible(false)}></button>
+                </div>
+                <div className="modal-body">
+                  <p><strong>Nombre:</strong> {clienteSeleccionado.cliente_nombre_completo}</p>
+                  <p><strong>Email:</strong> {clienteSeleccionado.email}</p>
+                  <p><strong>Teléfono:</strong> {clienteSeleccionado.telefono}</p>
+                  <p><strong>Dirección:</strong> {clienteSeleccionado.direccion}</p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setModalVisible(false)}>Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
-      <button className="btn btn-dark" onClick={() => navigate('/ventas')}>Volver</button>
+        {modalProductoVisible && productoSeleccionado && (
+          <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1" role="dialog">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Datos del producto</h5>
+                  <button type="button" className="btn-close" onClick={() => setModalProductoVisible(false)}></button>
+                </div>
+                <div className="modal-body">
+                  <p><strong>Nombre:</strong> {productoSeleccionado.nombre}</p>
+                  <p><strong>Categoría:</strong> {productoSeleccionado.categoria}</p>
+                  <p><strong>Descripcion:</strong> {productoSeleccionado.descripcion}</p>
+                  <p><strong>Precio Compra:</strong> ${productoSeleccionado.precio_costo}</p>
+                  <p><strong>Precio Venta:</strong> ${productoSeleccionado.precio_venta}</p>
+                  <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setModalProductoVisible(false)}>Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
+      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`} role="alert"
+        style={{ opacity: mostrarMensaje ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+        {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
+      </div>
+
+      <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '500px' }}>
+        <button className="btn btn-dark" onClick={() => navigate('/ventas')}>Volver</button>    
+      </div>
     </div>
   );
-};
+}
 
-const styles = {
-  cabecera: {
-    background: '#eee',
-    padding: '1em',
-    marginBottom: '1em',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '1em',
-  },
-
-  colInputs: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1em',
-  },
-  
-  colBotones: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1em',
-    justifyContent: 'flex-start',
-  },
-  
-};
-
-export default EditarVenta;
+export default VerVenta;

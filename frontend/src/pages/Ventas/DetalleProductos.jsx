@@ -2,7 +2,7 @@ import React from 'react';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 
-function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto  }) {
+function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto, esEdicion }) {
   
   const agregarDetalle = () => {
     setDetalles([...detalles, { id_producto: '', cantidad: '', precio_venta: '', total: '' }]);
@@ -63,6 +63,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
                     className="form-control"
                     value={detalle.id_producto}
                     onChange={(e) => actualizarDetalle(index, 'id_producto', e.target.value)}
+                    disabled={esEdicion}
                   >
                     <option value="">Seleccionar</option>
                     {productos.map(p => (
@@ -78,6 +79,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
                   className="form-control"
                   value={detalle.cantidad}
                   onChange={(e) => actualizarDetalle(index, 'cantidad', e.target.value)}
+                  disabled={esEdicion}
                 />
               </td>
 
@@ -105,6 +107,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
                     className="btn btn-danger btn-sm"
                     onClick={() => eliminarDetalle(index)}
                     title="Eliminar producto"
+                    disabled={esEdicion}
                   >
                     X
                   </button>
@@ -124,7 +127,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
         </tbody>
       </table>
 
-      <button className="btn btn-secondary mb-3" onClick={agregarDetalle}>+ Agregar producto</button>
+      <button className="btn btn-secondary mb-3" onClick={agregarDetalle} disabled={esEdicion} >+ Agregar producto</button>
     </>
   );
 }
