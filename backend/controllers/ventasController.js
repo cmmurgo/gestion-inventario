@@ -147,3 +147,13 @@ exports.updateDetalleVenta = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
+
+exports.getTotalVentas = async (req, res) => {
+  try {
+    const total = await ventaModel.totalVentas();
+    res.json({ total_ventas: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de las ventas' });
+  }
+};
