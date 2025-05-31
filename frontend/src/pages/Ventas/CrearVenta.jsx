@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_URL } from '../../api';
+import DetalleProductos from './DetalleProductos';
+import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 function CrearVenta() {
   const navigate = useNavigate();
@@ -13,6 +15,11 @@ function CrearVenta() {
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+  const [modalProductoVisible, setModalProductoVisible] = useState(false);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -37,29 +44,22 @@ function CrearVenta() {
     fetchData();
   }, [navigate]);
 
-  const agregarDetalle = () => {
-    setDetalles([...detalles, { id_producto: '', cantidad: '' }]);
-  };
+  useEffect(() => {
+    calcularTotal(detalles);
+  }, [detalles]);
 
-  const actualizarDetalle = (index, campo, valor) => {
-    const nuevosDetalles = [...detalles];
-    nuevosDetalles[index][campo] = valor;
-    setDetalles(nuevosDetalles);
-  };
-
-  const eliminarDetalle = (index) => {
-    const nuevosDetalles = detalles.filter((_, i) => i !== index);
-    setDetalles(nuevosDetalles);
+  const calcularTotal = (detalles) => {
+    const totalCalculado = detalles.reduce((acc, item) => {
+      const cantidad = parseFloat(item.cantidad) || 0;
+      const precio = parseFloat(item.precio_unitario || item.precio_venta || 0); // ajustá según tu modelo
+      return acc + cantidad * precio;
+    }, 0);
+    setTotal(totalCalculado);
   };
 
   const handleGuardar = async () => {
     if (!fecha || !idCliente || detalles.length === 0 || detalles.some(d => !d.id_producto || !d.cantidad)) {
-      console.log(fecha);
-      console.log(idCliente);
-      console.log(detalles.length);
-      console.log(d.id_producto);
-      console.log(d.cantidad);
-   
+       
       setMensaje('Todos los campos son obligatorios');
       setTipoMensaje('error');
       setMostrarMensaje(true);
@@ -77,10 +77,7 @@ function CrearVenta() {
 
       if (response.status === 201) {
         setMensaje('Venta registrada con éxito');
-        setTipoMensaje('success');
-        setFecha('');
-        setIdCliente('');
-        setDetalles([]);
+        setTipoMensaje('success');       
       } else {
         setMensaje('Error al registrar la venta');
         setTipoMensaje('error');
@@ -98,11 +95,43 @@ function CrearVenta() {
     }
   };
 
+  const abrirModalCliente = async () => {
+    if (!idCliente) return;
+  
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/api/clientes/${idCliente}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setClienteSeleccionado(res.data);
+      setModalVisible(true);
+    } catch (error) {
+      console.error('Error al obtener datos del cliente:', error);
+    }
+  };
+
+  const abrirModalProducto = async (idProducto) => {
+    if (!idProducto) return;
+  
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_URL}/api/inventario/productos/${idProducto}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setProductoSeleccionado(res.data);
+      setModalProductoVisible(true);
+    } catch (error) {
+      console.error('Error al obtener datos del producto:', error);
+    }
+  };
+  
+
   return (
     <div style={{ padding: '2rem' }}>
       <h4>REGISTRAR VENTA:</h4>
-      <div style={{ background: '#eee', padding: '2rem', maxWidth: '500px' }}>
-        <div className="mb-3">
+      <div style={{ background: '#eee', padding: '2rem' }}>
+      <div className="mb-3 d-flex justify-content-between" style={{ gap: '1rem' }}>
+        <div style={{ flex: 1 }}>
           <label className="form-label">FECHA:</label>
           <input
             type="date"
@@ -112,43 +141,124 @@ function CrearVenta() {
           />
         </div>
 
-        <div className="mb-3">
+        <div style={{ flex: 2 }}>
           <label className="form-label">CLIENTE:</label>
-          <select className="form-control" value={idCliente} onChange={(e) => setIdCliente(e.target.value)}>
-            <option value="">Seleccionar cliente</option>
-            {clientes.map(c => (
-              <option key={c.id} value={c.id}>{c.cliente_nombre_completo}</option>
-            ))}
-          </select>
+          <div className="d-flex align-items-center gap-2">
+            <select
+              className="form-control"
+              value={idCliente}
+              onChange={(e) => setIdCliente(e.target.value)}
+            >
+              <option value="">Seleccionar cliente</option>
+              {clientes.map(c => (
+                <option key={c.id} value={c.id}>{c.cliente_nombre_completo}</option>
+              ))}
+            </select>
+
+            {idCliente && (
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                onClick={abrirModalCliente}
+                title="Ver datos del cliente"
+              >
+                <FaEye />
+            </button>
+            )}
+          </div>
         </div>
+    </div>
+    
 
         <hr />
-        <h5>DETALLES DE PRODUCTOS</h5>
-        {detalles.map((detalle, index) => (
-          <div key={index} className="mb-3">
-            <div className="d-flex gap-2">
-              <select
-                className="form-control"
-                value={detalle.id_producto}
-                onChange={(e) => actualizarDetalle(index, 'id_producto', e.target.value)}
-              >
-                <option value="">Producto</option>
-                {productos.map(p => (
-                  <option key={p.id} value={p.id}>{p.nombre}</option>
-                ))}
-              </select>
-              <input
-                type="number"
-                placeholder="Cantidad"
-                className="form-control"
-                value={detalle.cantidad}
-                onChange={(e) => actualizarDetalle(index, 'cantidad', e.target.value)}
-              />
-              <button className="btn btn-danger" onClick={() => eliminarDetalle(index)}>X</button>
+        <DetalleProductos
+          productos={productos}
+          detalles={detalles}
+          setDetalles={setDetalles}
+          abrirModalProducto={abrirModalProducto}
+        />
+
+      <div className="mt-3 text-end">
+        <h5>Total: ${total.toFixed(2)}</h5>
+      </div>
+
+        {modalVisible && clienteSeleccionado && (
+          <div
+            className="modal fade show"
+            style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
+            tabIndex="-1"
+            role="dialog"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Datos del cliente</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setModalVisible(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <p><strong>Nombre:</strong> {clienteSeleccionado.cliente_nombre_completo}</p>
+                  <p><strong>Email:</strong> {clienteSeleccionado.email}</p>
+                  <p><strong>Teléfono:</strong> {clienteSeleccionado.telefono}</p>
+                  <p><strong>Dirección:</strong> {clienteSeleccionado.direccion}</p>
+                  {/* Agregá más campos si querés */}
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setModalVisible(false)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
-        <button className="btn btn-secondary mb-3" onClick={agregarDetalle}>+ Agregar producto</button>
+        )}
+
+      {modalProductoVisible && productoSeleccionado && (
+        <div
+          className="modal fade show"
+          style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
+          tabIndex="-1"
+          role="dialog"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Datos del producto</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setModalProductoVisible(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p><strong>Nombre:</strong> {productoSeleccionado.nombre}</p>
+                <p><strong>Categoría:</strong> {productoSeleccionado.categoria}</p>
+                <p><strong>Descripcion:</strong> {productoSeleccionado.descripcion}</p>
+                <p><strong>Precio Compra:</strong> ${productoSeleccionado.precio_costo}</p>
+                <p><strong>Precio Venta:</strong> ${productoSeleccionado.precio_venta}</p> 
+                <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setModalProductoVisible(false)}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       </div>
 
       <div
