@@ -35,16 +35,6 @@ exports.softDelete = async (id) => {
   );
 };
 
-exports.registrarPerdida = async ({ id_producto, cantidad }) => {
-    const fecha = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  
-    await pool.query(
-      `INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha)
-       VALUES (NULL, $1, 'PÉRDIDA', $2, $3)`,
-      [id_producto, -Math.abs(cantidad), fecha]
-    );
-  };
-
 exports.updateByOperacion = async ({ id_operacion, id_producto, fecha, tipo, cantidad }) => {
     const query = `
       UPDATE movimientos
@@ -55,7 +45,6 @@ exports.updateByOperacion = async ({ id_operacion, id_producto, fecha, tipo, can
     `;
   
     const values = [id_producto, cantidad, fecha, id_operacion, tipo];
-  
     await pool.query(query, values);
   };
 

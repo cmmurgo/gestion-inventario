@@ -1,5 +1,6 @@
 const ventaModel = require('../models/ventaModel');
 const detalleVentaModel = require('../models/detalleVentaModel');
+const movimientoModel = require('../models/movimientoModel');
 
 exports.getAllVentas = async (req, res) => {
   try {
@@ -19,16 +20,23 @@ exports.createVenta = async (req, res) => {
   }
 
   try {
-    // 1. Crear la cabecera de venta
     const nuevaVenta = await ventaModel.create({ fecha, id_cliente });
 
-    // 2. Insertar los detalles
     for (const detalle of detalles) {
       const { id_producto, cantidad } = detalle;
+
       await detalleVentaModel.create({
         id_venta: nuevaVenta.id,
         id_producto,
         cantidad
+      });
+
+      await movimientoModel.create({
+        id_operacion: nuevaVenta.id,
+        id_producto,
+        cantidad: -Math.abs(cantidad),
+        tipo: 'venta',
+        fecha
       });
     }
 
@@ -60,29 +68,46 @@ exports.updateVenta = async (req, res) => {
   const { id } = req.params;
   const { fecha, id_cliente, detalles } = req.body;
 
+  if (!fecha || !id_cliente || !Array.isArray(detalles) || detalles.length === 0) {
+    return res.status(400).json({ message: 'Todos los campos son obligatorios y debe haber al menos un detalle' });
+  }
+
   try {
     // 1. Actualizar la cabecera
     await ventaModel.update(id, { fecha, id_cliente });
 
-    // 2. Eliminar lógicamente detalles anteriores
+    // 2. Eliminar lógicamente los detalles y movimientos anteriores
     await detalleVentaModel.softDeleteByVentaId(id);
+    await movimientoModel.softDeleteByOperacion(id, 'venta');
 
-    // 3. Insertar nuevos detalles
+    // 3. Insertar nuevos detalles y movimientos
     for (const detalle of detalles) {
       const { id_producto, cantidad } = detalle;
+
+      // Crear detalle
       await detalleVentaModel.create({
         id_venta: id,
         id_producto,
         cantidad
       });
+
+      // Crear movimiento
+      await movimientoModel.create({
+        id_operacion: id,
+        id_producto,
+        cantidad: -Math.abs(cantidad),
+        tipo: 'venta',
+        fecha
+      });
     }
 
-    res.json({ message: 'Venta actualizada correctamente' });
+    res.json({ message: 'Venta y movimientos actualizados correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al actualizar la venta' });
+    res.status(500).json({ message: 'Error al actualizar la venta y sus movimientos' });
   }
 };
+
 
 exports.deleteVenta = async (req, res) => {
   const { id } = req.params;
@@ -90,18 +115,19 @@ exports.deleteVenta = async (req, res) => {
   try {
     await ventaModel.softDelete(id);
     await detalleVentaModel.softDeleteByVentaId(id);
+    await movimientoModel.softDeleteByOperacion(id, 'venta');
 
-    res.json({ message: 'Venta eliminada correctamente' });
+    res.json({ message: 'Venta y movimiento eliminados correctamente' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al eliminar la venta' });
+    res.status(500).json({ message: 'Error al eliminar la venta y su movimiento' });
   }
 };
 
 exports.getDetalleVentaById = async (req, res) => {
   const id_venta = req.params.id;
   try {
-    const detalles = await detalleVentaModel.getByVentaId(id_venta); 
+    const detalles = await detalleVentaModel.getByVentaId(id_venta);
     res.json(detalles);
   } catch (error) {
     console.error(error);
@@ -110,7 +136,7 @@ exports.getDetalleVentaById = async (req, res) => {
 };
 
 exports.updateDetalleVenta = async (req, res) => {
-  const { id } = req.params; // ID del detalle de venta
+  const { id } = req.params;
   const { id_producto, cantidad } = req.body;
 
   try {
@@ -121,4 +147,3 @@ exports.updateDetalleVenta = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
