@@ -10,7 +10,7 @@ exports.buscarProductoPorCodigo = async (codigo) => {
 
 exports.getAllProductos = async () => {
   const result = await pool.query(
-    'SELECT id, nombre FROM producto WHERE fecha_baja IS NULL ORDER BY id'
+    'SELECT id, nombre, categoria, descripcion,precio_costo, precio_venta, stock_minimo FROM producto WHERE fecha_baja IS NULL ORDER BY id'
   );
   return result.rows;
 };
