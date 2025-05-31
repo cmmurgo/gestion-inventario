@@ -6,6 +6,7 @@ const { verifyToken, isAdmin } = require('../middlewares/authMiddleware');
 // Rutas protegidas con token
 router.get('/', verifyToken, ventasController.getAllVentas);
 router.post('/', verifyToken, ventasController.createVenta);
+router.get('/total_ventas/', verifyToken, ventasController.getTotalVentas);
 router.get('/:id', verifyToken, ventasController.getVentaById);
 router.put('/:id', verifyToken, ventasController.updateVenta);
 router.delete('/:id', verifyToken, ventasController.deleteVenta);
