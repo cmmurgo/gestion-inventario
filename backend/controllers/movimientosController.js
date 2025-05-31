@@ -53,19 +53,4 @@ exports.deleteMovimiento = async (req, res) => {
   }
 };
 
-exports.registrarPerdida = async (req, res) => {
-    const { id_producto, cantidad } = req.body;
-  
-    if (!id_producto || !cantidad || cantidad <= 0) {
-      return res.status(400).json({ message: 'ID de producto y cantidad positiva son obligatorios' });
-    }
-  
-    try {
-      await movimientoModel.registrarPerdida({ id_producto, cantidad });
-      res.status(201).json({ message: 'Pérdida registrada correctamente' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al registrar la pérdida' });
-    }
-  };
-  
+
