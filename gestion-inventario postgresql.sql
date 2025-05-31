@@ -28,7 +28,8 @@ CREATE TABLE cliente (
 
 INSERT INTO cliente (nombre, apellido, email, telefono, direccion, cuit_cuil, fecha_baja) VALUES
 ('Carlos', 'Gonzalez', 'carlos.gonzalez@example.com', '2614123456', 'Av. San Martín 123', '20-12345678-9', NULL),
-('Lucía', 'Pérez', 'lucia.perez@example.com', '2614234567', 'Calle Mitre 456', '27-87654321-0', NULL);
+('Lucía', 'Pérez', 'lucia.perez@example.com', '2614234567', 'Calle Mitre 456', '27-87654321-0', NULL),
+('No es cliente', 'No es cliente', 'sin_registrar@example.com', '10000000', 'Sin Calle', '10-10000000-0', NULL);
 
 
 CREATE TABLE promocion (
@@ -96,19 +97,19 @@ INSERT INTO venta (fecha, id_cliente, fecha_baja) VALUES
 
 
 CREATE TABLE detalle_venta (
+    id SERIAL PRIMARY KEY,
     id_venta INT,
     id_producto INT,
     cantidad INT,
     fecha_baja DATE,
-    PRIMARY KEY (id_venta, id_producto),
     CONSTRAINT fk_detalle_venta_venta FOREIGN KEY (id_venta) REFERENCES venta(id),
     CONSTRAINT fk_detalle_venta_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, fecha_baja) VALUES
-(1, 1, 2, NULL),
-(1, 2, 1, NULL),
-(2, 1, 3, NULL);
+(1, 1, 1, 2, NULL),
+(1, 1, 2, 1, NULL),
+(2, 2, 1, 3, NULL);
 
 
 CREATE TABLE perdida (
@@ -141,18 +142,18 @@ INSERT INTO orden_compra (id_proveedor, fecha, estado, fecha_baja) VALUES
 
 
 CREATE TABLE detalle_orden_compra (
+    id SERIAL PRIMARY KEY,
     id_orden_compra INT,
     id_producto INT,
     cantidad INT,
     fecha_baja DATE,
-    PRIMARY KEY (id_orden_compra, id_producto),
     CONSTRAINT fk_detalle_oc_oc FOREIGN KEY (id_orden_compra) REFERENCES orden_compra(id),
     CONSTRAINT fk_detalle_oc_producto FOREIGN KEY (id_producto) REFERENCES producto(id)
 );
 
-INSERT INTO detalle_orden_compra (id_orden_compra, id_producto, cantidad, fecha_baja) VALUES
-(1, 1, 100, NULL),
-(2, 2, 50, NULL);
+INSERT INTO detalle_orden_compra (id, id_orden_compra, id_producto, cantidad, fecha_baja) VALUES
+(1, 1, 1, 100, NULL),
+(2, 2, 2, 50, NULL);
 
 
 CREATE TABLE movimientos (

@@ -19,7 +19,7 @@ function EditPerdida() {
 
     const normalizeFecha = (fecha) => {
       if (!fecha) return '';
-      return fecha.split('T')[0]; // Esto devuelve "2025-05-25"
+      return fecha.split('T')[0]; 
     };
 
   useEffect(() => {
