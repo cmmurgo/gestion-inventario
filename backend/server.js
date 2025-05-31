@@ -9,6 +9,7 @@ const clientRoutes = require('./routes/clientes');
 const inventarioRoutes = require('./routes/inventario');
 const perdidaRoutes = require('./routes/perdidas');
 const movimientosRoutes = require('./routes/movimientos');
+const ventasRoutes = require('./routes/ventas');
 
 // Middlewares primero
 app.use(cors());
@@ -21,6 +22,7 @@ app.use('/api/clientes', clientRoutes);
 app.use('/api/inventario', inventarioRoutes);
 app.use('/api/perdidas', perdidaRoutes);
 app.use('/api/movimientos', movimientosRoutes);
+app.use('/api/ventas', ventasRoutes);
 
 // Puerto
 const PORT = process.env.PORT || 3001;

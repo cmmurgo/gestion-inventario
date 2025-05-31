@@ -14,6 +14,12 @@ import IndexPerdidas from './pages/Perdidas/index';
 import CrearPerdida from './pages/Perdidas/CrearPerdida.jsx';
 import EditarPerdida from './pages/Perdidas/EditarPerdida.jsx';
 import VerPerdida from './pages/Perdidas/VerPerdida.jsx';
+import IndexVentas from './pages/Ventas/index';
+import CrearVenta from './pages/Ventas/CrearVenta.jsx';
+import EditarVenta from './pages/Ventas/EditarVenta.jsx';
+import VerVenta from './pages/Ventas/VerVenta.jsx';
+import VerDetalleVenta from './pages/Ventas/VerDetalleVenta.jsx';
+import EditarDetalleVenta from './pages/Ventas/EditarDetalleVenta.jsx';
 import RecuperarContrasena from './pages/RecuperarContrasena';
 import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
 import './App.css';
@@ -40,6 +46,12 @@ function App() {
       <Route path="perdidas/crear" element={<CrearPerdida />} />
       <Route path="perdidas/editar/:id" element={<EditarPerdida />} />
       <Route path="perdidas/ver/:id" element={<VerPerdida />} />
+      <Route path="ventas" element={<IndexVentas />} />
+      <Route path="ventas/crear" element={<CrearVenta />} />
+      <Route path="ventas/editar/:id" element={<EditarVenta />} />
+      <Route path="ventas/ver/:id" element={<VerVenta />} />
+      <Route path="/ventas/:ventaId/detalle/:detalleId/ver" element={<VerDetalleVenta />} />
+      <Route path="/ventas/:ventaId/detalle/:detalleId/editar" element={<EditarDetalleVenta />} />
       <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
     </Route>
   </Routes>
