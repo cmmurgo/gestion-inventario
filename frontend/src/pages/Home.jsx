@@ -7,23 +7,51 @@ import gastosImg from '../assets/total_gastos.png';
 import inventarioImg from '../assets/codigo_barras.png';
 import graficoImg from '../assets/grafico.png';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { API_URL } from '../api';
+import axios from 'axios';
 
-const data = [
-  { icon: ventasImg, value: 5, label: 'Total Ventas' },
-  { icon: comprasImg, value: 20, label: 'Total Compras' },
-  { icon: perdidasImg, value: 2, label: 'Total Pérdidas' },
-  { icon: ingresosImg, value: 15, label: 'Total Ingresos $' },
-  { icon: gastosImg, value: 12, label: 'Total Gastos $' },
-  { icon: inventarioImg, value: '', label: 'Inventario', hideValue: true, isButton: true },
-];
+function Home() {
 
-export default function Home() {
-
+  const [totalVentas, setTotalVentas] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/');
+      return;
+    }
+
+    const cargarDatos = async () => {
+      try {
+        const [resVenta,] = await Promise.all([
+          axios.get(`${API_URL}/api/ventas/total_ventas`, { headers: { Authorization: `Bearer ${token}` } }),       
+        ]);    
+        
+        setTotalVentas(resVenta.data.total_ventas);  
+      
+      } catch (error) {
+        console.error('Error al cargar los datos:', error);
+        alert('Error al cargar los datos de la venta.');
+      }
+    };
+
+    cargarDatos();
+  }, []);
 
   const handleCodigoBarra = () => {
     navigate('/inventario/codigo-barra');
   };
+
+  const data = [
+    { icon: ventasImg, value: totalVentas, label: 'Total Ventas' },
+    { icon: comprasImg, value: 20, label: 'Total Compras' },
+    { icon: perdidasImg, value: 2, label: 'Total Pérdidas' },
+    { icon: ingresosImg, value: 15, label: 'Total Ingresos $' },
+    { icon: gastosImg, value: 12, label: 'Total Gastos $' },
+    { icon: inventarioImg, value: '', label: 'Escanear Cído de Barras', hideValue: true, isButton: true },
+  ];
 
   return (
     <div className="container-md py-4">
@@ -78,3 +106,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;
