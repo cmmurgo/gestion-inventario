@@ -14,3 +14,11 @@ exports.getAllProductos = async () => {
   );
   return result.rows;
 };
+
+exports.buscarProductoPorId = async (id) => {
+  const result = await pool.query(
+    'SELECT * FROM producto WHERE id = $1 AND fecha_baja IS NULL',
+    [id]
+  );
+  return result.rows[0];
+};

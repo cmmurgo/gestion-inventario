@@ -5,7 +5,8 @@ exports.getByVentaId = async (id_venta) => {
     `SELECT dv.id, dv.id_producto, p.descripcion, dv.cantidad, p.precio_venta
      FROM detalle_venta dv
      INNER JOIN producto p ON p.id = dv.id_producto
-     WHERE dv.id = $1 AND dv.fecha_baja IS NULL`,
+     INNER JOIN venta v ON v.id = dv.id_venta
+     WHERE v.id = $1 AND dv.fecha_baja IS NULL`,
     [id_venta]
   );
   return result.rows;

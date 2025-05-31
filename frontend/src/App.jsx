@@ -18,8 +18,8 @@ import IndexVentas from './pages/Ventas/index';
 import CrearVenta from './pages/Ventas/CrearVenta.jsx';
 import EditarVenta from './pages/Ventas/EditarVenta.jsx';
 import VerVenta from './pages/Ventas/VerVenta.jsx';
-import VerDetalleVenta from './pages/Ventas/VerDetalleVenta.jsx';
-import EditarDetalleVenta from './pages/Ventas/EditarDetalleVenta.jsx';
+//import VerDetalleVenta from './pages/Ventas/VerDetalleVenta.jsx';
+//import EditarDetalleVenta from './pages/Ventas/EditarDetalleVenta.jsx';
 import RecuperarContrasena from './pages/RecuperarContrasena';
 import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
 import './App.css';
@@ -50,8 +50,7 @@ function App() {
       <Route path="ventas/crear" element={<CrearVenta />} />
       <Route path="ventas/editar/:id" element={<EditarVenta />} />
       <Route path="ventas/ver/:id" element={<VerVenta />} />
-      <Route path="/ventas/:ventaId/detalle/:detalleId/ver" element={<VerDetalleVenta />} />
-      <Route path="/ventas/:ventaId/detalle/:detalleId/editar" element={<EditarDetalleVenta />} />
+    
       <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
     </Route>
   </Routes>
