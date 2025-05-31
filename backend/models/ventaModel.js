@@ -60,3 +60,11 @@ exports.softDelete = async (id) => {
     [id]
   );
 };
+
+exports.totalVentas = async () => {
+  const result = await pool.query(
+    `Select count(id) AS total from venta
+      WHERE fecha_baja IS NULL `  
+  );
+  return result.rows[0].total;
+};
