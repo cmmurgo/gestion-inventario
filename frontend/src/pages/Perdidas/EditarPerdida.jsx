@@ -7,7 +7,7 @@ function EditPerdida() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [productos, setProductos] = useState([]); // Estado para productos
+  const [productos, setProductos] = useState([]);
   const [id_producto, setProductoId] = useState('');
   const [fecha, setFecha] = useState('');
   const [cantidad, setCantidad] = useState('');
@@ -16,11 +16,13 @@ function EditPerdida() {
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [nombre_producto, setNombreProducto] = useState('');
+  const [producto, setProducto] = useState('');
 
-    const normalizeFecha = (fecha) => {
-      if (!fecha) return '';
-      return fecha.split('T')[0]; 
-    };
+  const normalizeFecha = (fecha) => {
+    if (!fecha) return '';
+    return fecha.split('T')[0];
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -33,40 +35,70 @@ function EditPerdida() {
       axios.get(`${API_URL}/api/perdidas/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      .then(res => {
-        const { id_producto, fecha, cantidad, motivo } = res.data;
-        setProductoId(id_producto);
-        setFecha(normalizeFecha(fecha));
-        setCantidad(cantidad);
-        setMotivo(motivo);
-      })
-      .catch(err => {
-        console.error(err);
-        setMensaje('Error al cargar la pérdida');
-        setTipoMensaje('error');
-        setMostrarMensaje(true);
-      });
+        .then(res => {
+          const { id_producto, fecha, cantidad, motivo } = res.data;
+          setProductoId(id_producto);
+          setFecha(normalizeFecha(fecha));
+          setCantidad(cantidad);
+          setMotivo(motivo);
+        })
+        .catch(err => {
+          console.error(err);
+          setMensaje('Error al cargar la pérdida');
+          setTipoMensaje('error');
+          setMostrarMensaje(true);
+        });
     }
 
     const fetchProductos = async () => {
       try {
-        const token = localStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/inventario/productos`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setProductos(response.data);   
+        setProductos(response.data);
       } catch (error) {
         console.error('Error al cargar productos:', error);
       }
     };
-    
+
     fetchProductos();
-    
   }, [id, navigate]);
 
+  // Sincronizar producto y nombre cuando se cargan productos y pérdida
+  useEffect(() => {
+    if (id_producto && productos.length > 0) {
+      setProducto(id_producto);
+      const productoObj = productos.find(p => p.id === parseInt(id_producto));
+      setNombreProducto(productoObj?.nombre || '');
+    }
+  }, [id_producto, productos]);
+
   const handleGuardar = async () => {
+    if (!id_producto || !cantidad || !fecha || !motivo) {
+      setMensaje('Todos los campos son obligatorios');
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      return;
+    }
+
+    const erroresStock = await verificarStockSuficiente();
+    if (erroresStock.length > 0) {
+      const mensajeError = erroresStock.map(e =>
+        e.error
+          ? e.error
+          : `Producto: ${e.nombre} - Solicitado: ${e.solicitado}, Disponible: ${e.disponible}.`
+      ).join('\n');
+
+      setMensaje(`Stock insuficiente:\n${mensajeError}`);
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 5000);
+      return;
+    }
+
     const token = localStorage.getItem('token');
     if (!token) return;
 
@@ -92,6 +124,36 @@ function EditPerdida() {
     }
   };
 
+  const verificarStockSuficiente = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const errores = [];
+      const idProducto = producto;
+      const cantidadSolicitada = parseFloat(cantidad);
+
+      const res = await axios.get(`${API_URL}/api/movimientos/saldo/${idProducto}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const stockDisponible = parseFloat(res.data.saldo);
+
+      if (cantidadSolicitada > stockDisponible) {
+        errores.push({
+          nombre: nombre_producto,
+          solicitado: cantidadSolicitada,
+          disponible: stockDisponible
+        });
+      }
+
+      return errores;
+
+    } catch (error) {
+      console.error("Error al verificar stock:", error);
+      return [{ error: "Error al verificar el stock" }];
+    }
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <h4>EDITAR PÉRDIDA</h4>
@@ -100,8 +162,14 @@ function EditPerdida() {
           <label className="form-label">Producto:</label>
           <select
             className="form-control"
-            value={id_producto}                    
-            onChange={(e) => setProductoId(e.target.value)} 
+            value={id_producto}
+            onChange={(e) => {
+              const id = e.target.value;
+              const productoObj = productos.find((p) => p.id === parseInt(id));
+              setProducto(id);
+              setProductoId(id);
+              setNombreProducto(productoObj?.nombre || '');
+            }}
           >
             <option value="">Seleccionar producto</option>
             {productos.map((p) => (

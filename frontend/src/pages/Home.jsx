@@ -56,7 +56,7 @@ function Home() {
     { icon: ventasImg, value: totalVentas, label: 'Total Cantidad de Ventas' },
     { icon: comprasImg, value: 20, label: 'Total Compras' },
     { icon: perdidasImg, value: totalPerdidas, label: 'Total Cantidad de Pérdidas' },
-    { icon: ingresosImg, value: '$' + totalIngresos, label: 'Ingresos Netos x Ventas' },
+    { icon: ingresosImg, value: '$' + (totalIngresos ?? 0), label: 'Ingresos Netos x Ventas' },
     { icon: gastosImg, value: 12, label: 'Total Gastos $' },
     { icon: inventarioImg, value: '', label: 'Escanear Cído de Barras', hideValue: true, isButton: true },
   ];

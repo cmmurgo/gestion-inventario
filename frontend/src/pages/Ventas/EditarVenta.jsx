@@ -76,6 +76,21 @@ function EditarVenta() {
       return;
     }
 
+    const erroresStock = await verificarStockSuficiente();
+    if (erroresStock.length > 0) {
+      const mensajeError = erroresStock.map(e =>
+        e.error
+          ? e.error
+          : `Producto: ${e.nombre} - Solicitado: ${e.solicitado}, Disponible: ${e.disponible}.`
+      ).join('\n');
+  
+      setMensaje(`Stock insuficiente:\n${mensajeError}`);
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 5000);
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
@@ -101,6 +116,39 @@ function EditarVenta() {
       setTipoMensaje('error');
       setMostrarMensaje(true);
       setTimeout(() => setMostrarMensaje(false), 3000);
+    }
+  };
+
+  const verificarStockSuficiente = async () => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      const errores = [];
+  
+      for (const detalle of detalles) {
+        const idProducto = detalle.id_producto;
+        const cantidadSolicitada = parseFloat(detalle.cantidad);
+ 
+        const res = await axios.get(`${API_URL}/api/movimientos/saldo/${idProducto}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });  
+  
+        const stockDisponible = parseFloat(res.data.saldo);
+  
+        if (cantidadSolicitada > stockDisponible) {
+          errores.push({
+            nombre: detalle.nombre,
+            solicitado: cantidadSolicitada,
+            disponible: stockDisponible
+          });
+        }
+      }
+  
+      return errores;
+  
+    } catch (error) {
+      console.error("Error al verificar stock:", error);
+      return [{ error: "Error al verificar el stock" }];
     }
   };
 
