@@ -59,14 +59,28 @@ function CrearVenta() {
 
   const handleGuardar = async () => {
     if (!fecha || !idCliente || detalles.length === 0 || detalles.some(d => !d.id_producto || !d.cantidad)) {
-       
       setMensaje('Todos los campos son obligatorios');
       setTipoMensaje('error');
       setMostrarMensaje(true);
       setTimeout(() => setMostrarMensaje(false), 3000);
       return;
     }
-
+  
+    const erroresStock = await verificarStockSuficiente();
+    if (erroresStock.length > 0) {
+      const mensajeError = erroresStock.map(e =>
+        e.error
+          ? e.error
+          : `Producto: ${e.nombre} - Solicitado: ${e.solicitado}, Disponible: ${e.disponible}.`
+      ).join('\n');
+  
+      setMensaje(`Stock insuficiente:\n${mensajeError}`);
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 5000);
+      return;
+    }
+  
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
@@ -74,17 +88,18 @@ function CrearVenta() {
         { fecha, id_cliente: idCliente, detalles },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
+  
       if (response.status === 201) {
         setMensaje('Venta registrada con éxito');
-        setTipoMensaje('success');       
+        setTipoMensaje('success');
       } else {
         setMensaje('Error al registrar la venta');
         setTipoMensaje('error');
       }
-
+  
       setMostrarMensaje(true);
       setTimeout(() => setMostrarMensaje(false), 3000);
+  
     } catch (error) {
       console.error(error);
       const backendMessage = error?.response?.data?.message || 'Error al registrar la venta';
@@ -94,6 +109,41 @@ function CrearVenta() {
       setTimeout(() => setMostrarMensaje(false), 3000);
     }
   };
+
+
+  const verificarStockSuficiente = async () => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      const errores = [];
+  
+      for (const detalle of detalles) {
+        const idProducto = detalle.id_producto;
+        const cantidadSolicitada = parseFloat(detalle.cantidad);
+ 
+        const res = await axios.get(`${API_URL}/api/movimientos/saldo/${idProducto}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });  
+  
+        const stockDisponible = parseFloat(res.data.saldo);
+  
+        if (cantidadSolicitada > stockDisponible) {
+          errores.push({
+            nombre: detalle.nombre,
+            solicitado: cantidadSolicitada,
+            disponible: stockDisponible
+          });
+        }
+      }
+  
+      return errores;
+  
+    } catch (error) {
+      console.error("Error al verificar stock:", error);
+      return [{ error: "Error al verificar el stock" }];
+    }
+  };
+  
 
   const abrirModalCliente = async () => {
     if (!idCliente) return;

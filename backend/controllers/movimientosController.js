@@ -53,4 +53,19 @@ exports.deleteMovimiento = async (req, res) => {
   }
 };
 
+exports.getSaldo = async (req, res) => {
+  const id_producto = parseInt(req.params.id_producto);
+  try {
+    const saldo = await movimientoModel.controlSaldo(id_producto);
+
+    if (saldo < 0) {
+      return res.json({ message: 'No hay saldo suficiente de producto id ' + id_producto + ' para el movimiento que se intenta realizar. \n', saldo});
+    }
+    res.json({ message: 'Saldo suficiente' + ' del producto id ' + id_producto, saldo });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al consultar saldo' });
+  }
+};
+
 
