@@ -64,7 +64,8 @@ exports.softDelete = async (id) => {
 exports.totalVentas = async () => {
   const result = await pool.query(
     `Select count(id) AS total from venta
-      WHERE fecha_baja IS NULL `  
+      WHERE fecha_baja IS NULL and fecha >= date_trunc('month', CURRENT_DATE)`  
   );
   return result.rows[0].total;
 };
+

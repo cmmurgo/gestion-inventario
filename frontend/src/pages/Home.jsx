@@ -14,6 +14,8 @@ import axios from 'axios';
 function Home() {
 
   const [totalVentas, setTotalVentas] = useState([]);
+  const [totalPerdidas, setTotalPerdidas] = useState([]);
+  const [totalIngresos, setTotalIngresos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,11 +27,15 @@ function Home() {
 
     const cargarDatos = async () => {
       try {
-        const [resVenta,] = await Promise.all([
-          axios.get(`${API_URL}/api/ventas/total_ventas`, { headers: { Authorization: `Bearer ${token}` } }),       
+        const [resVenta, resPerdidas, resIngresos] = await Promise.all([
+          axios.get(`${API_URL}/api/ventas/total_ventas`, { headers: { Authorization: `Bearer ${token}` } }),      
+          axios.get(`${API_URL}/api/perdidas/total_perdidas`, { headers: { Authorization: `Bearer ${token}` } }),  
+          axios.get(`${API_URL}/api/ventas/total_ingresos`, { headers: { Authorization: `Bearer ${token}` } }), 
         ]);    
         
         setTotalVentas(resVenta.data.total_ventas);  
+        setTotalPerdidas(resPerdidas.data.total_perdidas); 
+        setTotalIngresos(resIngresos.data.total_ingresos); 
       
       } catch (error) {
         console.error('Error al cargar los datos:', error);
@@ -44,17 +50,20 @@ function Home() {
     navigate('/inventario/codigo-barra');
   };
 
+  const nombreMes = new Date().toLocaleString('es-AR', { month: 'long' }).toUpperCase();
+
   const data = [
-    { icon: ventasImg, value: totalVentas, label: 'Total Ventas' },
+    { icon: ventasImg, value: totalVentas, label: 'Total Cantidad de Ventas' },
     { icon: comprasImg, value: 20, label: 'Total Compras' },
-    { icon: perdidasImg, value: 2, label: 'Total Pérdidas' },
-    { icon: ingresosImg, value: 15, label: 'Total Ingresos $' },
+    { icon: perdidasImg, value: totalPerdidas, label: 'Total Cantidad de Pérdidas' },
+    { icon: ingresosImg, value: '$' + totalIngresos, label: 'Ingresos Netos x Ventas' },
     { icon: gastosImg, value: 12, label: 'Total Gastos $' },
     { icon: inventarioImg, value: '', label: 'Escanear Cído de Barras', hideValue: true, isButton: true },
   ];
 
-  return (
+  return (    
     <div className="container-md py-4">
+      <h4 className="text-center fw-bold mb-4">DATOS DEL MES DE {nombreMes}</h4>
       <div className="row g-4 mb-4">
         {data.map((item, index) => (
           <div className="col-4" key={index}>
@@ -96,7 +105,7 @@ function Home() {
       </div>
 
       <div className="text-center">
-        <h5 className="mb-3">Cantidad de ventas por mes</h5>
+        <h5 className="mb-3">Movimientos por mes</h5>
         <img
           src={graficoImg}
           alt="Gráfico de ventas"
