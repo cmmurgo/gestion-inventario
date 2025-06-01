@@ -49,10 +49,4 @@ exports.softDelete = async (id) => {
   );
 };
 
-exports.totalPerdidas = async () => {
-  const result = await pool.query(
-    `Select count(id) AS total from perdida
-      WHERE fecha_baja IS NULL and fecha >= date_trunc('month', CURRENT_DATE)`  
-  );
-  return result.rows[0].total;
-};
+
