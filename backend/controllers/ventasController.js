@@ -157,3 +157,13 @@ exports.getTotalVentas = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener el total de las ventas' });
   }
 };
+
+exports.getTotalIngresos = async (req, res) => {
+  try {
+    const total = await detalleVentaModel.totalIngresos();
+    res.json({ total_ingresos: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de los ingresos netos' });
+  }
+};
