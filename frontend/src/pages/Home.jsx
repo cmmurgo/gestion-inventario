@@ -16,6 +16,7 @@ function Home() {
   const [totalVentas, setTotalVentas] = useState([]);
   const [totalPerdidas, setTotalPerdidas] = useState([]);
   const [totalIngresos, setTotalIngresos] = useState([]);
+  const [totalCompras, setTotalCompras] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,15 +28,17 @@ function Home() {
 
     const cargarDatos = async () => {
       try {
-        const [resVenta, resPerdidas, resIngresos] = await Promise.all([
-          axios.get(`${API_URL}/api/ventas/total_ventas`, { headers: { Authorization: `Bearer ${token}` } }),      
-          axios.get(`${API_URL}/api/perdidas/total_perdidas`, { headers: { Authorization: `Bearer ${token}` } }),  
-          axios.get(`${API_URL}/api/ventas/total_ingresos`, { headers: { Authorization: `Bearer ${token}` } }), 
+        const [resVenta, resPerdidas, resIngresos, resCompra] = await Promise.all([
+          axios.get(`${API_URL}/api/inventario/totales/ventas`, { headers: { Authorization: `Bearer ${token}` } }),      
+          axios.get(`${API_URL}/api/inventario/totales/perdidas`, { headers: { Authorization: `Bearer ${token}` } }),  
+          axios.get(`${API_URL}/api/inventario/totales/ingresos`, { headers: { Authorization: `Bearer ${token}` } }), 
+          axios.get(`${API_URL}/api/inventario/totales/compras`, { headers: { Authorization: `Bearer ${token}` } }) 
         ]);    
         
         setTotalVentas(resVenta.data.total_ventas);  
         setTotalPerdidas(resPerdidas.data.total_perdidas); 
         setTotalIngresos(resIngresos.data.total_ingresos); 
+        setTotalCompras(resCompra.data.total_compras);  
       
       } catch (error) {
         console.error('Error al cargar los datos:', error);
@@ -54,7 +57,7 @@ function Home() {
 
   const data = [
     { icon: ventasImg, value: totalVentas, label: 'Total Cantidad de Ventas' },
-    { icon: comprasImg, value: 20, label: 'Total Compras' },
+    { icon: comprasImg, value: totalCompras, label: 'Total Cantidad de Compras' },
     { icon: perdidasImg, value: totalPerdidas, label: 'Total Cantidad de Pérdidas' },
     { icon: ingresosImg, value: '$' + (totalIngresos ?? 0), label: 'Ingresos Netos x Ventas' },
     { icon: gastosImg, value: 12, label: 'Total Gastos $' },
