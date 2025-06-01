@@ -94,13 +94,5 @@ exports.deletePerdida = async (req, res) => {
   }
 };
 
-exports.getTotalPerdidas = async (req, res) => {
-  try {
-    const total = await perdidaModel.totalPerdidas();
-    res.json({ total_perdidas: total });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al obtener el total de las perdidas' });
-  }
-};
+
 

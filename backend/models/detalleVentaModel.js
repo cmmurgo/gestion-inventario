@@ -39,14 +39,5 @@ exports.softDeleteByVentaId = async (id_venta) => {
   );
 };
 
-exports.totalIngresos = async () => {
-  const result = await pool.query(
-    `Select sum(dv.cantidad*(p.precio_venta-p.precio_costo)) AS total from detalle_venta dv
-      INNER JOIN producto p ON p.id = dv.id_producto
-      INNER JOIN venta v ON v.id = dv.id_venta
-      WHERE dv.fecha_baja IS NULL 
-      and v.fecha >= date_trunc('month', CURRENT_DATE)`  
-  );
-  return result.rows[0].total;
-};
+
 

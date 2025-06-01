@@ -1,4 +1,4 @@
-const inventarioModel = require('../models/inventario');
+const inventarioModel = require('../models/inventarioModel');
 
 exports.getProductoPorCodigo = async (req, res) => {
   try {
@@ -39,5 +39,45 @@ exports.getProductoPorId = async (req, res) => {
   } catch (error) {
     console.error('Error al obtener producto:', error);
     res.status(500).json({ mensaje: 'Error del servidor' });
+  }
+};
+
+exports.getTotalVentas = async (req, res) => {
+  try {
+    const total = await inventarioModel.totalVentas();
+    res.json({ total_ventas: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de las ventas' });
+  }
+};
+
+exports.getTotalIngresos = async (req, res) => {
+  try {
+    const total = await inventarioModel.totalIngresos();
+    res.json({ total_ingresos: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de los ingresos netos' });
+  }
+};
+
+exports.getTotalPerdidas = async (req, res) => {
+  try {
+    const total = await inventarioModel.totalPerdidas();
+    res.json({ total_perdidas: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de las perdidas' });
+  }
+};
+
+exports.getTotalCompras = async (req, res) => {
+  try {
+    const total = await inventarioModel.totalCompras();
+    res.json({ total_compras: total });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener el total de las compras' });
   }
 };
