@@ -14,6 +14,7 @@ function CrearPerdida() {
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [productos, setProductos] = useState([]);
+  const [nombre_producto, setNombreProducto] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -55,6 +56,21 @@ function CrearPerdida() {
       return;
     }
 
+    const erroresStock = await verificarStockSuficiente();
+    if (erroresStock.length > 0) {
+      const mensajeError = erroresStock.map(e =>
+        e.error
+          ? e.error
+          : `Producto: ${e.nombre} - Solicitado: ${e.solicitado}, Disponible: ${e.disponible}.`
+      ).join('\n');
+  
+      setMensaje(`Stock insuficiente:\n${mensajeError}`);
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 5000);
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
@@ -69,11 +85,7 @@ function CrearPerdida() {
 
       if (response.status === 201) {
         setMensaje('Pérdida registrada con éxito');
-        setTipoMensaje('success');
-        setProducto('');
-        setCantidad('');
-        setFecha('');
-        setMotivo('');
+        setTipoMensaje('success'); 
       } else {
         setMensaje('Error al registrar la pérdida');
         setTipoMensaje('error');
@@ -91,6 +103,36 @@ function CrearPerdida() {
     }
   };
 
+  const verificarStockSuficiente = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const errores = [];
+      const idProducto = producto;
+      const cantidadSolicitada = parseFloat(cantidad);
+
+      const res = await axios.get(`${API_URL}/api/movimientos/saldo/${idProducto}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });  
+
+      const stockDisponible = parseFloat(res.data.saldo);
+
+      if (cantidadSolicitada > stockDisponible) {
+        errores.push({
+          nombre: nombre_producto,
+          solicitado: cantidadSolicitada,
+          disponible: stockDisponible
+        });
+      }
+  
+      return errores;
+  
+    } catch (error) {
+      console.error("Error al verificar stock:", error);
+      return [{ error: "Error al verificar el stock" }];
+    }
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <h4>REGISTRAR PÉRDIDA:</h4>
@@ -100,7 +142,12 @@ function CrearPerdida() {
           <select
               className="form-control"
               value={producto}
-              onChange={(e) => setProducto(e.target.value)}
+              onChange={(e) => {
+                const id = e.target.value;
+                const productoObj = productos.find((p) => p.id === parseInt(id));
+                setProducto(id);
+                setNombreProducto(productoObj?.nombre || '');
+              }}
             >
               <option value="">Seleccionar producto</option>
               {productos.map((p) => (
@@ -154,6 +201,7 @@ function CrearPerdida() {
         <button className="btn btn-dark" onClick={() => navigate('/perdidas')}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>
       </div>
+     
     </div>
   );
 }

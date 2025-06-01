@@ -58,4 +58,18 @@ exports.softDeleteByOperacion = async (id_operacion, tipo) => {
   
     await pool.query(query, values);
   };
+
+  exports.controlSaldo = async ( id_producto ) => {
+    const query = `
+      SELECT SUM(cantidad) AS saldo from movimientos
+      WHERE id_producto = $1         
+      AND fecha_baja IS NULL
+    `;
+  
+    const values = [id_producto];
+    const result = await pool.query(query, values);
+
+    return result.rows[0].saldo;
+  };
+
   

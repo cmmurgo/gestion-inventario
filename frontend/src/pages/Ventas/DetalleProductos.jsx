@@ -5,7 +5,7 @@ import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto, esEdicion }) {
   
   const agregarDetalle = () => {
-    setDetalles([...detalles, { id_producto: '', cantidad: '', precio_venta: '', total: '' }]);
+    setDetalles([...detalles, { id_producto: '', nombre: '', cantidad: '', precio_venta: '', total: '' }]);
   };  
 
   const actualizarDetalle = (index, campo, valor) => {
@@ -15,6 +15,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
       const productoSeleccionado = productos.find(p => p.id === parseInt(valor));
       nuevosDetalles[index].id_producto = valor;
       nuevosDetalles[index].precio_venta = productoSeleccionado ? productoSeleccionado.precio_venta : '';
+      nuevosDetalles[index].nombre = productoSeleccionado ? productoSeleccionado.nombre : '';
     } else {
       nuevosDetalles[index][campo] = valor;
     }
