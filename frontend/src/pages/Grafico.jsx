@@ -49,7 +49,7 @@ useEffect(() => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="mes_anio" />
                 <YAxis   label={{
-                                    value: "Cantidad de movimientos",
+                                    value: "Montos en $ en movimientos",
                                     angle: -90,
                                     position: "insideLeft",
                                     style: { textAnchor: "middle" }
