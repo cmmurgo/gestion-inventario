@@ -126,7 +126,11 @@ function CrearVenta() {
         });  
   
         const stockDisponible = parseFloat(res.data.saldo);
-  
+
+        if (isNaN(stockDisponible)) {
+          stockDisponible = 0;
+        }
+        
         if (cantidadSolicitada > stockDisponible) {
           errores.push({
             nombre: detalle.nombre,
