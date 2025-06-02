@@ -1,5 +1,5 @@
 -- PostgreSQL version
-BEGIN;
+
 
 -- Crear la tabla
 CREATE TABLE usuario (
@@ -44,7 +44,8 @@ CREATE TABLE promocion (
 
 INSERT INTO promocion (nombre, condiciones, porcentaje, fecha_inicio, fecha_fin, fecha_baja) VALUES
 ('Promo Invierno', 'Descuento por temporada invernal', 15, '2025-06-01', '2025-08-31', NULL),
-('2x1 Bebidas', 'Lleva 2 y paga 1', 50, '2025-05-01', '2025-06-30', NULL);
+('2x1 Bebidas', 'Lleva 2 y paga 1', 50, '2025-05-01', '2025-06-30', NULL),
+('3x1 Bebidas', 'Lleva 3 y paga 1', 33, '2025-05-10', '2025-06-10', NULL);
 
 
 CREATE TABLE proveedor (
@@ -79,6 +80,34 @@ CREATE TABLE producto (
 );
 
 INSERT INTO producto (nombre, categoria, descripcion, precio_costo, precio_venta, stock_minimo, id_promocion, codigo_barra, fecha_baja) VALUES
+('Gaseosa Cola 1.5L', 'Bebidas', 'Botella de 1.5 litros', 100, 180, 15, 1, 7790000000003, NULL),
+('Yogur Natural 1L', 'Lácteos', 'Yogur sin sabor', 90, 140, 10, 3, 7790000000004, NULL),
+('Pan de Molde', 'Panificados', 'Pan blanco en paquete', 80, 120, 20, NULL, 7790000000005, NULL),
+('Aceite Girasol 1L', 'Aceites', 'Aceite comestible de girasol', 150, 220, 5, NULL, 7790000000006, NULL),
+('Galletitas Dulces', 'Snacks', 'Galletas de chocolate', 60, 100, 30, 2, 7790000000007, NULL),
+('Jugo en Polvo', 'Bebidas', 'Sabor naranja', 20, 45, 50, 1, 7790000000008, NULL),
+('Café Molido 250g', 'Bebidas', 'Café tostado molido', 200, 300, 5, NULL, 7790000000009, NULL),
+('Arroz 1kg', 'Almacén', 'Arroz largo fino', 70, 110, 10, NULL, 7790000000010, NULL),
+('Fideos Spaghetti', 'Almacén', 'Pasta seca', 60, 100, 10, NULL, 7790000000011, NULL),
+('Sal fina 500g', 'Almacén', 'Sal común', 20, 35, 15, NULL, 7790000000012, NULL),
+('Azúcar 1kg', 'Almacén', 'Azúcar refinada', 50, 90, 20, NULL, 7790000000013, NULL),
+('Mermelada Frutilla', 'Almacén', 'Mermelada natural', 90, 140, 5, 3, 7790000000014, NULL),
+('Harina 000 1kg', 'Almacén', 'Harina común', 40, 70, 30, NULL, 7790000000015, NULL),
+('Huevos docena', 'Huevos', 'Huevos de gallina', 150, 220, 5, NULL, 7790000000016, NULL),
+('Manteca 200g', 'Lácteos', 'Manteca con sal', 100, 160, 5, 3, 7790000000017, NULL),
+('Queso Cremoso', 'Lácteos', 'Queso fresco', 250, 350, 5, NULL, 7790000000018, NULL),
+('Cerveza 500ml', 'Bebidas', 'Cerveza rubia', 180, 300, 10, NULL, 7790000000019, NULL),
+('Jabón de Tocador', 'Limpieza', 'Jabón perfumado', 50, 90, 20, NULL, 7790000000020, NULL),
+('Shampoo 400ml', 'Limpieza', 'Shampoo para cabello normal', 200, 300, 5, NULL, 7790000000021, NULL),
+('Papel Higiénico', 'Limpieza', 'Rollo doble hoja', 60, 100, 30, NULL, 7790000000022, NULL),
+('Lavandina 1L', 'Limpieza', 'Desinfectante líquido', 30, 60, 20, NULL, 7790000000023, NULL),
+('Detergente 500ml', 'Limpieza', 'Detergente para vajilla', 40, 70, 15, NULL, 7790000000024, NULL),
+('Desodorante Ambiente', 'Limpieza', 'Spray de ambiente', 120, 180, 5, NULL, 7790000000025, NULL),
+('Servilletas', 'Limpieza', 'Paquete x100', 50, 80, 10, NULL, 7790000000026, NULL),
+('Carne Picada 1kg', 'Carnes', 'Carne vacuna', 900, 1200, 5, NULL, 7790000000027, NULL),
+('Pollo Entero', 'Carnes', 'Pollo fresco entero', 800, 1000, 3, NULL, 7790000000028, NULL),
+('Milanesa Soja', 'Congelados', 'Empanado vegetal', 150, 200, 10, NULL, 7790000000029, NULL),
+('Helado 1L', 'Congelados', 'Sabor vainilla', 300, 450, 5, 2, 7790000000030, NULL);
 ('Agua Mineral 500ml', 'Bebidas', 'Agua sin gas en botella plástica', 50, 100, 10, 2, 7791234567890, NULL),
 ('Leche Entera 1L', 'Lácteos', 'Leche entera pasteurizada', 120, 180, 20, NULL, 7790987654321, NULL);
 
@@ -107,9 +136,9 @@ CREATE TABLE detalle_venta (
 );
 
 INSERT INTO detalle_venta (id_venta, id_producto, cantidad, fecha_baja) VALUES
-(1, 1, 1, 2, NULL),
-(1, 1, 2, 1, NULL),
-(2, 2, 1, 3, NULL);
+(1, 1, 2, NULL),
+(1, 2, 1, NULL),
+(2, 1, 3, NULL);
 
 
 CREATE TABLE perdida (
@@ -168,9 +197,9 @@ CREATE TABLE movimientos (
 );
 
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES
-(1, 1, 'compra', -10, '2025-05-09', NULL),
-(2, 2, 'venta', 50, '2025-05-10', NULL),
+(1, 1, 'compra', 100, '2025-05-09', NULL),
+(2, 2, 'venta', -50, '2025-05-10', NULL),
 (3, 1, 'perdida', -2, '2025-05-10', NULL),
-(4, 2, 'compra', 1, '2025-05-10', NULL);
+(4, 2, 'compra', 150, '2025-05-10', NULL);
 
 

@@ -4,12 +4,11 @@ import comprasImg from '../assets/total_compras.png';
 import perdidasImg from '../assets/total_perdidas.png';
 import ingresosImg from '../assets/total_ingresos.png';
 import gastosImg from '../assets/total_gastos.png';
-import inventarioImg from '../assets/codigo_barras.png';
-import graficoImg from '../assets/grafico.png';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { API_URL } from '../api';
 import axios from 'axios';
+import Grafico from './Grafico.jsx';
 
 function Home() {
 
@@ -17,6 +16,7 @@ function Home() {
   const [totalPerdidas, setTotalPerdidas] = useState([]);
   const [totalIngresos, setTotalIngresos] = useState([]);
   const [totalCompras, setTotalCompras] = useState([]);
+  const [totalGastos, setTotalGastos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,17 +28,19 @@ function Home() {
 
     const cargarDatos = async () => {
       try {
-        const [resVenta, resPerdidas, resIngresos, resCompra] = await Promise.all([
+        const [resVenta, resPerdidas, resIngresos, resCompra, resGastos] = await Promise.all([
           axios.get(`${API_URL}/api/inventario/totales/ventas`, { headers: { Authorization: `Bearer ${token}` } }),      
           axios.get(`${API_URL}/api/inventario/totales/perdidas`, { headers: { Authorization: `Bearer ${token}` } }),  
           axios.get(`${API_URL}/api/inventario/totales/ingresos`, { headers: { Authorization: `Bearer ${token}` } }), 
-          axios.get(`${API_URL}/api/inventario/totales/compras`, { headers: { Authorization: `Bearer ${token}` } }) 
+          axios.get(`${API_URL}/api/inventario/totales/compras`, { headers: { Authorization: `Bearer ${token}` } }), 
+          axios.get(`${API_URL}/api/inventario/totales/gastos`, { headers: { Authorization: `Bearer ${token}` } }) 
         ]);    
         
         setTotalVentas(resVenta.data.total_ventas);  
         setTotalPerdidas(resPerdidas.data.total_perdidas); 
         setTotalIngresos(resIngresos.data.total_ingresos); 
         setTotalCompras(resCompra.data.total_compras);  
+        setTotalGastos(resGastos.data.total_gastos); 
       
       } catch (error) {
         console.error('Error al cargar los datos:', error);
@@ -60,8 +62,7 @@ function Home() {
     { icon: comprasImg, value: totalCompras, label: 'Total Cantidad de Compras' },
     { icon: perdidasImg, value: totalPerdidas, label: 'Total Cantidad de Pérdidas' },
     { icon: ingresosImg, value: '$' + (totalIngresos ?? 0), label: 'Ingresos Netos x Ventas' },
-    { icon: gastosImg, value: 12, label: 'Total Gastos $' },
-    { icon: inventarioImg, value: '', label: 'Escanear Cído de Barras', hideValue: true, isButton: true },
+    { icon: gastosImg, value: '$' + (totalGastos ?? 0), label: 'Total Gastos' },
   ];
 
   return (    
@@ -108,12 +109,9 @@ function Home() {
       </div>
 
       <div className="text-center">
-        <h5 className="mb-3">Movimientos por mes</h5>
-        <img
-          src={graficoImg}
-          alt="Gráfico de ventas"
-          className="img-fluid shadow rounded-4"
-        />
+
+        <Grafico />
+      
       </div>
     </div>
   );
