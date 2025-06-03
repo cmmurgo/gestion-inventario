@@ -105,3 +105,150 @@ exports.movimientosPorMes = async () => {
     throw error;
   }
 };
+
+
+exports.stockBajos = async () => {
+  const query = `
+    SELECT
+          p.id,
+          p.nombre,
+          p.categoria,
+          p.descripcion,
+          p.stock_minimo,
+          COALESCE(SUM(CASE 
+              WHEN m.tipo = 'entrada' THEN m.cantidad
+              WHEN m.tipo = 'salida' THEN -m.cantidad
+              ELSE 0 
+          END), 0) AS stock_actual,
+          ROUND(p.stock_minimo * 1.2, 2) AS umbral_stock_bajo
+      FROM producto p
+      LEFT JOIN movimientos m ON m.id_producto = p.id AND m.fecha_baja IS NULL
+      WHERE p.fecha_baja IS NULL
+      GROUP BY p.id
+      HAVING COALESCE(SUM(CASE 
+              WHEN m.tipo = 'entrada' THEN m.cantidad
+              WHEN m.tipo = 'salida' THEN -m.cantidad
+              ELSE 0 
+          END), 0) <= p.stock_minimo * 1.2;
+
+            `;
+  
+  try {
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error al consultar stock bajos:', error);
+    throw error;
+  }
+};
+
+
+exports.tasaRotacion = async () => {
+  const query = `
+    WITH stock_por_mes AS (
+      SELECT 
+        m.id_producto,
+        DATE_TRUNC('month', m.fecha) AS mes,
+        SUM(
+          CASE 
+            WHEN m.tipo ILIKE 'ingreso' THEN m.cantidad
+            WHEN m.tipo ILIKE 'egreso' THEN -m.cantidad
+            ELSE 0
+          END
+        ) AS saldo_mes
+      FROM movimientos m
+      WHERE 
+        m.fecha_baja IS NULL
+        AND m.fecha >= CURRENT_DATE - INTERVAL '6 months'
+      GROUP BY m.id_producto, DATE_TRUNC('month', m.fecha)
+    ),
+    stock_promedio_mensual AS (
+      SELECT 
+        id_producto,
+        ROUND(AVG(saldo_mes)::numeric, 2) AS stock_promedio_mensual
+      FROM stock_por_mes
+      GROUP BY id_producto
+    )
+
+    SELECT 
+      p.id AS producto_id,
+      p.nombre,
+      COALESCE(SUM(dv.cantidad), 0) AS total_ventas_6_meses,
+      spm.stock_promedio_mensual,
+      CASE 
+        WHEN spm.stock_promedio_mensual > 0 THEN 
+          ROUND(SUM(dv.cantidad)::numeric / spm.stock_promedio_mensual, 2)
+        ELSE NULL
+      END AS tasa_rotacion_6_meses
+
+    FROM producto p
+
+    LEFT JOIN detalle_venta dv ON dv.id_producto = p.id AND dv.fecha_baja IS NULL
+    LEFT JOIN venta v ON v.id = dv.id_venta 
+      AND v.fecha_baja IS NULL
+      AND v.fecha >= CURRENT_DATE - INTERVAL '6 months'
+
+    LEFT JOIN stock_promedio_mensual spm ON spm.id_producto = p.id
+    WHERE p.fecha_baja IS NULL
+    GROUP BY p.id, p.nombre, spm.stock_promedio_mensual
+    ORDER BY tasa_rotacion_6_meses DESC NULLS LAST;  `;
+  
+  try {
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error al consultar tasa rotacion:', error);
+    throw error;
+  }
+};
+
+exports.productosMayorIngreso = async () => {
+  const query = `
+    SELECT
+        p.id AS producto_id,
+        p.nombre,
+        p.precio_venta,
+        SUM(vd.cantidad) AS total_ventas_6_meses,
+        SUM(vd.cantidad * p.precio_venta) AS ingreso_total
+      FROM producto p
+      JOIN detalle_venta vd ON vd.id_producto = p.id
+      JOIN venta v ON v.id = vd.id_venta
+      WHERE v.fecha >= CURRENT_DATE - INTERVAL '6 months'
+      GROUP BY p.id, p.nombre, p.precio_venta
+      ORDER BY ingreso_total DESC;
+  `;
+  
+  try {
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error al consultar productos mayor ingreso:', error);
+    throw error;
+  }
+};
+
+exports.productosMenosVendidos = async () => {
+  const query = `
+    SELECT
+        p.id AS producto_id,
+        p.nombre,
+        p.precio_venta,
+        COALESCE(SUM(vd.cantidad), 0) AS total_ventas_6_meses,
+        COALESCE(SUM(vd.cantidad * p.precio_venta), 0) AS ingreso_total
+      FROM producto p
+      LEFT JOIN detalle_venta vd ON vd.id_producto = p.id
+      LEFT JOIN venta v ON v.id = vd.id_venta AND v.fecha >= CURRENT_DATE - INTERVAL '6 months'
+      GROUP BY p.id, p.nombre, p.precio_venta
+      HAVING COALESCE(SUM(vd.cantidad), 0) <= 5 -- o 0 para sin ventas
+      ORDER BY total_ventas_6_meses ASC, ingreso_total ASC;
+  `;
+  
+  try {
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error al consultar productos menos vendidos:', error);
+    throw error;
+  }
+};
+
