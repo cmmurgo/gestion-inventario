@@ -3,6 +3,10 @@ const router = express.Router();
 const inventarioController = require('../controllers/inventarioController');
 const { verifyToken } = require('../middlewares/authMiddleware');
 
+router.get('/productos-menos-vendidos', verifyToken, inventarioController.getProductosMenosVendidos);
+router.get('/productos-mayor-ingreso', verifyToken, inventarioController.getProductosMayorIngreso);
+router.get('/tasa-rotacion', verifyToken, inventarioController.getTasaRotacion);
+router.get('/stock-bajos', verifyToken, inventarioController.getStockBajos);
 router.get('/movimientos-por-mes', verifyToken, inventarioController.getMovimientosPorMes);
 router.get('/totales/perdidas', verifyToken, inventarioController.getTotalPerdidas);
 router.get('/totales/ventas', verifyToken, inventarioController.getTotalVentas);

@@ -125,7 +125,8 @@ function CrearVenta() {
           headers: { Authorization: `Bearer ${token}` },
         });  
   
-        const stockDisponible = parseFloat(res.data.saldo);
+    
+        let stockDisponible = parseFloat(res.data.saldo);
 
         if (isNaN(stockDisponible)) {
           stockDisponible = 0;
