@@ -101,3 +101,45 @@ exports.getMovimientosPorMes = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener los movimientos por mes' });
   }
 };
+
+exports.getStockBajos = async (req, res) => {
+  try {
+    const stock_bajos  = await inventarioModel.stockBajos();
+    res.json({ stock_bajos: stock_bajos  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener los stock bajos' });
+  }
+};
+
+exports.getTasaRotacion = async (req, res) => {
+  try {
+    const tasa_rotacion  = await inventarioModel.tasaRotacion();
+    res.json({ tasa_rotacion: tasa_rotacion  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener tasa rotacion' });
+  }
+};
+
+exports.getProductosMayorIngreso = async (req, res) => {
+  try {
+    const productos_mayor_ingreso  = await inventarioModel.productosMayorIngreso();
+    res.json({ productos_mayor_ingreso: productos_mayor_ingreso  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener productos mayor ingreso' });
+  }
+};
+
+exports.getProductosMenosVendidos = async (req, res) => {
+  try {
+    const productos_menos_vendidos  = await inventarioModel.productosMenosVendidos();
+    res.json({ productos_menos_vendidos: productos_menos_vendidos  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener productos mayor ingreso' });
+  }
+};
+
+
