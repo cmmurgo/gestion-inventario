@@ -2,7 +2,8 @@ const pool = require('../config/db');
 
 exports.getAll = async () => {
   const result = await pool.query(
-    'SELECT id, nombre, apellido, email, cuit_cuil, direccion, telefono FROM cliente WHERE fecha_baja IS NULL ORDER BY id'
+    `SELECT id, nombre, apellido, email, cuit_cuil, direccion, telefono, CONCAT(nombre, ' ', apellido) AS cliente_nombre_completo 
+     FROM cliente WHERE fecha_baja IS NULL ORDER BY id`
   );
   return result.rows;
 };

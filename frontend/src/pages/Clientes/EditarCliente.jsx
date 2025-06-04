@@ -59,6 +59,16 @@ function RegisterCliente() {
     const token = localStorage.getItem('token');
     const clienteData = { nombre, apellido, email, telefono, direccion, cuit_cuil };
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMensaje('Ingrese un email válido');
+      setTipoMensaje('error');
+      setMostrarMensaje(true);
+      setTimeout(() => setMostrarMensaje(false), 3000);
+      return;
+    }
+
+
     try {
       if (id) {
         // Modo edición
