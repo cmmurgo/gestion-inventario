@@ -23,45 +23,53 @@ import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
 import MenuInventario from './pages/Inventario/MenuInventario.jsx';
 import StockBajo from "./pages/Inventario/StockBajo";
 import TasaRotacion from "./pages/Inventario/TasaRotacion";
+import IndexProductos from './pages/Productos/index';
+import CrearProducto from './pages/Productos/CrearProducto.jsx';
+import EditarProducto from './pages/Productos/EditarProducto.jsx';
+import VerProducto from './pages/Productos/VerProducto.jsx';
 import ProductosMayorIngreso from "./pages/Inventario/ProductosMayorIngreso";
 import ProductosMenosVendidos from "./pages/Inventario/ProductosMenosVendidos";
 import './App.css';
 
 function App() {
-  return (   
+  return (
     <Routes>
-    {/* Rutas públicas */}
-    <Route path="/" element={<Login />} />
-    <Route path="/recuperar" element={<RecuperarContrasena />} />
-  
-    {/* Rutas privadas con plantilla */}
-    <Route path="/" element={<Plantilla />}>
-      <Route path="home" element={<Home />} />
-      <Route path="usuarios" element={<IndexUsuarios />} />
-      <Route path="usuarios/crear" element={<CrearUsuario />} />
-      <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
-      <Route path="usuarios/ver/:id" element={<VerUsuario />} />
-      <Route path="clientes" element={<IndexClientes />} />
-      <Route path="clientes/crear" element={<CrearCliente />} />
-      <Route path="clientes/editar/:id" element={<EditarCliente />} />
-      <Route path="clientes/ver/:id" element={<VerCliente />} />
-      <Route path="perdidas" element={<IndexPerdidas />} />
-      <Route path="perdidas/crear" element={<CrearPerdida />} />
-      <Route path="perdidas/editar/:id" element={<EditarPerdida />} />
-      <Route path="perdidas/ver/:id" element={<VerPerdida />} />
-      <Route path="ventas" element={<IndexVentas />} />
-      <Route path="ventas/crear" element={<CrearVenta />} />
-      <Route path="ventas/editar/:id" element={<EditarVenta />} />
-      <Route path="ventas/ver/:id" element={<VerVenta />} />    
-      <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
-      <Route path="inventario/" element={<MenuInventario />} />
-      <Route path="/stock-bajo" element={<StockBajo />} />
-      <Route path="/tasa-rotacion" element={<TasaRotacion />} />
-      <Route path="/productos-mayor-ingreso" element={<ProductosMayorIngreso />} />
-      <Route path="/productos-menos-vendidos" element={<ProductosMenosVendidos />} />
-    </Route>
-  </Routes>
-  
+      {/* Rutas públicas */}
+      <Route path="/" element={<Login />} />
+      <Route path="/recuperar" element={<RecuperarContrasena />} />
+
+      {/* Rutas privadas con plantilla */}
+      <Route path="/" element={<Plantilla />}>
+        <Route path="home" element={<Home />} />
+        <Route path="usuarios" element={<IndexUsuarios />} />
+        <Route path="usuarios/crear" element={<CrearUsuario />} />
+        <Route path="usuarios/editar/:id" element={<EditarUsuario />} />
+        <Route path="usuarios/ver/:id" element={<VerUsuario />} />
+        <Route path="clientes" element={<IndexClientes />} />
+        <Route path="clientes/crear" element={<CrearCliente />} />
+        <Route path="clientes/editar/:id" element={<EditarCliente />} />
+        <Route path="clientes/ver/:id" element={<VerCliente />} />
+        <Route path="perdidas" element={<IndexPerdidas />} />
+        <Route path="perdidas/crear" element={<CrearPerdida />} />
+        <Route path="perdidas/editar/:id" element={<EditarPerdida />} />
+        <Route path="perdidas/ver/:id" element={<VerPerdida />} />
+        <Route path="ventas" element={<IndexVentas />} />
+        <Route path="ventas/crear" element={<CrearVenta />} />
+        <Route path="ventas/editar/:id" element={<EditarVenta />} />
+        <Route path="ventas/ver/:id" element={<VerVenta />} />
+        <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
+        <Route path="inventario/" element={<MenuInventario />} />
+        <Route path="/stock-bajo" element={<StockBajo />} />
+        <Route path="/tasa-rotacion" element={<TasaRotacion />} />
+        <Route path="productos" element={<IndexProductos />} />
+        <Route path="productos/crear" element={<CrearProducto />} />
+        <Route path="productos/editar/:id" element={<EditarProducto />} />
+        <Route path="productos/ver/:id" element={<VerProducto />} />
+        <Route path="/productos-mayor-ingreso" element={<ProductosMayorIngreso />} />
+        <Route path="/productos-menos-vendidos" element={<ProductosMenosVendidos />} />
+      </Route>
+    </Routes>
+
 
   );
 }
