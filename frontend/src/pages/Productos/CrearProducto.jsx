@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { crearProducto } from '../../services/productService';
+import { getPromocionesActivas } from '../../services/promocionService';
 import { useNavigate } from 'react-router-dom';
 
 export default function CrearProducto() {
   const navigate = useNavigate();
+
   const [producto, setProducto] = useState({
     nombre: '',
     categoria: '',
@@ -15,9 +17,22 @@ export default function CrearProducto() {
     codigo_barra: ''
   });
 
+  const [promociones, setPromociones] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
+
+  useEffect(() => {
+    const cargarPromociones = async () => {
+      try {
+        const res = await getPromocionesActivas();
+        setPromociones(res.data);
+      } catch (err) {
+        console.error('Error al cargar promociones activas', err);
+      }
+    };
+    cargarPromociones();
+  }, []);
 
   const handleChange = (e) => {
     setProducto({ ...producto, [e.target.name]: e.target.value });
@@ -37,7 +52,16 @@ export default function CrearProducto() {
       await crearProducto(datos);
       setMensaje('Producto creado exitosamente');
       setTipoMensaje('success');
-      setProducto({ nombre: '', categoria: '', descripcion: '', precio_costo: '', precio_venta: '', stock_minimo: '', id_promocion: '', codigo_barra: '' });
+      setProducto({
+        nombre: '',
+        categoria: '',
+        descripcion: '',
+        precio_costo: '',
+        precio_venta: '',
+        stock_minimo: '',
+        id_promocion: '',
+        codigo_barra: ''
+      });
     } catch (err) {
       console.error(err);
       setMensaje('Error al crear producto');
@@ -52,6 +76,7 @@ export default function CrearProducto() {
     <div style={{ padding: '2rem' }}>
       <h4>CREAR PRODUCTO</h4>
       <div style={{ background: '#eee', padding: '2rem', maxWidth: '400px' }}>
+        {}
         {[
           ['nombre', 'Nombre'],
           ['categoria', 'Categoría'],
@@ -59,7 +84,6 @@ export default function CrearProducto() {
           ['precio_costo', 'Precio Costo'],
           ['precio_venta', 'Precio Venta'],
           ['stock_minimo', 'Stock Mínimo'],
-          ['id_promocion', 'ID Promoción'],
           ['codigo_barra', 'Código de Barra']
         ].map(([key, label], i) => (
           <div className="mb-3" key={i}>
@@ -73,14 +97,32 @@ export default function CrearProducto() {
             />
           </div>
         ))}
+
+        {}
+        <div className="mb-3">
+          <label className="form-label">Promoción:</label>
+          <select
+            className="form-select"
+            name="id_promocion"
+            value={producto.id_promocion}
+            onChange={handleChange}
+          >
+            <option value="">Sin promoción</option>
+            {promociones.map((promo) => (
+              <option key={promo.id} value={promo.id}>
+                {promo.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div
-        className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}
-      >
+      {}
+      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}>
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
+      {}
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>

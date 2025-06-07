@@ -52,3 +52,17 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: 'Error al eliminar promoción', error: err });
   }
 };
+
+exports.getActivas = async (req, res) => {
+  try {
+    const { rows } = await db.query(`
+      SELECT id, nombre FROM promocion 
+      WHERE fecha_baja IS NULL 
+        AND CURRENT_DATE BETWEEN fecha_inicio AND fecha_fin
+    `);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener promociones activas:', error);
+    res.status(500).json({ message: 'Error al obtener promociones activas' });
+  }
+};

@@ -1,25 +1,51 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductoById, actualizarProducto } from '../../services/productService';
+import { getPromocionesActivas } from '../../services/promocionService';
 
 export default function EditarProducto() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [producto, setProducto] = useState({});
+  const [producto, setProducto] = useState({
+    nombre: '',
+    categoria: '',
+    descripcion: '',
+    precio_costo: '',
+    precio_venta: '',
+    stock_minimo: '',
+    id_promocion: '',
+    codigo_barra: ''
+  });
+
+  const [promociones, setPromociones] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
   useEffect(() => {
-    getProductoById(id)
-      .then(res => setProducto(res.data))
-      .catch(err => console.error('Error al cargar producto', err));
+    const cargarDatos = async () => {
+      try {
+        const resProd = await getProductoById(id);
+        setProducto({
+          ...resProd.data,
+          id_promocion: resProd.data.id_promocion ?? '' // evitar null en el select
+        });
+
+        const resPromo = await getPromocionesActivas();
+        setPromociones(resPromo.data);
+      } catch (error) {
+        console.error('Error al cargar producto o promociones:', error);
+        setMensaje('Error al cargar los datos');
+        setTipoMensaje('error');
+        setMostrarMensaje(true);
+      }
+    };
+    cargarDatos();
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProducto({ ...producto, [name]: value });
+    setProducto({ ...producto, [e.target.name]: e.target.value });
   };
 
   const handleGuardar = async () => {
@@ -37,7 +63,7 @@ export default function EditarProducto() {
       setMensaje('Producto actualizado correctamente');
       setTipoMensaje('success');
     } catch (error) {
-      console.error(error);
+      console.error('Error al guardar producto:', error);
       setMensaje('Error al actualizar producto');
       setTipoMensaje('error');
     }
@@ -57,7 +83,6 @@ export default function EditarProducto() {
           ['precio_costo', 'Precio Costo'],
           ['precio_venta', 'Precio Venta'],
           ['stock_minimo', 'Stock Mínimo'],
-          ['id_promocion', 'ID Promoción'],
           ['codigo_barra', 'Código de Barra']
         ].map(([key, label], i) => (
           <div className="mb-3" key={i}>
@@ -71,17 +96,32 @@ export default function EditarProducto() {
             />
           </div>
         ))}
+
+        <div className="mb-3">
+          <label className="form-label">Promoción:</label>
+          <select
+            className="form-select"
+            name="id_promocion"
+            value={producto.id_promocion}
+            onChange={handleChange}
+          >
+            <option value="">Sin promoción</option>
+            {promociones.map((promo) => (
+              <option key={promo.id} value={promo.id}>
+                {promo.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div
-        className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}
-      >
+      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}>
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
-        <button className="btn btn-success" onClick={handleGuardar}>GUARDAR CAMBIOS</button>
+        <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>
       </div>
     </div>
   );
