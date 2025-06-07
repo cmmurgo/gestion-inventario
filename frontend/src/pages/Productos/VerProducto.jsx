@@ -1,50 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { getProductoById } from '../../services/productService';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getProductoById } from '../../services/productService';
 
 export default function VerProducto() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [producto, setProducto] = useState(null);
+  const [producto, setProducto] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const cargarProducto = async () => {
-      try {
-        const res = await getProductoById(id);
-        setProducto(res.data);
-      } catch (error) {
-        console.error('Error al obtener el producto', error);
-        alert('No se pudo cargar el producto');
-      }
-    };
-    cargarProducto();
+    getProductoById(id)
+      .then(res => setProducto(res.data))
+      .catch(() => setErrorMessage('Error al obtener el producto.'));
   }, [id]);
 
-  if (!producto) return <div>Cargando producto...</div>;
-
   return (
-    <div className="container mt-4">
-      <h2>Detalle del Producto</h2>
-      <div className="card shadow p-4 mt-3">
-        <div className="row mb-3">
-          <div className="col-md-6"><strong>Nombre:</strong> {producto.nombre}</div>
-          <div className="col-md-6"><strong>Categoría:</strong> {producto.categoria}</div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-12"><strong>Descripción:</strong><br />{producto.descripcion}</div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-4"><strong>Precio costo:</strong> ${producto.precio_costo}</div>
-          <div className="col-md-4"><strong>Precio venta:</strong> ${producto.precio_venta}</div>
-          <div className="col-md-4"><strong>Stock mínimo:</strong> {producto.stock_minimo}</div>
-        </div>
-        <div className="row mb-3">
-          <div className="col-md-6"><strong>Código de barra:</strong> {producto.codigo_barra}</div>
-          <div className="col-md-6"><strong>ID Promoción:</strong> {producto.id_promocion || '—'}</div>
-        </div>
-        <div className="text-end">
-          <button className="btn btn-secondary" onClick={() => navigate('/productos')}>Volver</button>
-        </div>
+    <div style={{ padding: '2rem' }}>
+      <h4>VER PRODUCTO</h4>
+      <div style={{ background: '#eee', padding: '2rem', maxWidth: '400px' }}>
+        {[
+          ['NOMBRE', producto.nombre],
+          ['CATEGORÍA', producto.categoria],
+          ['DESCRIPCIÓN', producto.descripcion],
+          ['PRECIO COSTO', producto.precio_costo],
+          ['PRECIO VENTA', producto.precio_venta],
+          ['STOCK MÍNIMO', producto.stock_minimo],
+          ['ID PROMOCIÓN', producto.id_promocion],
+          ['CÓDIGO DE BARRA', producto.codigo_barra]
+        ].map(([label, value], i) => (
+          <div className="mb-3" key={i}>
+            <label className="form-label">{label}:</label>
+            <div className="form-control bg-light">{value || '-'}</div>
+          </div>
+        ))}
+      </div>
+      {errorMessage && <p className="text-danger mt-2">{errorMessage}</p>}
+      <div className="mt-4" style={{ maxWidth: '400px' }}>
+        <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
       </div>
     </div>
   );
