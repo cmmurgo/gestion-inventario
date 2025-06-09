@@ -10,8 +10,21 @@ import IndexClientes from './pages/Clientes/index';
 import CrearCliente from './pages/Clientes/CrearCliente.jsx';
 import EditarCliente from './pages/Clientes/EditarCliente.jsx';
 import VerCliente from './pages/Clientes/VerCliente.jsx';
+import IndexPerdidas from './pages/Perdidas/index';
+import CrearPerdida from './pages/Perdidas/CrearPerdida.jsx';
+import EditarPerdida from './pages/Perdidas/EditarPerdida.jsx';
+import VerPerdida from './pages/Perdidas/VerPerdida.jsx';
+import IndexVentas from './pages/Ventas/index';
+import CrearVenta from './pages/Ventas/CrearVenta.jsx';
+import EditarVenta from './pages/Ventas/EditarVenta.jsx';
+import VerVenta from './pages/Ventas/VerVenta.jsx';
 import RecuperarContrasena from './pages/RecuperarContrasena';
 import CodigoBarra from './pages/Inventario/CodigoBarra.jsx';
+import MenuInventario from './pages/Inventario/MenuInventario.jsx';
+import StockBajo from "./pages/Inventario/StockBajo";
+import TasaRotacion from "./pages/Inventario/TasaRotacion";
+import ProductosMayorIngreso from "./pages/Inventario/ProductosMayorIngreso";
+import ProductosMenosVendidos from "./pages/Inventario/ProductosMenosVendidos";
 import './App.css';
 
 function App() {
@@ -32,7 +45,20 @@ function App() {
       <Route path="clientes/crear" element={<CrearCliente />} />
       <Route path="clientes/editar/:id" element={<EditarCliente />} />
       <Route path="clientes/ver/:id" element={<VerCliente />} />
+      <Route path="perdidas" element={<IndexPerdidas />} />
+      <Route path="perdidas/crear" element={<CrearPerdida />} />
+      <Route path="perdidas/editar/:id" element={<EditarPerdida />} />
+      <Route path="perdidas/ver/:id" element={<VerPerdida />} />
+      <Route path="ventas" element={<IndexVentas />} />
+      <Route path="ventas/crear" element={<CrearVenta />} />
+      <Route path="ventas/editar/:id" element={<EditarVenta />} />
+      <Route path="ventas/ver/:id" element={<VerVenta />} />    
       <Route path="inventario/codigo-barra" element={<CodigoBarra />} />
+      <Route path="inventario/" element={<MenuInventario />} />
+      <Route path="/stock-bajo" element={<StockBajo />} />
+      <Route path="/tasa-rotacion" element={<TasaRotacion />} />
+      <Route path="/productos-mayor-ingreso" element={<ProductosMayorIngreso />} />
+      <Route path="/productos-menos-vendidos" element={<ProductosMenosVendidos />} />
     </Route>
   </Routes>
   
