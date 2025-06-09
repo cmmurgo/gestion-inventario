@@ -46,7 +46,7 @@ function StockBajo() {
               productos.map(p => (
                 <tr key={p.id} style={{ backgroundColor: '#ffe5e5' }}>
                   <td>{p.nombre}</td>
-                  <td>{p.categoria}</td>
+                  <td>{p.nombre}</td>
                   <td>{p.descripcion}</td>
                   <td>{p.stock_minimo}</td>
                   <td>{p.stock_actual}</td>
