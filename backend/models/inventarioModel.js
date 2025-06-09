@@ -118,7 +118,7 @@ exports.stockBajos = async () => {
     p.stock_minimo,
      COALESCE(SUM(CASE 
         WHEN m.tipo = 'compra' THEN m.cantidad
-        WHEN m.tipo IN ('venta', 'perdida') THEN -m.cantidad
+        WHEN m.tipo IN ('venta', 'perdida') THEN m.cantidad
         ELSE 0 
     END), 0) AS stock_actual,
     ROUND(p.stock_minimo * 1.2, 2) AS umbral_stock_bajo
@@ -129,7 +129,7 @@ exports.stockBajos = async () => {
     GROUP BY p.id, p.nombre, r.nombre, p.descripcion, p.stock_minimo
     HAVING COALESCE(SUM(CASE 
           WHEN m.tipo = 'compra' THEN m.cantidad
-          WHEN m.tipo IN ('venta', 'perdida') THEN -m.cantidad
+          WHEN m.tipo IN ('venta', 'perdida') THEN m.cantidad
          ELSE 0 
     END), 0) <= p.stock_minimo * 1.2;
 
