@@ -153,8 +153,9 @@ exports.tasaRotacion = async () => {
         DATE_TRUNC('month', m.fecha) AS mes,
         SUM(
           CASE 
-            WHEN m.tipo ILIKE 'ingreso' THEN m.cantidad
-            WHEN m.tipo ILIKE 'egreso' THEN -m.cantidad
+            WHEN m.tipo ILIKE 'compra' THEN m.cantidad
+            WHEN m.tipo ILIKE 'venta' THEN -m.cantidad
+			      WHEN m.tipo ILIKE 'perdida' THEN -m.cantidad
             ELSE 0
           END
         ) AS saldo_mes
