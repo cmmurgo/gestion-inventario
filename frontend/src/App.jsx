@@ -25,6 +25,7 @@ import StockBajo from "./pages/Inventario/StockBajo";
 import TasaRotacion from "./pages/Inventario/TasaRotacion";
 import ProductosMayorIngreso from "./pages/Inventario/ProductosMayorIngreso";
 import ProductosMenosVendidos from "./pages/Inventario/ProductosMenosVendidos";
+import StockProducto from "./pages/Inventario/StockProducto";
 import './App.css';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
       <Route path="/tasa-rotacion" element={<TasaRotacion />} />
       <Route path="/productos-mayor-ingreso" element={<ProductosMayorIngreso />} />
       <Route path="/productos-menos-vendidos" element={<ProductosMenosVendidos />} />
+      <Route path="/stock-producto" element={<StockProducto />} />
     </Route>
   </Routes>
   

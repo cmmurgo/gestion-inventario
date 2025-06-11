@@ -9,6 +9,15 @@ export default function MenuInventario() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-xl">
 
       <br></br>
+        <Link to="/stock-producto" className="w-full">
+        <button className="btn btn-secondary w-full flex items-center gap-3 py-4 px-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+          📦
+          <span className="text-base font-medium">
+            Ver reporte de stock de productos
+          </span>
+        </button>
+      </Link>
+      <br></br>      <br></br>
         <Link to="/stock-bajo" className="w-full">
           <button className="btn btn-danger w-full flex items-center gap-3 py-4 px-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
             🛑
