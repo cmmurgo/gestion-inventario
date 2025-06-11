@@ -732,3 +732,218 @@ INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (31, 22, 'venta', 1, '2025-06-20', NULL);
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (32, 2, 'venta', 4, '2025-06-25', NULL);
 INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (32, 24, 'venta', 4, '2025-06-25', NULL);
+
+
+-----------------------------------
+-- Más datos de ventas para pruebas:
+-----------------------------------
+
+-- Ventas (January)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (33, '2025-01-05', 9, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (34, '2025-01-10', 3, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (35, '2025-01-15', 6, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (36, '2025-01-20', 5, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (37, '2025-01-25', 3, NULL);
+-- Detalle de Ventas (January)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (64, 33, 3, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (65, 33, 17, 20, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (66, 34, 9, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (67, 34, 26, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (68, 34, 6, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (69, 35, 26, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (70, 35, 10, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (71, 35, 18, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (72, 36, 6, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (73, 36, 27, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (74, 36, 20, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (75, 37, 6, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (76, 37, 23, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (77, 37, 19, 15, NULL);
+-- Ventas (February)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (38, '2025-02-05', 10, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (39, '2025-02-10', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (40, '2025-02-15', 3, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (41, '2025-02-20', 10, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (42, '2025-02-25', 4, NULL);
+-- Detalle de Ventas (February)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (78, 38, 10, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (79, 38, 16, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (80, 39, 15, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (81, 39, 13, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (82, 39, 3, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (83, 40, 7, 20, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (84, 40, 2, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (85, 41, 5, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (86, 41, 20, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (87, 41, 4, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (88, 42, 27, 20, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (89, 42, 7, 13, NULL);
+-- Ventas (March)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (43, '2025-03-05', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (44, '2025-03-10', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (45, '2025-03-15', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (46, '2025-03-20', 7, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (47, '2025-03-25', 8, NULL);
+-- Detalle de Ventas (March)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (90, 43, 2, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (91, 43, 9, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (92, 43, 26, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (93, 44, 17, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (94, 44, 22, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (95, 44, 30, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (96, 45, 9, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (97, 45, 24, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (98, 45, 10, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (99, 46, 10, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (100, 46, 11, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (101, 47, 28, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (102, 47, 15, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (103, 47, 20, 19, NULL);
+-- Ventas (April)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (48, '2025-04-05', 10, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (49, '2025-04-10', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (50, '2025-04-15', 6, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (51, '2025-04-20', 5, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (52, '2025-04-25', 8, NULL);
+-- Detalle de Ventas (April)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (104, 48, 27, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (105, 48, 25, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (106, 49, 16, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (107, 49, 21, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (108, 50, 6, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (109, 50, 30, 18, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (110, 50, 9, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (111, 51, 26, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (112, 51, 12, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (113, 51, 11, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (114, 52, 18, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (115, 52, 12, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (116, 52, 21, 16, NULL);
+-- Ventas (May)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (53, '2025-05-05', 5, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (54, '2025-05-10', 11, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (55, '2025-05-15', 8, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (56, '2025-05-20', 9, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (57, '2025-05-25', 8, NULL);
+-- Detalle de Ventas (May)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (117, 53, 20, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (118, 53, 13, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (119, 54, 12, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (120, 54, 6, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (121, 54, 6, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (122, 55, 2, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (123, 55, 3, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (124, 55, 14, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (125, 56, 11, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (126, 56, 2, 13, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (127, 56, 16, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (128, 57, 6, 12, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (129, 57, 20, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (130, 57, 13, 15, NULL);
+-- Ventas (June)
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (58, '2025-06-05', 6, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (59, '2025-06-10', 2, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (60, '2025-06-15', 2, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (61, '2025-06-20', 7, NULL);
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (62, '2025-06-25', 2, NULL);
+-- Detalle de Ventas (June)
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (131, 58, 3, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (132, 58, 23, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (133, 59, 11, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (134, 59, 28, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (135, 59, 17, 15, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (136, 60, 10, 17, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (137, 60, 30, 14, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (138, 61, 6, 19, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (139, 61, 10, 10, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (140, 61, 13, 11, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (141, 62, 12, 16, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (142, 62, 8, 15, NULL);
+
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (33, 10, 'venta', 19, '2025-01-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (33, 24, 'venta', 19, '2025-01-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (34, 28, 'venta', 14, '2025-01-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (34, 27, 'venta', 16, '2025-01-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (34, 7, 'venta', 13, '2025-01-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (35, 9, 'venta', 11, '2025-01-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (35, 9, 'venta', 20, '2025-01-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (36, 21, 'venta', 14, '2025-01-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (36, 5, 'venta', 14, '2025-01-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (36, 18, 'venta', 18, '2025-01-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (37, 8, 'venta', 13, '2025-01-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (37, 18, 'venta', 19, '2025-01-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (38, 24, 'venta', 14, '2025-02-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (38, 11, 'venta', 19, '2025-02-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (39, 6, 'venta', 16, '2025-02-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (39, 6, 'venta', 14, '2025-02-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (39, 5, 'venta', 17, '2025-02-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (40, 28, 'venta', 13, '2025-02-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (40, 30, 'venta', 13, '2025-02-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (40, 20, 'venta', 17, '2025-02-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (41, 4, 'venta', 18, '2025-02-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (41, 22, 'venta', 20, '2025-02-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (42, 28, 'venta', 12, '2025-02-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (42, 12, 'venta', 11, '2025-02-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (42, 3, 'venta', 14, '2025-02-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (43, 16, 'venta', 12, '2025-03-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (43, 10, 'venta', 13, '2025-03-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (43, 15, 'venta', 15, '2025-03-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (44, 17, 'venta', 19, '2025-03-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (44, 4, 'venta', 20, '2025-03-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (45, 15, 'venta', 10, '2025-03-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (45, 22, 'venta', 19, '2025-03-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (45, 1, 'venta', 10, '2025-03-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (46, 27, 'venta', 19, '2025-03-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (46, 18, 'venta', 10, '2025-03-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (46, 21, 'venta', 18, '2025-03-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (47, 6, 'venta', 12, '2025-03-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (47, 27, 'venta', 14, '2025-03-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (47, 13, 'venta', 19, '2025-03-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (48, 2, 'venta', 14, '2025-04-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (48, 19, 'venta', 10, '2025-04-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (48, 1, 'venta', 12, '2025-04-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (49, 18, 'venta', 10, '2025-04-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (49, 27, 'venta', 12, '2025-04-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (49, 1, 'venta', 15, '2025-04-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (50, 3, 'venta', 16, '2025-04-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (50, 8, 'venta', 15, '2025-04-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (51, 29, 'venta', 12, '2025-04-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (51, 28, 'venta', 15, '2025-04-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (51, 21, 'venta', 15, '2025-04-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (52, 15, 'venta', 15, '2025-04-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (52, 3, 'venta', 20, '2025-04-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (53, 23, 'venta', 17, '2025-05-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (53, 20, 'venta', 11, '2025-05-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (53, 3, 'venta', 20, '2025-05-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (54, 16, 'venta', 11, '2025-05-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (54, 1, 'venta', 12, '2025-05-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (54, 1, 'venta', 20, '2025-05-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (55, 4, 'venta', 12, '2025-05-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (55, 13, 'venta', 18, '2025-05-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (55, 7, 'venta', 14, '2025-05-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (56, 16, 'venta', 10, '2025-05-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (56, 26, 'venta', 15, '2025-05-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (56, 22, 'venta', 10, '2025-05-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (57, 2, 'venta', 10, '2025-05-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (57, 19, 'venta', 20, '2025-05-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (57, 24, 'venta', 20, '2025-05-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (58, 14, 'venta', 12, '2025-06-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (58, 28, 'venta', 13, '2025-06-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (58, 16, 'venta', 15, '2025-06-05', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (59, 17, 'venta', 16, '2025-06-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (59, 9, 'venta', 11, '2025-06-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (59, 23, 'venta', 20, '2025-06-10', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (60, 26, 'venta', 20, '2025-06-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (60, 3, 'venta', 11, '2025-06-15', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (61, 30, 'venta', 20, '2025-06-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (61, 22, 'venta', 11, '2025-06-20', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (62, 11, 'venta', 20, '2025-06-25', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (62, 6, 'venta', 17, '2025-06-25', NULL);
+
+INSERT INTO venta (id, fecha, id_cliente, fecha_baja) VALUES (63, '2025-06-26', 2, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (143, 63, 11, 180, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (144, 63, 6, 170, NULL);
+INSERT INTO detalle_venta (id, id_venta, id_producto, cantidad, fecha_baja) VALUES (145, 63, 4, 700, NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (63, 11, 'venta', 180, '2025-06-26', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (63, 6, 'venta', 170, '2025-06-26', NULL);
+INSERT INTO movimientos (id_operacion, id_producto, tipo, cantidad, fecha, fecha_baja) VALUES (63, 4, 'venta', 700, '2025-06-26', NULL);

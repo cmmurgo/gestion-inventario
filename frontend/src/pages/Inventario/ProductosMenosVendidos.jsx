@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ProductosMenosVendidos() {
   const [datos, setDatos] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,31 +30,70 @@ function ProductosMenosVendidos() {
       .catch(err => console.error("Error al cargar productos:", err));
   }, []);
 
+  // Ordenar datos según sortConfig
+  const sortedDatos = React.useMemo(() => {
+    if (!sortConfig.key) return datos;
+
+    const sorted = [...datos].sort((a, b) => {
+      const aVal = a[sortConfig.key];
+      const bVal = b[sortConfig.key];
+
+      // Si son números, ordenar numéricamente
+      if (!isNaN(parseFloat(aVal)) && !isNaN(parseFloat(bVal))) {
+        return parseFloat(aVal) - parseFloat(bVal);
+      }
+      // Si no, ordenar como strings
+      return aVal?.toString().localeCompare(bVal?.toString());
+    });
+
+    if (sortConfig.direction === 'desc') sorted.reverse();
+    return sorted;
+  }, [datos, sortConfig]);
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const renderSortArrow = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+  };
+
   return (
     <div>
       <h2>📉 Productos Menos Vendidos y que Requieren Estrategias Promocionales</h2>
       <div style={{ maxHeight: '500px', overflowY: 'auto', border: '1px solid #ccc' }}>
         <table border="1" cellPadding="5" style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead style={{ position: 'sticky', top: 0, backgroundColor: '#ffe6e6' }}>
+          <thead style={{ position: 'sticky', top: 0, backgroundColor: '#ffe6e6', cursor: 'pointer' }}>
             <tr>
-              <th>Producto</th>
-              <th>Precio Venta</th>
-              <th>Total Ventas (6 meses)</th>
-              <th>Ingreso Total</th>
+              <th onClick={() => handleSort('nombre')}>Producto{renderSortArrow('nombre')}</th>
+              <th onClick={() => handleSort('precio_venta')} style={{ textAlign: 'right' }}>
+                Precio Venta{renderSortArrow('precio_venta')}
+              </th>
+              <th onClick={() => handleSort('total_ventas_6_meses')} style={{ textAlign: 'right' }}>
+                Total Ventas (6 meses){renderSortArrow('total_ventas_6_meses')}
+              </th>
+              <th onClick={() => handleSort('ingreso_total')} style={{ textAlign: 'right' }}>
+                Ingreso Total{renderSortArrow('ingreso_total')}
+              </th>
             </tr>
           </thead>
           <tbody>
-            {datos.length > 0 ? (
-              datos.map(p => (
+            {sortedDatos.length > 0 ? (
+              sortedDatos.map(p => (
                 <tr key={p.producto_id}>
                   <td>{p.nombre}</td>
-                  <td>${parseFloat(p.precio_venta).toFixed(2)}</td>
-                  <td>{p.total_ventas_6_meses}</td>
-                  <td>${parseFloat(p.ingreso_total).toFixed(2)}</td>
+                  <td style={{ textAlign: 'right' }}>${parseFloat(p.precio_venta).toFixed(2)}</td>
+                  <td style={{ textAlign: 'right' }}>{p.total_ventas_6_meses}</td>
+                  <td style={{ textAlign: 'right' }}>${parseFloat(p.ingreso_total).toFixed(2)}</td>
                 </tr>
               ))
             ) : (
-              <tr><td colSpan="4">No hay productos con bajo rendimiento</td></tr>
+              <tr><td colSpan="4" style={{ textAlign: 'center' }}>No hay productos con bajo rendimiento</td></tr>
             )}
           </tbody>
         </table>
