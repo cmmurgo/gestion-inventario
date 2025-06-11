@@ -85,11 +85,11 @@ exports.movimientosPorMes = async () => {
               SUM(CASE 
                       WHEN m.tipo = 'venta' THEN m.cantidad * p.precio_venta 
                       ELSE 0 
-                  END) * (-1) AS monto_ventas,
+                  END) AS monto_ventas,
               SUM(CASE 
                       WHEN m.tipo = 'perdida' THEN m.cantidad * p.precio_costo 
                       ELSE 0 
-                  END) * (-1) AS monto_perdidas
+                  END) AS monto_perdidas
           FROM movimientos m
           INNER JOIN producto p ON m.id_producto = p.id
           WHERE
@@ -116,22 +116,23 @@ exports.stockBajos = async () => {
     r.nombre AS rubro,
     p.descripcion,
     p.stock_minimo,
-     COALESCE(SUM(CASE 
+    COALESCE(SUM(CASE 
         WHEN m.tipo = 'compra' THEN m.cantidad
-        WHEN m.tipo IN ('venta', 'perdida') THEN m.cantidad
+        WHEN m.tipo IN ('venta', 'perdida') THEN -m.cantidad
         ELSE 0 
     END), 0) AS stock_actual,
     ROUND(p.stock_minimo * 1.2, 2) AS umbral_stock_bajo
-    FROM producto p
-    LEFT JOIN movimientos m ON m.id_producto = p.id AND m.fecha_baja IS NULL
-    INNER JOIN rubro r ON r.id = p.id_rubro
-    WHERE p.fecha_baja IS NULL
-    GROUP BY p.id, p.nombre, r.nombre, p.descripcion, p.stock_minimo
-    HAVING COALESCE(SUM(CASE 
-          WHEN m.tipo = 'compra' THEN m.cantidad
-          WHEN m.tipo IN ('venta', 'perdida') THEN m.cantidad
-         ELSE 0 
+FROM producto p
+LEFT JOIN movimientos m ON m.id_producto = p.id AND m.fecha_baja IS NULL
+INNER JOIN rubro r ON r.id = p.id_rubro
+WHERE p.fecha_baja IS NULL
+GROUP BY p.id, p.nombre, r.nombre, p.descripcion, p.stock_minimo
+HAVING COALESCE(SUM(CASE 
+        WHEN m.tipo = 'compra' THEN m.cantidad
+        WHEN m.tipo IN ('venta', 'perdida') THEN -m.cantidad
+        ELSE 0 
     END), 0) <= p.stock_minimo * 1.2;
+
 
             `;
   
@@ -251,6 +252,37 @@ exports.productosMenosVendidos = async () => {
     return rows;
   } catch (error) {
     console.error('Error al consultar productos menos vendidos:', error);
+    throw error;
+  }
+};
+
+exports.stockProducto = async () => {
+  const query = 
+  ` SELECT
+      p.nombre,
+      r.nombre AS rubro,
+      p.descripcion,
+      p.stock_minimo,
+      COALESCE(SUM(
+        CASE 
+          WHEN m.tipo = 'compra' THEN m.cantidad
+          WHEN m.tipo IN ('venta', 'perdida') THEN -m.cantidad
+          ELSE 0 
+        END
+      ), 0) AS stock_actual
+    FROM producto p
+    LEFT JOIN movimientos m ON m.id_producto = p.id AND m.fecha_baja IS NULL
+    INNER JOIN rubro r ON r.id = p.id_rubro
+    WHERE p.fecha_baja IS NULL
+    GROUP BY p.id, p.nombre, r.nombre, p.descripcion, p.stock_minimo
+    ORDER BY p.nombre;
+            `;
+  
+  try {
+    const { rows } = await pool.query(query);
+    return rows;
+  } catch (error) {
+    console.error('Error al consultar stock:', error);
     throw error;
   }
 };
