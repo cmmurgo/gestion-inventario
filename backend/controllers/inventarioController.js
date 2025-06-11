@@ -142,4 +142,14 @@ exports.getProductosMenosVendidos = async (req, res) => {
   }
 };
 
+exports.getStockProducto = async (req, res) => {
+  try {
+    const stock_producto  = await inventarioModel.stockProducto();
+    res.json({ stock_producto: stock_producto  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al obtener productos mayor ingreso' });
+  }
+};
+
 
