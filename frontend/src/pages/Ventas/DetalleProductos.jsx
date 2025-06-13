@@ -5,7 +5,7 @@ import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto, esEdicion }) {
   
   const agregarDetalle = () => {
-    setDetalles([...detalles, { id_producto: '', nombre: '', cantidad: '', precio_venta: '', total: '' }]);
+    setDetalles([...detalles, { id_producto: '', nombre: '', cantidad: '', precio_venta: '', total: '', porcentaje: '' }]);
   };  
 
   const actualizarDetalle = (index, campo, valor) => {
@@ -16,13 +16,17 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
       nuevosDetalles[index].id_producto = valor;
       nuevosDetalles[index].precio_venta = productoSeleccionado ? productoSeleccionado.precio_venta : '';
       nuevosDetalles[index].nombre = productoSeleccionado ? productoSeleccionado.nombre : '';
+      nuevosDetalles[index].porcentaje = productoSeleccionado ? productoSeleccionado.porcentaje : '';
+
     } else {
       nuevosDetalles[index][campo] = valor;
     }
 
     const cantidad = parseFloat(nuevosDetalles[index].cantidad) || 0;
     const precio = parseFloat(nuevosDetalles[index].precio_venta) || 0;
-    nuevosDetalles[index].total = (cantidad * precio).toFixed(2);
+    const porcentaje_descuento = parseFloat(nuevosDetalles[index].porcentaje) || 0;
+    const precio_final = precio-(precio * porcentaje_descuento /100);
+    nuevosDetalles[index].total = (cantidad * precio_final).toFixed(2);
 
     setDetalles(nuevosDetalles);
   };
@@ -51,6 +55,7 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
             <th>Producto</th>
             <th>Cantidad</th>
             <th>Precio de Venta</th>
+            <th>Porcent. Descuento</th>
             <th>Total</th>
             <th>Acciones</th>
           </tr>
@@ -89,6 +94,15 @@ function DetalleProductos({ productos, detalles, setDetalles, abrirModalProducto
                   type="number"
                   className="form-control"
                   value={detalle.precio_venta}
+                  disabled
+                />
+              </td>
+
+              <td>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={detalle.porcentaje ?? 0}
                   disabled
                 />
               </td>
