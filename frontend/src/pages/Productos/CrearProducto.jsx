@@ -1,37 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { crearProducto } from '../../services/productService';
+import { getRubros } from '../../services/rubroService';
 import { getPromocionesActivas } from '../../services/promocionService';
+import { getProveedores } from '../../services/proveedorService';
 import { useNavigate } from 'react-router-dom';
 
 export default function CrearProducto() {
   const navigate = useNavigate();
-
   const [producto, setProducto] = useState({
     nombre: '',
-    categoria: '',
+    id_rubro: '',
     descripcion: '',
     precio_costo: '',
     precio_venta: '',
     stock_minimo: '',
     id_promocion: '',
-    codigo_barra: ''
+    codigo_barra: '',
+    id_proveedor: ''
   });
 
+  const [rubros, setRubros] = useState([]);
   const [promociones, setPromociones] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
+
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
   useEffect(() => {
-    const cargarPromociones = async () => {
-      try {
-        const res = await getPromocionesActivas();
-        setPromociones(res.data);
-      } catch (err) {
-        console.error('Error al cargar promociones activas', err);
-      }
-    };
-    cargarPromociones();
+    getRubros().then(res => setRubros(res.data)).catch(err => console.error('Error al obtener rubros', err));
+    getPromocionesActivas().then(res => setPromociones(res.data)).catch(err => console.error('Error al obtener promociones', err));
+    getProveedores().then(res => setProveedores(res.data)).catch(err => console.error('Error al obtener proveedores', err));
   }, []);
 
   const handleChange = (e) => {
@@ -46,6 +45,8 @@ export default function CrearProducto() {
         precio_venta: parseInt(producto.precio_venta),
         stock_minimo: parseInt(producto.stock_minimo) || 0,
         id_promocion: producto.id_promocion ? parseInt(producto.id_promocion) : null,
+        id_rubro: producto.id_rubro ? parseInt(producto.id_rubro) : null,
+        id_proveedor: producto.id_proveedor ? parseInt(producto.id_proveedor) : null,
         codigo_barra: parseInt(producto.codigo_barra)
       };
 
@@ -54,13 +55,14 @@ export default function CrearProducto() {
       setTipoMensaje('success');
       setProducto({
         nombre: '',
-        categoria: '',
+        id_rubro: '',
         descripcion: '',
         precio_costo: '',
         precio_venta: '',
         stock_minimo: '',
         id_promocion: '',
-        codigo_barra: ''
+        codigo_barra: '',
+        id_proveedor: ''
       });
     } catch (err) {
       console.error(err);
@@ -75,55 +77,73 @@ export default function CrearProducto() {
   return (
     <div style={{ padding: '2rem' }}>
       <h4>CREAR PRODUCTO</h4>
-      <div style={{ background: '#eee', padding: '2rem', maxWidth: '400px' }}>
-        {}
-        {[
-          ['nombre', 'Nombre'],
-          ['categoria', 'Categoría'],
-          ['descripcion', 'Descripción'],
-          ['precio_costo', 'Precio Costo'],
-          ['precio_venta', 'Precio Venta'],
-          ['stock_minimo', 'Stock Mínimo'],
-          ['codigo_barra', 'Código de Barra']
-        ].map(([key, label], i) => (
-          <div className="mb-3" key={i}>
-            <label className="form-label">{label}:</label>
-            <input
-              type={key.includes('precio') || key.includes('stock') || key.includes('codigo') ? 'number' : 'text'}
-              className="form-control"
-              name={key}
-              value={producto[key] || ''}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
-
-        {}
+      <div style={{ background: '#eee', padding: '2rem', maxWidth: '500px' }}>
         <div className="mb-3">
-          <label className="form-label">Promoción:</label>
-          <select
-            className="form-select"
-            name="id_promocion"
-            value={producto.id_promocion}
-            onChange={handleChange}
-          >
-            <option value="">Sin promoción</option>
-            {promociones.map((promo) => (
-              <option key={promo.id} value={promo.id}>
-                {promo.nombre}
-              </option>
+          <label className="form-label">Nombre:</label>
+          <input type="text" className="form-control" name="nombre" value={producto.nombre} onChange={handleChange} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Rubro:</label>
+          <select className="form-select" name="id_rubro" value={producto.id_rubro} onChange={handleChange}>
+            <option value="">-- Seleccionar Rubro --</option>
+            {rubros.map(r => (
+              <option key={r.id} value={r.id}>{r.nombre}</option>
             ))}
           </select>
         </div>
+
+        <div className="mb-3">
+          <label className="form-label">Descripción:</label>
+          <textarea className="form-control" name="descripcion" value={producto.descripcion} onChange={handleChange} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Precio Costo:</label>
+          <input type="number" className="form-control" name="precio_costo" value={producto.precio_costo} onChange={handleChange} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Precio Venta:</label>
+          <input type="number" className="form-control" name="precio_venta" value={producto.precio_venta} onChange={handleChange} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Stock Mínimo:</label>
+          <input type="number" className="form-control" name="stock_minimo" value={producto.stock_minimo} onChange={handleChange} />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Promoción (opcional):</label>
+          <select className="form-select" name="id_promocion" value={producto.id_promocion} onChange={handleChange}>
+            <option value="">-- Sin promoción --</option>
+            {promociones.map(p => (
+              <option key={p.id} value={p.id}>{p.nombre} ({p.porcentaje}%)</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Proveedor:</label>
+          <select className="form-select" name="id_proveedor" value={producto.id_proveedor} onChange={handleChange}>
+            <option value="">-- Seleccionar Proveedor --</option>
+            {proveedores.map(pr => (
+              <option key={pr.id} value={pr.id}>{pr.nombre}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Código de Barra:</label>
+          <input type="number" className="form-control" name="codigo_barra" value={producto.codigo_barra} onChange={handleChange} />
+        </div>
       </div>
 
-      {}
       <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}>
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
-      {}
-      <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
+      <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '500px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>
       </div>

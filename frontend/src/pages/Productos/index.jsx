@@ -93,7 +93,8 @@ export default function Productos() {
             <tr>
               <th>ID</th>
               <th>NOMBRE</th>
-              <th>CATEGORÍA</th>
+              <th>RUBRO</th>
+              <th>PROVEEDOR</th>
               <th>PRECIO VENTA</th>
               <th>STOCK MÍNIMO</th>
               <th>ACCIONES</th>
@@ -105,7 +106,8 @@ export default function Productos() {
                 <tr key={producto.id}>
                   <td>{producto.id}</td>
                   <td>{producto.nombre}</td>
-                  <td>{producto.categoria}</td>
+                  <td>{producto.rubro_nombre || '-'}</td>
+                  <td>{producto.proveedor_nombre || '-'}</td>
                   <td>${producto.precio_venta}</td>
                   <td>{producto.stock_minimo}</td>
                   <td>
@@ -124,6 +126,9 @@ export default function Productos() {
 
       <div className="d-flex justify-content-between mt-3">
         <button className="btn btn-success" onClick={handleNuevo}>NUEVO PRODUCTO</button>
+        <button className="btn btn-outline-secondary" onClick={() => navigate('/rubros')}>
+          GESTION DE RUBROS
+        </button>
       </div>
 
       <div className="mt-4 d-flex justify-content-center">

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getProductoById, actualizarProducto } from '../../services/productService';
-import { getPromocionesActivas } from '../../services/promocionService';
+import { getRubros } from '../../services/rubroService';
+import { getProveedores } from '../../services/proveedorService';
 
 export default function EditarProducto() {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [producto, setProducto] = useState({
     nombre: '',
-    categoria: '',
+    id_rubro: '',
+    id_proveedor: '',
     descripcion: '',
     precio_costo: '',
     precio_venta: '',
@@ -18,30 +20,38 @@ export default function EditarProducto() {
     codigo_barra: ''
   });
 
-  const [promociones, setPromociones] = useState([]);
+  const [rubros, setRubros] = useState([]);
+  const [proveedores, setProveedores] = useState([]);
+
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
   const [mostrarMensaje, setMostrarMensaje] = useState(false);
 
   useEffect(() => {
-    const cargarDatos = async () => {
-      try {
-        const resProd = await getProductoById(id);
-        setProducto({
-          ...resProd.data,
-          id_promocion: resProd.data.id_promocion ?? '' // evitar null en el select
-        });
+    getRubros().then(res => setRubros(res.data)).catch(console.error);
+    getProveedores().then(res => setProveedores(res.data)).catch(console.error);
 
-        const resPromo = await getPromocionesActivas();
-        setPromociones(resPromo.data);
-      } catch (error) {
-        console.error('Error al cargar producto o promociones:', error);
+    getProductoById(id)
+      .then(res => {
+        const prod = res.data;
+        setProducto({
+          nombre: prod.nombre || '',
+          id_rubro: prod.id_rubro?.toString() || '',
+          id_proveedor: prod.id_proveedor?.toString() || '',
+          descripcion: prod.descripcion || '',
+          precio_costo: prod.precio_costo || '',
+          precio_venta: prod.precio_venta || '',
+          stock_minimo: prod.stock_minimo || '',
+          id_promocion: prod.id_promocion || '',
+          codigo_barra: prod.codigo_barra || ''
+        });
+      })
+      .catch(err => {
+        console.error('Error al cargar producto', err);
         setMensaje('Error al cargar los datos');
         setTipoMensaje('error');
         setMostrarMensaje(true);
-      }
-    };
-    cargarDatos();
+      });
   }, [id]);
 
   const handleChange = (e) => {
@@ -52,6 +62,8 @@ export default function EditarProducto() {
     try {
       const datos = {
         ...producto,
+        id_rubro: parseInt(producto.id_rubro),
+        id_proveedor: parseInt(producto.id_proveedor),
         precio_costo: parseInt(producto.precio_costo) || 0,
         precio_venta: parseInt(producto.precio_venta),
         stock_minimo: parseInt(producto.stock_minimo) || 0,
@@ -60,11 +72,11 @@ export default function EditarProducto() {
       };
 
       await actualizarProducto(id, datos);
-      setMensaje('Producto actualizado correctamente');
+      setMensaje('Producto actualizado con éxito');
       setTipoMensaje('success');
-    } catch (error) {
-      console.error('Error al guardar producto:', error);
-      setMensaje('Error al actualizar producto');
+    } catch (err) {
+      console.error('Error al guardar cambios', err);
+      setMensaje('Error al guardar cambios');
       setTipoMensaje('error');
     }
 
@@ -75,14 +87,14 @@ export default function EditarProducto() {
   return (
     <div style={{ padding: '2rem' }}>
       <h4>EDITAR PRODUCTO</h4>
-      <div style={{ background: '#eee', padding: '2rem', maxWidth: '400px' }}>
+      <div style={{ background: '#eee', padding: '2rem', maxWidth: '500px' }}>
         {[
           ['nombre', 'Nombre'],
-          ['categoria', 'Categoría'],
           ['descripcion', 'Descripción'],
           ['precio_costo', 'Precio Costo'],
           ['precio_venta', 'Precio Venta'],
           ['stock_minimo', 'Stock Mínimo'],
+          ['id_promocion', 'ID Promoción'],
           ['codigo_barra', 'Código de Barra']
         ].map(([key, label], i) => (
           <div className="mb-3" key={i}>
@@ -97,19 +109,24 @@ export default function EditarProducto() {
           </div>
         ))}
 
+        {/* Rubro */}
         <div className="mb-3">
-          <label className="form-label">Promoción:</label>
-          <select
-            className="form-select"
-            name="id_promocion"
-            value={producto.id_promocion}
-            onChange={handleChange}
-          >
-            <option value="">Sin promoción</option>
-            {promociones.map((promo) => (
-              <option key={promo.id} value={promo.id}>
-                {promo.nombre}
-              </option>
+          <label className="form-label">Rubro:</label>
+          <select className="form-select" name="id_rubro" value={producto.id_rubro} onChange={handleChange}>
+            <option value="">-- Seleccionar rubro --</option>
+            {rubros.map(r => (
+              <option key={r.id} value={r.id}>{r.nombre}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Proveedor */}
+        <div className="mb-3">
+          <label className="form-label">Proveedor:</label>
+          <select className="form-select" name="id_proveedor" value={producto.id_proveedor} onChange={handleChange}>
+            <option value="">-- Seleccionar proveedor --</option>
+            {proveedores.map(p => (
+              <option key={p.id} value={p.id}>{p.nombre}</option>
             ))}
           </select>
         </div>
@@ -119,7 +136,7 @@ export default function EditarProducto() {
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
-      <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
+      <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '500px' }}>
         <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>
       </div>
