@@ -2,7 +2,9 @@ const pool = require('../config/db');
 
 exports.buscarProductoPorCodigo = async (codigo) => {
   const result = await pool.query(
-    `SELECT p.id, p.nombre, r.nombre as categoria, p.descripcion, p.precio_costo, p.precio_venta, p.stock_minimo,   
+    `SELECT p.id, p.nombre as nombre, r.nombre as categoria, 
+       p.descripcion as descripcion, p.precio_costo as precio_costo, 
+       p.precio_venta as precio_venta, p.stock_minimo,   
        pr.nombre as promocion_nombre, 
        pr.condiciones as promocion_condiciones,  
        pr.porcentaje as porcentaje 
@@ -12,7 +14,7 @@ exports.buscarProductoPorCodigo = async (codigo) => {
     WHERE codigo_barra = $1 
     AND p.fecha_baja IS NULL
     AND pr.fecha_baja IS NULL`,
-    [p.codigo]
+    [codigo]
   );
   return result.rows[0];
 };
@@ -113,16 +115,18 @@ exports.totalPerdidas = async () => {
 exports.movimientosPorMes = async () => {
   const query = `
     SELECT
-      TO_CHAR(m.fecha, 'YYYY-MM') AS mes_anio,
-      SUM(CASE WHEN m.tipo = 'compra' THEN m.monto ELSE 0 END) AS monto_compras,
-      SUM(CASE WHEN m.tipo = 'venta' THEN m.monto * (-1) ELSE 0 END) AS monto_ventas,
-      SUM(CASE WHEN m.tipo = 'perdida' THEN m.monto * (-1) ELSE 0 END) AS monto_perdidas
-    FROM movimientos m
-    WHERE
-      m.fecha_baja IS NULL
-      AND EXTRACT(YEAR FROM m.fecha) = EXTRACT(YEAR FROM CURRENT_DATE)
-    GROUP BY TO_CHAR(m.fecha, 'YYYY-MM')
-    ORDER BY mes_anio;
+        TO_CHAR(m.fecha, 'YYYY-MM') AS mes_anio,
+        SUM(CASE WHEN m.tipo = 'compra' THEN m.monto ELSE 0 END) AS monto_compras,
+        SUM(CASE WHEN m.tipo = 'venta' THEN m.monto * (-1) ELSE 0 END) AS monto_ventas,
+        SUM(CASE WHEN m.tipo = 'perdida' THEN m.monto * (-1) ELSE 0 END) AS monto_perdidas
+      FROM movimientos m
+      WHERE
+        m.fecha_baja IS NULL
+        AND m.fecha >= (CURRENT_DATE - INTERVAL '12 months')
+        AND m.fecha < (DATE_TRUNC('month', CURRENT_DATE) + INTERVAL '1 month')
+      GROUP BY TO_CHAR(m.fecha, 'YYYY-MM')
+      ORDER BY mes_anio;
+
   `;
 
   try {
