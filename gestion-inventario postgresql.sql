@@ -130,13 +130,13 @@ INSERT INTO producto (
     nombre, id_rubro, descripcion, precio_costo, precio_venta, stock_minimo,
     id_promocion, codigo_barra, fecha_baja, id_proveedor
 ) VALUES
-('Gaseosa Cola 1.5L', 2, 'Botella de 1.5 litros', 100, 180, 15, 1, 7790000000003, NULL, 1), -- Bebidas = 2
+('Gaseosa Cola 1.5L', 2, 'Botella de 1.5 litros', 100, 180, 15, 1, 7794635020504, NULL, 1), -- Bebidas = 2
 ('Yogur Natural 1L', 1, 'Yogur sin sabor', 90, 140, 10, 3, 7790000000004, NULL, 2), -- Lácteos = 1
 ('Pan de Molde', 3, 'Pan blanco en paquete', 80, 120, 20, NULL, 7790000000005, NULL, 3), -- Panificados = 3
 ('Aceite Girasol 1L', 11, 'Aceite comestible de girasol', 150, 220, 5, NULL, 7790000000006, NULL, 4), -- Aceites = 11
 ('Galletitas Dulces', 8, 'Galletas de chocolate', 60, 100, 30, 2, 7790000000007, NULL, 5), -- Snacks = 8
 ('Jugo en Polvo', 2, 'Sabor naranja', 20, 45, 50, 1, 7790000000008, NULL, 5), -- Bebidas = 2
-('Café Molido 250g', 2, 'Café tostado molido', 200, 300, 5, NULL, 7790000000009, NULL, 13), -- Bebidas = 2 (proveedor 13)
+('Café Molido 250g', 2, 'Café tostado molido', 200, 300, 5, NULL, 7790000000009, NULL, 4), -- Bebidas = 2 (proveedor 13)
 ('Arroz 1kg', 12, 'Arroz largo fino', 70, 110, 10, NULL, 7790000000010, NULL, 4), -- Almacén = 12
 ('Fideos Spaghetti', 12, 'Pasta seca', 60, 100, 10, NULL, 7790000000011, NULL, 4),
 ('Sal fina 500g', 12, 'Sal común', 20, 35, 15, NULL, 7790000000012, NULL, 4),

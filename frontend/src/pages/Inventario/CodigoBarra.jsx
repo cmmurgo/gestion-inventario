@@ -54,8 +54,12 @@ export default function CodigoBarra() {
           <p><strong>Nombre:</strong> {producto.nombre}</p>
           <p><strong>Categoría:</strong> {producto.categoria}</p>
           <p><strong>Descripción:</strong> {producto.descripcion}</p>
+          <p><strong>Precio costo:</strong> ${producto.precio_costo}</p>
           <p><strong>Precio venta:</strong> ${producto.precio_venta}</p>
           <p><strong>Stock mínimo:</strong> {producto.stock_minimo}</p>
+          <p><strong>Promoción nombre:</strong> {producto.promocion_nombre}</p>
+          <p><strong>Promoción condiciones:</strong> {producto.promocion_condiciones}</p>
+          <p><strong>Porcentaje:</strong> {producto.porcentaje}</p>
         </div>
       )}
     </div>
