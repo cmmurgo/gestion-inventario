@@ -131,11 +131,21 @@ export default function Rubros() {
                                     )}
                                 </td>
                                 <td>
-                                    <span title={rubro.tiene_productos ? "No se puede eliminar: rubro con productos" : "Eliminar rubro"}>
+                                    <button
+                                        className="btn btn-sm btn-secondary me-2"
+                                        onClick={() => navigate(`/rubros/${rubro.id}/productos`)}
+                                    >
+                                        Ver productos
+                                    </button>
+
+                                    <span
+                                        title={rubro.tiene_productos ? 'No se puede eliminar: rubro con productos' : 'Eliminar rubro'}
+                                    >
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            onClick={() => handleEliminar(rubro.id)}
                                             disabled={rubro.tiene_productos}
+                                            onClick={() => handleEliminar(rubro.id)}
+                                            style={{ opacity: rubro.tiene_productos ? 0.4 : 1 }}
                                         >
                                             <FaTrash />
                                         </button>
