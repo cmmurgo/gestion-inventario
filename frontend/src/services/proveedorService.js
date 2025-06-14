@@ -12,3 +12,4 @@ const authConfig = () => ({
 });
 
 export const getProveedores = () => axios.get(API, authConfig());
+export const getProveedorById = (id) => axios.get(`${API}/${id}`, authConfig());
