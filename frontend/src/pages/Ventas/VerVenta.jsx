@@ -61,8 +61,10 @@ function VerVenta() {
   const calcularTotal = (detalles) => {
     const totalCalculado = detalles.reduce((acc, item) => {
       const cantidad = parseFloat(item.cantidad) || 0;
-      const precio = parseFloat(item.precio_unitario || item.precio_venta || 0); // ajustá según tu modelo
-      return acc + cantidad * precio;
+      const precio = parseFloat(item.precio_venta || 0);
+      const porcentaje_descuento = parseFloat(item.porcentaje || 0);
+      const precio_final = precio-(precio * porcentaje_descuento /100);
+      return acc + cantidad * precio_final;
     }, 0);
     setTotal(totalCalculado);
   };
@@ -184,12 +186,15 @@ function VerVenta() {
                   <button type="button" className="btn-close" onClick={() => setModalProductoVisible(false)}></button>
                 </div>
                 <div className="modal-body">
-                  <p><strong>Nombre:</strong> {productoSeleccionado.nombre}</p>
-                  <p><strong>Categoría:</strong> {productoSeleccionado.categoria}</p>
-                  <p><strong>Descripcion:</strong> {productoSeleccionado.descripcion}</p>
-                  <p><strong>Precio Compra:</strong> ${productoSeleccionado.precio_costo}</p>
-                  <p><strong>Precio Venta:</strong> ${productoSeleccionado.precio_venta}</p>
-                  <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
+                    <p><strong>Nombre:</strong> {productoSeleccionado.nombre}</p>
+                    <p><strong>Categoría:</strong> {productoSeleccionado.categoria}</p>
+                    <p><strong>Descripcion:</strong> {productoSeleccionado.descripcion}</p>
+                    <p><strong>Precio Compra:</strong> ${productoSeleccionado.precio_costo}</p>
+                    <p><strong>Precio Venta:</strong> ${productoSeleccionado.precio_venta}</p>           
+                    <p><strong>Porcentaje Descuento:</strong> {productoSeleccionado.porcentaje ?? 0}</p> 
+                    <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
+                    <p><strong>Nombre Promoción:</strong> {productoSeleccionado.promocion_nombre ?? ' - '}</p> 
+                    <p><strong>Condiciones de Promoción:</strong> {productoSeleccionado.promocion_condiciones ?? ' - '}</p> 
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" onClick={() => setModalProductoVisible(false)}>Cerrar</button>

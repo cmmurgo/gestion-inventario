@@ -3,6 +3,7 @@ const router = express.Router();
 const inventarioController = require('../controllers/inventarioController');
 const { verifyToken } = require('../middlewares/authMiddleware');
 
+router.get('/stock-producto', verifyToken, inventarioController.getStockProducto);
 router.get('/productos-menos-vendidos', verifyToken, inventarioController.getProductosMenosVendidos);
 router.get('/productos-mayor-ingreso', verifyToken, inventarioController.getProductosMayorIngreso);
 router.get('/tasa-rotacion', verifyToken, inventarioController.getTasaRotacion);

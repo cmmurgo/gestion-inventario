@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { API_URL } from '../api';
 import axios from 'axios';
 import Grafico from './Grafico.jsx';
+import inventarioImg from '../assets/codigo_barras.png';
 
 function Home() {
 
@@ -56,13 +57,14 @@ function Home() {
   };
 
   const nombreMes = new Date().toLocaleString('es-AR', { month: 'long' }).toUpperCase();
-
+console.log(totalIngresos);
   const data = [
     { icon: ventasImg, value: totalVentas, label: 'Total Cantidad de Ventas' },
     { icon: comprasImg, value: totalCompras, label: 'Total Cantidad de Compras' },
     { icon: perdidasImg, value: totalPerdidas, label: 'Total Cantidad de Pérdidas' },
     { icon: ingresosImg, value: '$' + (totalIngresos ?? 0), label: 'Ingresos Netos x Ventas' },
     { icon: gastosImg, value: '$' + (totalGastos ?? 0), label: 'Total Gastos' },
+    { icon: inventarioImg, value: '', label: 'Inventario', hideValue: true, isButton: true },
   ];
 
   return (    

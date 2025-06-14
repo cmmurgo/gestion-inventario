@@ -10,6 +10,10 @@ const inventarioRoutes = require('./routes/inventario');
 const perdidaRoutes = require('./routes/perdidas');
 const movimientosRoutes = require('./routes/movimientos');
 const ventasRoutes = require('./routes/ventas');
+const productosRoutes = require('./routes/productos');
+const promocionesRoutes = require('./routes/promociones');
+const rubrosRoutes = require('./routes/rubros');
+const proveedorRoutes = require('./routes/proveedoresT');
 
 // Middlewares primero
 app.use(cors());
@@ -23,6 +27,10 @@ app.use('/api/inventario', inventarioRoutes);
 app.use('/api/perdidas', perdidaRoutes);
 app.use('/api/movimientos', movimientosRoutes);
 app.use('/api/ventas', ventasRoutes);
+app.use('/api/productos', productosRoutes);
+app.use('/api/promociones', promocionesRoutes);
+app.use('/api/rubros', rubrosRoutes);
+app.use('/api/proveedores', proveedorRoutes);
 
 // Exportar app para pruebas
 module.exports = app;
