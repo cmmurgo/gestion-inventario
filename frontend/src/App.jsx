@@ -29,11 +29,14 @@ import EditarProducto from './pages/Productos/EditarProducto.jsx';
 import VerProducto from './pages/Productos/VerProducto.jsx';
 import ProductosMayorIngreso from "./pages/Inventario/ProductosMayorIngreso";
 import ProductosMenosVendidos from "./pages/Inventario/ProductosMenosVendidos";
+import StockProducto from "./pages/Inventario/StockProducto";
 import IndexPromociones from './pages/Promociones/index';
 import CrearPromocion from './pages/Promociones/CrearPromocion';
 import EditarPromocion from './pages/Promociones/EditarPromocion';
 import VerPromocion from './pages/Promociones/VerPromocion';
 import Rubros from './pages/Rubros';
+
+
 import './App.css';
 
 function App() {
@@ -72,6 +75,7 @@ function App() {
         <Route path="productos/ver/:id" element={<VerProducto />} />
         <Route path="/productos-mayor-ingreso" element={<ProductosMayorIngreso />} />
         <Route path="/productos-menos-vendidos" element={<ProductosMenosVendidos />} />
+        <Route path="/stock-producto" element={<StockProducto />} />
         <Route path="promociones" element={<IndexPromociones />} />
         <Route path="promociones/crear" element={<CrearPromocion />} />
         <Route path="promociones/editar/:id" element={<EditarPromocion />} />
