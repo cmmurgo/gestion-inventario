@@ -35,13 +35,18 @@ export default function Rubros() {
 
     const handleCrear = async () => {
         if (!nuevoRubro.trim()) return;
+
         try {
             await crearRubro({ nombre: nuevoRubro.trim() });
             mostrarMensaje('Rubro creado con éxito', 'success');
             setNuevoRubro('');
             fetchRubros();
         } catch (err) {
-            mostrarMensaje('Error al crear rubro', 'error');
+            if (err.response && err.response.data && err.response.data.message) {
+                mostrarMensaje(err.response.data.message, 'error');
+            } else {
+                mostrarMensaje('Error al crear rubro', 'error');
+            }
         }
     };
 
@@ -57,7 +62,11 @@ export default function Rubros() {
             setEditandoId(null);
             fetchRubros();
         } catch (err) {
-            mostrarMensaje('Error al editar rubro', 'error');
+            if (err.response && err.response.data && err.response.data.message) {
+                mostrarMensaje(err.response.data.message, 'error');
+            } else {
+                mostrarMensaje('Error al editar rubro', 'error');
+            }
         }
     };
 
@@ -84,8 +93,11 @@ export default function Rubros() {
             <h5 className="fw-bold mb-4">GESTIÓN DE RUBROS</h5>
 
             {mensaje && (
-                <div className={`alert ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'}`}>
-                    {mensaje}
+                <div
+                    className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} show`}
+                    role="alert"
+                >
+                    {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
                 </div>
             )}
 

@@ -27,7 +27,11 @@ exports.create = async (req, res) => {
     await rubroModel.create(req.body);
     res.status(201).json({ message: 'Rubro creado correctamente' });
   } catch (error) {
-    console.error('Error al crear rubro:', error);
+    if (error.code === '23505') {
+      // Código de error de Postgres para violación de UNIQUE
+      return res.status(400).json({ message: 'Ya existe un rubro con ese nombre.' });
+    }
+    //console.error('Error al crear rubro:', error);
     res.status(500).json({ message: 'Error al crear rubro', error });
   }
 };
@@ -37,6 +41,10 @@ exports.update = async (req, res) => {
     await rubroModel.update(req.params.id, req.body);
     res.json({ message: 'Rubro actualizado correctamente' });
   } catch (error) {
+    if (error.code === '23505') {
+      // Código de error de Postgres para violación de UNIQUE
+      return res.status(400).json({ message: 'Ya existe un rubro con ese nombre.' });
+    }
     res.status(500).json({ message: 'Error al actualizar rubro', error });
   }
 };
