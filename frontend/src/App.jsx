@@ -37,6 +37,7 @@ import VerPromocion from './pages/Promociones/VerPromocion';
 import Rubros from './pages/Rubros';
 
 
+import StockProducto from "./pages/Inventario/StockProducto";
 import './App.css';
 
 function App() {
@@ -83,7 +84,8 @@ function App() {
         <Route path="/rubros" element={<Rubros />} />
 
 
-      </Route>
+        <Route path="/stock-producto" element={<StockProducto />} />
+    </Route>
     </Routes>
 
 
