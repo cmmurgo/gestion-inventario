@@ -29,7 +29,7 @@ export default function CrearProducto() {
 
   useEffect(() => {
     getRubros().then(res => setRubros(res.data)).catch(err => console.error('Error al obtener rubros', err));
-    getPromocionesActivas().then(res => setPromociones(res.data)).catch(err => console.error('Error al obtener promociones', err));
+    getPromocionesActivas().then(res => setPromociones(res.data)).catch(err => console.error('Error al obtener promociones activas', err));
     getProveedores().then(res => setProveedores(res.data)).catch(err => console.error('Error al obtener proveedores', err));
   }, []);
 

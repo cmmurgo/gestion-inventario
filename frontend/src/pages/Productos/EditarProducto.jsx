@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getProductoById, actualizarProducto } from '../../services/productService';
 import { getRubros } from '../../services/rubroService';
 import { getProveedores } from '../../services/proveedorService';
+import { getPromocionesActivas } from '../../services/promocionService';
 
 export default function EditarProducto() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function EditarProducto() {
 
   const [rubros, setRubros] = useState([]);
   const [proveedores, setProveedores] = useState([]);
+  const [promociones, setPromociones] = useState([]);
 
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
@@ -30,6 +32,7 @@ export default function EditarProducto() {
   useEffect(() => {
     getRubros().then(res => setRubros(res.data)).catch(console.error);
     getProveedores().then(res => setProveedores(res.data)).catch(console.error);
+    getPromocionesActivas().then(res => setPromociones(res.data)).catch(console.error);
 
     getProductoById(id)
       .then(res => {
@@ -42,7 +45,7 @@ export default function EditarProducto() {
           precio_costo: prod.precio_costo || '',
           precio_venta: prod.precio_venta || '',
           stock_minimo: prod.stock_minimo || '',
-          id_promocion: prod.id_promocion || '',
+          id_promocion: prod.id_promocion?.toString() || '',
           codigo_barra: prod.codigo_barra || ''
         });
       })
@@ -88,26 +91,17 @@ export default function EditarProducto() {
     <div style={{ padding: '2rem' }}>
       <h4>EDITAR PRODUCTO</h4>
       <div style={{ background: '#eee', padding: '2rem', maxWidth: '500px' }}>
-        {[
-          ['nombre', 'Nombre'],
-          ['descripcion', 'Descripción'],
-          ['precio_costo', 'Precio Costo'],
-          ['precio_venta', 'Precio Venta'],
-          ['stock_minimo', 'Stock Mínimo'],
-          ['id_promocion', 'ID Promoción'],
-          ['codigo_barra', 'Código de Barra']
-        ].map(([key, label], i) => (
-          <div className="mb-3" key={i}>
-            <label className="form-label">{label}:</label>
-            <input
-              type={key.includes('precio') || key.includes('stock') || key.includes('codigo') ? 'number' : 'text'}
-              className="form-control"
-              name={key}
-              value={producto[key] || ''}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
+        {/* Nombre */}
+        <div className="mb-3">
+          <label className="form-label">Nombre:</label>
+          <input
+            type="text"
+            className="form-control"
+            name="nombre"
+            value={producto.nombre}
+            onChange={handleChange}
+          />
+        </div>
 
         {/* Rubro */}
         <div className="mb-3">
@@ -116,6 +110,64 @@ export default function EditarProducto() {
             <option value="">-- Seleccionar rubro --</option>
             {rubros.map(r => (
               <option key={r.id} value={r.id}>{r.nombre}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Descripción */}
+        <div className="mb-3">
+          <label className="form-label">Descripción:</label>
+          <textarea
+            className="form-control"
+            name="descripcion"
+            value={producto.descripcion}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Precio Costo */}
+        <div className="mb-3">
+          <label className="form-label">Precio Costo:</label>
+          <input
+            type="number"
+            className="form-control"
+            name="precio_costo"
+            value={producto.precio_costo}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Precio Venta */}
+        <div className="mb-3">
+          <label className="form-label">Precio Venta:</label>
+          <input
+            type="number"
+            className="form-control"
+            name="precio_venta"
+            value={producto.precio_venta}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Stock Mínimo */}
+        <div className="mb-3">
+          <label className="form-label">Stock Mínimo:</label>
+          <input
+            type="number"
+            className="form-control"
+            name="stock_minimo"
+            value={producto.stock_minimo}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Promoción */}
+        <div className="mb-3">
+          <label className="form-label">Promoción (opcional):</label>
+          <select className="form-select" name="id_promocion" value={producto.id_promocion} onChange={handleChange}>
+            <option value="">-- Sin promoción --</option>
+            {promociones.map(p => (
+              <option key={p.id} value={p.id}>{p.nombre} ({p.porcentaje}%)</option>
             ))}
           </select>
         </div>
@@ -129,6 +181,18 @@ export default function EditarProducto() {
               <option key={p.id} value={p.id}>{p.nombre}</option>
             ))}
           </select>
+        </div>
+
+        {/* Código de Barra */}
+        <div className="mb-3">
+          <label className="form-label">Código de Barra:</label>
+          <input
+            type="number"
+            className="form-control"
+            name="codigo_barra"
+            value={producto.codigo_barra}
+            onChange={handleChange}
+          />
         </div>
       </div>
 
