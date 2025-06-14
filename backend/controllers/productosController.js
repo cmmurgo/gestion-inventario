@@ -52,3 +52,13 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: 'Error al eliminar producto', error });
   }
 };
+
+exports.getByRubroId = async (req, res) => {
+  try {
+    const { rows } = await productoModel.getByRubroId(req.params.id);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener productos por rubro:', error);
+    res.status(500).json({ message: 'Error al obtener productos del rubro' });
+  }
+};

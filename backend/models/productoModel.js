@@ -71,3 +71,12 @@ exports.delete = (id) => {
     UPDATE producto SET fecha_baja = CURRENT_DATE WHERE id = $1
   `, [id]);
 };
+
+exports.getByRubroId = (idRubro) => {
+  return db.query(`
+    SELECT producto.*, proveedor.nombre AS proveedor_nombre
+    FROM producto
+    LEFT JOIN proveedor ON producto.id_proveedor = proveedor.id
+    WHERE producto.id_rubro = $1 AND producto.fecha_baja IS NULL
+  `, [idRubro]);
+};

@@ -35,6 +35,7 @@ import CrearPromocion from './pages/Promociones/CrearPromocion';
 import EditarPromocion from './pages/Promociones/EditarPromocion';
 import VerPromocion from './pages/Promociones/VerPromocion';
 import Rubros from './pages/Rubros';
+import VerProductosRubro from './pages/Rubros/VerProductosRubro.jsx';
 import './App.css';
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
         <Route path="promociones/editar/:id" element={<EditarPromocion />} />
         <Route path="promociones/ver/:id" element={<VerPromocion />} />
         <Route path="/rubros" element={<Rubros />} />
+        <Route path="rubros/:id/productos" element={<VerProductosRubro />} />
     </Route>
     </Routes>
 
