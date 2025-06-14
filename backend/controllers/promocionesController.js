@@ -55,11 +55,7 @@ exports.delete = async (req, res) => {
 
 exports.getActivas = async (req, res) => {
   try {
-    const { rows } = await db.query(`
-      SELECT id, nombre FROM promocion 
-      WHERE fecha_baja IS NULL 
-        AND CURRENT_DATE BETWEEN fecha_inicio AND fecha_fin
-    `);
+    const { rows } = await model.getActivas();
     res.json(rows);
   } catch (error) {
     console.error('Error al obtener promociones activas:', error);

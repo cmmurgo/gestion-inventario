@@ -6,6 +6,16 @@ exports.getAll = () => {
   `);
 };
 
+exports.getActivas = () => {
+  return db.query(`
+    SELECT id, nombre 
+    FROM promocion 
+    WHERE fecha_baja IS NULL 
+      AND CURRENT_DATE >= fecha_inicio
+      AND (fecha_fin IS NULL OR CURRENT_DATE <= fecha_fin)
+  `);
+};
+
 exports.getById = (id) => {
   return db.query(`
     SELECT * FROM promocion WHERE id = $1 AND fecha_baja IS NULL
@@ -41,3 +51,4 @@ exports.delete = (id) => {
     UPDATE promocion SET fecha_baja = CURRENT_DATE WHERE id = $1
   `, [id]);
 };
+
