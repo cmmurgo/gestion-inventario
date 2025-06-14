@@ -43,7 +43,7 @@ export default function Ventas() {
 
   useEffect(() => {
     const filtradas = ventas.filter(v => {
-      const coincideCliente = clienteFiltro ? v.cliente.toLowerCase().includes(clienteFiltro.toLowerCase()) : true;
+      const coincideCliente = clienteFiltro ? v.cliente_nombre_completo.toLowerCase().includes(clienteFiltro.toLowerCase()) : true;
       const coincideFecha = fechaFiltro ? v.fecha.includes(fechaFiltro) : true;
       return coincideCliente && coincideFecha;
     });
