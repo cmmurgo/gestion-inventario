@@ -57,7 +57,7 @@ function Home() {
   };
 
   const nombreMes = new Date().toLocaleString('es-AR', { month: 'long' }).toUpperCase();
-
+console.log(totalIngresos);
   const data = [
     { icon: ventasImg, value: totalVentas, label: 'Total Cantidad de Ventas' },
     { icon: comprasImg, value: totalCompras, label: 'Total Cantidad de Compras' },
