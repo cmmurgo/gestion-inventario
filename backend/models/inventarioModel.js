@@ -245,8 +245,8 @@ exports.productosMayorIngreso = async () => {
       p.id AS producto_id,
       p.nombre,
       p.precio_venta,
-      COALESCE(SUM(m.cantidad), 0) AS total_ventas_6_meses,
-      COALESCE(SUM(m.monto), 0) AS ingreso_total
+      COALESCE(SUM(-m.cantidad), 0) AS total_ventas_6_meses,
+      COALESCE(SUM(-m.monto), 0) AS ingreso_total
     FROM producto p
     LEFT JOIN movimientos m ON m.id_producto = p.id
       AND m.tipo = 'venta'
@@ -272,8 +272,8 @@ exports.productosMenosVendidos = async () => {
       p.id AS producto_id,
       p.nombre,
       p.precio_venta,
-      COALESCE(SUM(m.cantidad), 0) AS total_ventas_6_meses,
-      COALESCE(SUM(m.monto), 0) AS ingreso_total
+      COALESCE(SUM(-m.cantidad), 0) AS total_ventas_6_meses,
+      COALESCE(SUM(-m.monto), 0) AS ingreso_total
     FROM producto p
     LEFT JOIN movimientos m ON m.id_producto = p.id
       AND m.tipo = 'venta'
@@ -281,7 +281,7 @@ exports.productosMenosVendidos = async () => {
       AND m.fecha >= CURRENT_DATE - INTERVAL '6 months'
     WHERE p.fecha_baja IS NULL
     GROUP BY p.id, p.nombre, p.precio_venta
-    HAVING COALESCE(SUM(m.cantidad), 0) <= 5
+    HAVING COALESCE(SUM(-m.cantidad), 0) <= 10
     ORDER BY total_ventas_6_meses ASC, ingreso_total ASC;
   `;
 
