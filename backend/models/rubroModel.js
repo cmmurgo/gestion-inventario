@@ -2,7 +2,8 @@ const db = require('../config/db');
 
 exports.getAll = () => {
   return db.query(`
-    SELECT r.*, 
+    SELECT r.*,
+      (SELECT COUNT(*) FROM producto p WHERE p.id_rubro = r.id AND p.fecha_baja IS NULL) AS cantidad_productos,
       EXISTS (
         SELECT 1 FROM producto p 
         WHERE p.id_rubro = r.id AND p.fecha_baja IS NULL
