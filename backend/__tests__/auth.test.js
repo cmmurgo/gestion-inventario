@@ -3,7 +3,7 @@ const app = require('../server');
 
 const usuarioTest = {
     email: 'cmmurgo@gmail.com',
-    password: '123456789'
+    password: '12345678'
 };
 
 describe('Pruebas funcionales - Autenticación', () => {
