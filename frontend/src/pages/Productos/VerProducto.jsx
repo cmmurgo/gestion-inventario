@@ -64,7 +64,7 @@ export default function VerProducto() {
       </div>
       {errorMessage && <p className="text-danger mt-2">{errorMessage}</p>}
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '400px' }}>
-        <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
+        <button className="btn btn-dark" onClick={() => navigate(-1)}>Volver</button>
         <button className="btn btn-primary" onClick={() => navigate(`/productos/editar/${id}`)}>Editar</button>
       </div>
     </div>

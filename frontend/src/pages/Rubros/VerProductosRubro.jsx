@@ -45,7 +45,11 @@ export default function VerProductosRubro() {
                             productos.map(p => (
                                 <tr key={p.id}>
                                     <td>{p.id}</td>
-                                    <td>{p.nombre}</td>
+                                    <td>
+                                        <button className="btn btn-link text-primary p-0" onClick={() => navigate(`/productos/ver/${p.id}`)}>
+                                            {p.nombre}
+                                        </button>
+                                    </td>
                                     <td>${p.precio_venta}</td>
                                     <td>{p.stock_minimo}</td>
                                 </tr>
