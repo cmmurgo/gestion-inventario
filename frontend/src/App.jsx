@@ -34,6 +34,7 @@ import IndexPromociones from './pages/Promociones/index';
 import CrearPromocion from './pages/Promociones/CrearPromocion';
 import EditarPromocion from './pages/Promociones/EditarPromocion';
 import VerPromocion from './pages/Promociones/VerPromocion';
+import VerProductosPromocion from './pages/Promociones/VerProductos.jsx';
 import Rubros from './pages/Rubros';
 import VerProductosRubro from './pages/Rubros/VerProductosRubro.jsx';
 import './App.css';
@@ -79,9 +80,11 @@ function App() {
         <Route path="promociones/crear" element={<CrearPromocion />} />
         <Route path="promociones/editar/:id" element={<EditarPromocion />} />
         <Route path="promociones/ver/:id" element={<VerPromocion />} />
+        <Route path="promociones/ver/:id/productos" element={<VerProductosPromocion />} />
         <Route path="/rubros" element={<Rubros />} />
         <Route path="rubros/:id/productos" element={<VerProductosRubro />} />
-    </Route>
+
+      </Route>
     </Routes>
 
 

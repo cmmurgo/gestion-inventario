@@ -201,7 +201,7 @@ export default function EditarProducto() {
       </div>
 
       <div className="d-flex justify-content-between mt-4" style={{ maxWidth: '500px' }}>
-        <button className="btn btn-dark" onClick={() => navigate('/productos')}>Volver</button>
+        <button className="btn btn-dark" onClick={() => navigate(-1)}>Volver</button>
         <button className="btn btn-success" onClick={handleGuardar}>GUARDAR</button>
       </div>
     </div>

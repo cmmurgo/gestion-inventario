@@ -62,3 +62,13 @@ exports.getActivas = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener promociones activas' });
   }
 };
+
+exports.getProductosAsociados = async (req, res) => {
+  try {
+    const { rows } = await model.getProductosAsociados(req.params.id);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener productos de la promoción:', error);
+    res.status(500).json({ message: 'Error al obtener productos de la promoción' });
+  }
+};

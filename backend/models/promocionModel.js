@@ -52,3 +52,12 @@ exports.delete = (id) => {
   `, [id]);
 };
 
+exports.getProductosAsociados = (id) => {
+  return db.query(`
+    SELECT producto.id, producto.nombre, producto.precio_venta, rubro.nombre AS rubro
+    FROM producto
+    LEFT JOIN rubro ON producto.id_rubro = rubro.id
+    WHERE producto.id_promocion = $1
+    ORDER BY producto.nombre
+  `, [id]);
+};
