@@ -62,3 +62,23 @@ exports.getByRubroId = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener productos del rubro' });
   }
 };
+
+exports.getEliminados = async (req, res) => {
+  try {
+    const { rows } = await productoModel.getEliminados();
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener productos eliminados:', error);
+    res.status(500).json({ message: 'Error al obtener productos eliminados' });
+  }
+};
+
+exports.restaurar = async (req, res) => {
+  try {
+    await productoModel.restaurar(req.params.id);
+    res.json({ message: 'Producto dado de alta nuevamente' });
+  } catch (error) {
+    console.error('Error al restaurar producto:', error);
+    res.status(500).json({ message: 'Error al dar de alta producto' });
+  }
+};

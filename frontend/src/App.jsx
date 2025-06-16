@@ -37,6 +37,7 @@ import VerPromocion from './pages/Promociones/VerPromocion';
 import VerProductosPromocion from './pages/Promociones/VerProductos.jsx';
 import Rubros from './pages/Rubros';
 import VerProductosRubro from './pages/Rubros/VerProductosRubro.jsx';
+import ProductosEliminados from './pages/Productos/ProductosEliminados.jsx';
 import './App.css';
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
         <Route path="promociones/ver/:id/productos" element={<VerProductosPromocion />} />
         <Route path="/rubros" element={<Rubros />} />
         <Route path="rubros/:id/productos" element={<VerProductosRubro />} />
+        <Route path="productos/eliminados" element={<ProductosEliminados />} />
 
       </Route>
     </Routes>

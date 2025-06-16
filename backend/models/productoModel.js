@@ -80,3 +80,21 @@ exports.getByRubroId = (idRubro) => {
     WHERE producto.id_rubro = $1 AND producto.fecha_baja IS NULL
   `, [idRubro]);
 };
+
+exports.getEliminados = () => {
+  return db.query(`
+    SELECT producto.*, 
+           rubro.nombre AS rubro_nombre,
+           proveedor.nombre AS proveedor_nombre
+    FROM producto
+    LEFT JOIN rubro ON producto.id_rubro = rubro.id
+    LEFT JOIN proveedor ON producto.id_proveedor = proveedor.id
+    WHERE producto.fecha_baja IS NOT NULL
+  `);
+};
+
+exports.restaurar = (id) => {
+  return db.query(`
+    UPDATE producto SET fecha_baja = NULL WHERE id = $1
+  `, [id]);
+};
