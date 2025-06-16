@@ -48,11 +48,11 @@ export default function VerPromocion() {
         </div>
         <div className="mb-3">
           <label className="form-label">Fecha inicio:</label>
-          <div className="form-control bg-light">{promo.fecha_inicio}</div>
+          <div className="form-control bg-light">{new Date(promo.fecha_inicio).toLocaleDateString('es-AR')}</div>
         </div>
         <div className="mb-3">
           <label className="form-label">Fecha fin:</label>
-          <div className="form-control bg-light">{promo.fecha_fin}</div>
+          <div className="form-control bg-light">{new Date(promo.fecha_fin).toLocaleDateString('es-AR')}</div>
         </div>
       </div>
 

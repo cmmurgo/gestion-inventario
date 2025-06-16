@@ -55,14 +55,20 @@ exports.delete = async (req, res) => {
 
 exports.getActivas = async (req, res) => {
   try {
-    const { rows } = await db.query(`
-      SELECT id, nombre FROM promocion 
-      WHERE fecha_baja IS NULL 
-        AND CURRENT_DATE BETWEEN fecha_inicio AND fecha_fin
-    `);
+    const { rows } = await model.getActivas();
     res.json(rows);
   } catch (error) {
     console.error('Error al obtener promociones activas:', error);
     res.status(500).json({ message: 'Error al obtener promociones activas' });
+  }
+};
+
+exports.getProductosAsociados = async (req, res) => {
+  try {
+    const { rows } = await model.getProductosAsociados(req.params.id);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error al obtener productos de la promoción:', error);
+    res.status(500).json({ message: 'Error al obtener productos de la promoción' });
   }
 };

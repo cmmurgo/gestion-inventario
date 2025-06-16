@@ -27,6 +27,14 @@ export default function Rubros() {
         fetchRubros();
     }, []);
 
+    const [filtroNombre, setFiltroNombre] = useState('');
+    const [filtroCantidad, setFiltroCantidad] = useState('');
+
+    const rubrosFiltrados = rubros.filter(r =>
+        r.nombre.toLowerCase().includes(filtroNombre.toLowerCase()) &&
+        (filtroCantidad ? r.cantidad_productos >= parseInt(filtroCantidad) : true)
+    );
+
     const mostrarMensaje = (texto, tipo) => {
         setMensaje(texto);
         setTipoMensaje(tipo);
@@ -101,6 +109,15 @@ export default function Rubros() {
                 </div>
             )}
 
+            <div className="row mb-3" style={{ maxWidth: '500px' }}>
+                <div className="col">
+                    <input className="form-control" placeholder="🔍 Filtrar por nombre" value={filtroNombre} onChange={e => setFiltroNombre(e.target.value)} />
+                </div>
+                <div className="col">
+                    <input className="form-control" type="number" placeholder="🔍 Mínimo productos" value={filtroCantidad} onChange={e => setFiltroCantidad(e.target.value)} />
+                </div>
+            </div>
+
             <div className="table-responsive" style={{ maxWidth: '500px' }}>
                 <table className="table table-bordered align-middle text-center">
                     <thead className="table-light">
@@ -111,7 +128,7 @@ export default function Rubros() {
                         </tr>
                     </thead>
                     <tbody>
-                        {rubros.map((rubro) => (
+                        {rubrosFiltrados.map((rubro) => (
                             <tr key={rubro.id}>
                                 <td>{rubro.id}</td>
                                 <td>
@@ -126,16 +143,26 @@ export default function Rubros() {
                                         />
                                     ) : (
                                         <span onClick={() => handleEditar(rubro.id, rubro.nombre)} style={{ cursor: 'pointer' }}>
-                                            {rubro.nombre}
+                                            {rubro.nombre} ({rubro.cantidad_productos} productos)
                                         </span>
                                     )}
                                 </td>
                                 <td>
-                                    <span title={rubro.tiene_productos ? "No se puede eliminar: rubro con productos" : "Eliminar rubro"}>
+                                    <button
+                                        className="btn btn-sm btn-secondary me-2"
+                                        onClick={() => navigate(`/rubros/${rubro.id}/productos`)}
+                                    >
+                                        Ver productos
+                                    </button>
+
+                                    <span
+                                        title={rubro.tiene_productos ? 'No se puede eliminar: rubro con productos' : 'Eliminar rubro'}
+                                    >
                                         <button
                                             className="btn btn-sm btn-danger"
-                                            onClick={() => handleEliminar(rubro.id)}
                                             disabled={rubro.tiene_productos}
+                                            onClick={() => handleEliminar(rubro.id)}
+                                            style={{ opacity: rubro.tiene_productos ? 0.4 : 1 }}
                                         >
                                             <FaTrash />
                                         </button>

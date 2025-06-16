@@ -6,6 +6,16 @@ exports.getAll = () => {
   `);
 };
 
+exports.getActivas = () => {
+  return db.query(`
+    SELECT id, nombre 
+    FROM promocion 
+    WHERE fecha_baja IS NULL 
+      AND CURRENT_DATE >= fecha_inicio
+      AND (fecha_fin IS NULL OR CURRENT_DATE <= fecha_fin)
+  `);
+};
+
 exports.getById = (id) => {
   return db.query(`
     SELECT * FROM promocion WHERE id = $1 AND fecha_baja IS NULL
@@ -39,5 +49,15 @@ exports.update = (id, data) => {
 exports.delete = (id) => {
   return db.query(`
     UPDATE promocion SET fecha_baja = CURRENT_DATE WHERE id = $1
+  `, [id]);
+};
+
+exports.getProductosAsociados = (id) => {
+  return db.query(`
+    SELECT producto.id, producto.nombre, producto.precio_venta, rubro.nombre AS rubro
+    FROM producto
+    LEFT JOIN rubro ON producto.id_rubro = rubro.id
+    WHERE producto.id_promocion = $1
+    ORDER BY producto.nombre
   `, [id]);
 };

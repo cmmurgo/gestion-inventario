@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getPromociones, eliminarPromocion } from '../../services/promocionService';
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import VerProductosPromocion from "./VerProductos.jsx";
+
 
 export default function Promociones() {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function Promociones() {
   const indexOfFirst = indexOfLast - itemsPerPage;
   const currentPromos = filtrados.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filtrados.length / itemsPerPage);
+  const [mostrarInactivas, setMostrarInactivas] = useState(true);
 
   useEffect(() => {
     getPromociones()
@@ -35,13 +38,21 @@ export default function Promociones() {
   }, []);
 
   useEffect(() => {
-    const filtrados = promos.filter(p =>
-      (idFiltro ? p.id.toString().includes(idFiltro) : true) &&
-      (nombreFiltro ? p.nombre.toLowerCase().includes(nombreFiltro.toLowerCase()) : true)
-    );
+    const hoy = new Date();
+
+    const filtrados = promos.filter(p => {
+      const fechaFin = new Date(p.fecha_fin);
+      const coincideId = idFiltro ? p.id.toString().includes(idFiltro) : true;
+      const coincideNombre = nombreFiltro ? p.nombre.toLowerCase().includes(nombreFiltro.toLowerCase()) : true;
+
+      const esActiva = fechaFin >= hoy;
+
+      return coincideId && coincideNombre && (mostrarInactivas || esActiva);
+    });
+
     setFiltrados(filtrados);
     setCurrentPage(1);
-  }, [idFiltro, nombreFiltro, promos]);
+  }, [idFiltro, nombreFiltro, promos, mostrarInactivas]);
 
   const handleNuevo = () => navigate('/promociones/crear');
   const handleVer = (id) => navigate(`/promociones/ver/${id}`);
@@ -86,6 +97,16 @@ export default function Promociones() {
         <div className="col-md-5">
           <input type="text" className="form-control" placeholder="🔍 Buscar por nombre" value={nombreFiltro} onChange={(e) => setNombreFiltro(e.target.value)} />
         </div>
+
+      </div>
+
+      <div className="form-check mb-3">
+        <input
+          className="form-check-input" type="checkbox" id="checkInactivas" checked={mostrarInactivas} onChange={() => setMostrarInactivas(!mostrarInactivas)}
+        />
+        <label className="form-check-label" htmlFor="checkInactivas">
+          Mostrar promociones inactivas
+        </label>
       </div>
 
       <div className="table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
@@ -97,18 +118,32 @@ export default function Promociones() {
               <th>PORCENTAJE</th>
               <th>FECHA INICIO</th>
               <th>FECHA FIN</th>
+              <th>ESTADO</th>
+              <th>PRODUCTOS INCLUIDOS</th>
               <th>ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {currentPromos.length > 0 ? (
               currentPromos.map(promo => (
-                <tr key={promo.id}>
+                <tr key={promo.id} className={new Date(promo.fecha_fin) < new Date() ? 'table-secondary' : ''}>
                   <td>{promo.id}</td>
                   <td>{promo.nombre}</td>
                   <td>{promo.porcentaje}%</td>
-                  <td>{promo.fecha_inicio}</td>
-                  <td>{promo.fecha_fin}</td>
+                  <td>{new Date(promo.fecha_inicio).toLocaleDateString('es-AR')}</td>
+                  <td>{new Date(promo.fecha_fin).toLocaleDateString('es-AR')}</td>
+                  <td>
+                    {new Date(promo.fecha_fin) >= new Date() ? (
+                      <span className="badge bg-success">Activa</span>
+                    ) : (
+                      <span className="badge bg-danger">Inactiva</span>
+                    )}
+                  </td>
+                  <td>
+                    <button className="btn btn-link text-info me-2" onClick={() => navigate(`/promociones/ver/${promo.id}/productos`)}>
+                      Ver productos
+                    </button>
+                  </td>
                   <td>
                     <button className="btn btn-link text-primary me-2" onClick={() => handleVer(promo.id)}><FaEye /></button>
                     <button className="btn btn-link text-warning me-2" onClick={() => handleEditar(promo.id)}><FaEdit /></button>

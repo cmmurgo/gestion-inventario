@@ -126,6 +126,9 @@ export default function Productos() {
 
       <div className="d-flex justify-content-between mt-3">
         <button className="btn btn-success" onClick={handleNuevo}>NUEVO PRODUCTO</button>
+        <button className="btn btn-outline-danger" onClick={() => navigate('/productos/eliminados')}>
+          VER PRODUCTOS ELIMINADOS
+        </button>
         <button className="btn btn-outline-secondary" onClick={() => navigate('/rubros')}>
           GESTION DE RUBROS
         </button>

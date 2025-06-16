@@ -15,4 +15,5 @@ export const getPromocionById = (id) => axios.get(`${API}/${id}`, authConfig());
 export const crearPromocion = (data) => axios.post(API, data, authConfig());
 export const actualizarPromocion = (id, data) => axios.put(`${API}/${id}`, data, authConfig());
 export const eliminarPromocion = (id) => axios.delete(`${API}/${id}`, authConfig());
-export const getPromocionesActivas = () => axios.get(API, authConfig());
+export const getPromocionesActivas = () => axios.get(`${API}/activas`, authConfig());
+export const getProductosByPromocion = (id) => axios.get(`${API}/${id}/productos`, authConfig());
