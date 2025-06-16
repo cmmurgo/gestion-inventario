@@ -46,7 +46,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     await model.delete(req.params.id);
-    res.json({ message: 'Promoción eliminada (baja lógica)' });
+    res.json({ message: 'Promoción dada de baja correctamente' });
   } catch (err) {
     console.error('Error en delete promociones:', err);
     res.status(500).json({ message: 'Error al eliminar promoción', error: err });
