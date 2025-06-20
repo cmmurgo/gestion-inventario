@@ -1,0 +1,101 @@
+/* Asegurar scroll natural y responsive design */
+html, body {
+  height: auto !important;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+}
+
+/* Contenedores flexibles */
+.min-vh-100 {
+  min-height: 100vh !important;
+  height: auto !important;
+}
+
+/* Optimización para móviles */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .card-body {
+    padding: 1rem !important;
+  }
+  
+  .btn {
+    font-size: 0.875rem;
+  }
+}
+
+/* Scroll suave para contenedores internos */
+div[style*="overflowY: auto"] {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+/* Webkit scrollbar styling */
+div[style*="overflowY: auto"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+div[style*="overflowY: auto"]::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+div[style*="overflowY: auto"]::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+div[style*="overflowY: auto"]::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+
+
+.custom-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f2f2f2;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.custom-link:hover,
+.custom-link.active {
+  background-color: #d9d9d9;
+  color: #000;
+}
+
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 64px; /* Puedes ajustar este valor */
+}
+
+.main {
+  flex: 1;
+  overflow: hidden;
+}
+
+.alert {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.alert.show {
+  opacity: 1;
+  transform: translateY(0);
+}
