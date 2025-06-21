@@ -7,7 +7,20 @@ exports.buscarProductoPorCodigo = async (codigo) => {
        p.precio_venta as precio_venta, p.stock_minimo,   
        pr.nombre as promocion_nombre, 
        pr.condiciones as promocion_condiciones,  
-       pr.porcentaje as porcentaje 
+       CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+          THEN pr.porcentaje
+          ELSE 0
+        END as porcentaje, 
+        CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+            THEN 'Activa'
+          ELSE 'Inactiva'
+        END as estado_promocion
        FROM producto p
     INNER JOIN rubro r on r.id=p.id_rubro
     LEFT JOIN promocion pr on pr.id=p.id_promocion
@@ -24,7 +37,20 @@ exports.getAllProductos = async () => {
     `SELECT p.id, p.nombre, r.nombre as categoria, p.descripcion, p.precio_costo, p.precio_venta, p.stock_minimo,   
        pr.nombre as promocion_nombre, 
        pr.condiciones as promocion_condiciones,  
-       pr.porcentaje as porcentaje 
+       CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+          THEN pr.porcentaje
+          ELSE 0
+        END as porcentaje,
+        CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+            THEN 'Activa'
+          ELSE 'Inactiva'
+        END as estado_promocion
     FROM producto p
     INNER JOIN rubro r on r.id=p.id_rubro
     LEFT JOIN promocion pr on pr.id=p.id_promocion
@@ -40,7 +66,20 @@ exports.buscarProductoPorId = async (id) => {
     `SELECT p.id, p.nombre, r.nombre as categoria, p.descripcion, p.precio_costo, p.precio_venta, p.stock_minimo,   
        pr.nombre as promocion_nombre, 
        pr.condiciones as promocion_condiciones,  
-       pr.porcentaje as porcentaje 
+       CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+          THEN pr.porcentaje
+          ELSE 0
+        END as porcentaje,
+        CASE 
+          WHEN pr.id IS NOT NULL 
+              AND CURRENT_DATE BETWEEN pr.fecha_inicio AND pr.fecha_fin 
+              AND pr.fecha_baja IS NULL
+            THEN 'Activa'
+          ELSE 'Inactiva'
+        END as estado_promocion
        FROM producto p
      INNER JOIN rubro r on r.id=p.id_rubro
      LEFT JOIN promocion pr on pr.id=p.id_promocion
