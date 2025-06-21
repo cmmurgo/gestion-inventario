@@ -38,6 +38,17 @@ import VerProductosPromocion from './pages/Promociones/VerProductos.jsx';
 import Rubros from './pages/Rubros';
 import VerProductosRubro from './pages/Rubros/VerProductosRubro.jsx';
 import ProductosEliminados from './pages/Productos/ProductosEliminados.jsx';
+
+import IndexProveedores from './pages/Proveedores/IndexProveedores.jsx';
+import CrearProveedor from './pages/Proveedores/CrearProveedor.jsx';
+import EditarProveedor from './pages/Proveedores/EditarProveedor.jsx';
+import VerProveedor from './pages/Proveedores/VerProveedor.jsx';
+
+import IndexOrdenCompra from './pages/OrdenCompra/index.jsx';
+import CrearOrdenCompra from './pages/OrdenCompra/CrearOrdenCompra.jsx';
+import EditarOrdenCompra from './pages/OrdenCompra/EditarOrdenCompra.jsx';
+import VerOrdenCompra from './pages/OrdenCompra/VerOrdenCompra.jsx';
+
 import './App.css';
 
 function App() {
@@ -86,6 +97,18 @@ function App() {
         <Route path="rubros/:id/productos" element={<VerProductosRubro />} />
         <Route path="productos/eliminados" element={<ProductosEliminados />} />
 
+        {/* Rutas para proveedores */}
+        <Route path="proveedores" element={<IndexProveedores />} />
+        <Route path="proveedores/crear" element={<CrearProveedor />} />
+        <Route path="proveedores/editar/:id" element={<EditarProveedor />} />
+        <Route path="proveedores/ver/:id" element={<VerProveedor />} />
+
+        {/* Rutas para órdenes de compra */}
+        <Route path="compras" element={<IndexOrdenCompra />} />
+        <Route path="compras/crear" element={<CrearOrdenCompra />} />
+        <Route path="compras/editar/:id" element={<EditarOrdenCompra />} />
+        <Route path="compras/ver/:id" element={<VerOrdenCompra />} />
+        
       </Route>
     </Routes>
 
