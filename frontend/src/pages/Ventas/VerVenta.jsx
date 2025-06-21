@@ -195,6 +195,12 @@ function VerVenta() {
                     <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
                     <p><strong>Nombre Promoción:</strong> {productoSeleccionado.promocion_nombre ?? ' - '}</p> 
                     <p><strong>Condiciones de Promoción:</strong> {productoSeleccionado.promocion_condiciones ?? ' - '}</p> 
+                    <p>
+                      <strong>Estado de la Promoción:</strong>{' '}
+                      <span style={{ color: productoSeleccionado.estado_promocion === 'Activa' ? 'green' : 'red' }}>
+                        {productoSeleccionado.estado_promocion ?? ' - '}
+                      </span>
+                    </p>
                 </div>
                 <div className="modal-footer">
                   <button className="btn btn-secondary" onClick={() => setModalProductoVisible(false)}>Cerrar</button>
