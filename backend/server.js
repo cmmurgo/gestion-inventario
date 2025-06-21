@@ -13,7 +13,8 @@ const ventasRoutes = require('./routes/ventas');
 const productosRoutes = require('./routes/productos');
 const promocionesRoutes = require('./routes/promociones');
 const rubrosRoutes = require('./routes/rubros');
-const proveedorRoutes = require('./routes/proveedoresT');
+const proveedorRoutes = require('./routes/proveedores');
+const ordenCompraRoutes = require('./routes/ordenCompra'); // Integración de órdenes de compra
 
 // Middlewares primero
 app.use(cors());
@@ -31,6 +32,7 @@ app.use('/api/productos', productosRoutes);
 app.use('/api/promociones', promocionesRoutes);
 app.use('/api/rubros', rubrosRoutes);
 app.use('/api/proveedores', proveedorRoutes);
+app.use('/api/ordenes-compra', ordenCompraRoutes);
 
 // Puerto
 const PORT = process.env.PORT || 3001;
