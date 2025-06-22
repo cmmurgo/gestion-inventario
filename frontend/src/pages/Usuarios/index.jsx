@@ -85,18 +85,18 @@ export default function Usuarios() {
           setUsuarios(nuevosUsuarios);
           const nuevosFiltrados = usuariosFiltrados.filter((u) => u.id !== usuarioAEliminar);
           setUsuariosFiltrados(nuevosFiltrados);
-  
+
           setMensaje('Usuario eliminado con éxito');
           setTipoMensaje('success');
         } else {
           setMensaje('Error al eliminar el usuario');
           setTipoMensaje('error');
         }
-  
+
         // Mostrar el cartel
         setMostrarMensaje(true);
         setTimeout(() => setMostrarMensaje(false), 3000);
-  
+
         // Cerrar modal manualmente
         const modal = bootstrap.Modal.getInstance(modalRef.current);
         if (modal) modal.hide();
@@ -107,12 +107,12 @@ export default function Usuarios() {
         setTipoMensaje('error');
         setMostrarMensaje(true);
         setTimeout(() => setMostrarMensaje(false), 3000);
-  
+
         const modal = bootstrap.Modal.getInstance(modalRef.current);
         if (modal) modal.hide();
       });
   };
-  
+
   const handleNuevoUsuario = () => {
     navigate('/usuarios/crear');
   };
@@ -137,7 +137,7 @@ export default function Usuarios() {
       <div
         className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : ''}`}
         role="alert"
-        >
+      >
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
@@ -195,6 +195,7 @@ export default function Usuarios() {
                         <button
                           className="btn btn-link text-warning me-2"
                           onClick={() => handleEditarUsuario(usuario.id)}
+                          data-testid={`editar-${usuario.id}`}
                         >
                           <FaEdit />
                         </button>
@@ -217,7 +218,7 @@ export default function Usuarios() {
           </tbody>
         </table>
       </div>
-     
+
       {rol === 'admin' && (
         <div className="d-flex justify-content-between mt-3">
           <button className="btn btn-success" onClick={handleNuevoUsuario}>
@@ -263,7 +264,7 @@ export default function Usuarios() {
                 <button
                   type="button"
                   className="btn btn-success"
-                  onClick={confirmarEliminacion}           
+                  onClick={confirmarEliminacion}
                 >
                   OK
                 </button>
