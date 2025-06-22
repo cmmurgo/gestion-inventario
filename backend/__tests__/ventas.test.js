@@ -12,34 +12,44 @@ const tokenAdmin = jwt.sign(
 let testVentaId;
 
 beforeAll(async () => {
-  await db.query(`DELETE FROM usuario WHERE id = 9999`);
-  await db.query(`
-    INSERT INTO usuario (id, nombre, email, clave, rol)
-    VALUES (9999, 'Admin QA', 'adminqa@qa.com',
-    '$2b$10$abcdabcdabcdabcdabcdababcdefabcdefabcdefabcdefabcdef', 'admin')
-  `);
-
-  await db.query(`DELETE FROM cliente WHERE id = 5555`);
-  await db.query(`
-    INSERT INTO cliente (id, nombre, apellido, email, cuit_cuil, direccion, telefono)
-    VALUES (5555, 'Cliente QA', 'Test', 'clienteqa@test.com', '20111222333', 'Fake 123', '1122334455')
-  `);
+  // Limpiar primero las ventas y movimientos por seguridad
+  await db.query(`DELETE FROM movimientos WHERE id_operacion IN (SELECT id FROM venta WHERE id_cliente = 5555)`);
+  await db.query(`DELETE FROM detalle_venta WHERE id_venta IN (SELECT id FROM venta WHERE id_cliente = 5555)`);
+  await db.query(`DELETE FROM venta WHERE id_cliente = 5555`);
 
   await db.query(`DELETE FROM producto WHERE id = 7777`);
   await db.query(`
     INSERT INTO producto (id, nombre, id_rubro, precio_costo, precio_venta, stock_minimo, id_proveedor)
     VALUES (7777, 'Producto QA Venta', 1, 80, 120, 5, 1)
+    ON CONFLICT (id) DO NOTHING
+  `);
+
+  await db.query(`
+    INSERT INTO cliente (id, nombre, apellido, email, cuit_cuil, direccion, telefono)
+    VALUES (5555, 'Cliente QA', 'Test', 'clienteqa@test.com', '20111222333', 'Fake 123', '1122334455')
+    ON CONFLICT (id) DO UPDATE SET nombre = 'Cliente QA'
+  `);
+
+  await db.query(`
+    INSERT INTO usuario (id, nombre, email, clave, rol)
+    VALUES (9999, 'Admin QA', 'adminqa@qa.com',
+    '$2b$10$abcdabcdabcdabcdabcdababcdefabcdefabcdefabcdefabcdef', 'admin')
+    ON CONFLICT (id) DO NOTHING
   `);
 });
 
 afterAll(async () => {
-  await db.query(`DELETE FROM movimientos WHERE id_operacion = $1`, [testVentaId]);
-  await db.query(`DELETE FROM detalle_venta WHERE id_venta = $1`, [testVentaId]);
-  await db.query(`DELETE FROM venta WHERE id = $1`, [testVentaId]);
+  if (testVentaId) {
+    await db.query(`DELETE FROM movimientos WHERE id_operacion = $1`, [testVentaId]);
+    await db.query(`DELETE FROM detalle_venta WHERE id_venta = $1`, [testVentaId]);
+    await db.query(`DELETE FROM venta WHERE id = $1`, [testVentaId]);
+  }
+
   await db.query(`DELETE FROM producto WHERE id = 7777`);
-  await db.query(`DELETE FROM cliente WHERE id = 5555`);
-  await db.query(`DELETE FROM usuario WHERE id = 9999`);
-  await db.end();
+  // No eliminar cliente ni usuario si hay riesgo de FK
+  // await db.query(`DELETE FROM cliente WHERE id = 5555`);
+  // await db.query(`DELETE FROM usuario WHERE id = 9999`);
+  // await db.end(); // solo si este es el único archivo que ejecutás
 });
 
 describe('Pruebas funcionales – Módulo de Ventas', () => {
@@ -57,10 +67,7 @@ describe('Pruebas funcionales – Módulo de Ventas', () => {
       fecha: new Date().toISOString().slice(0, 10),
       id_cliente: 5555,
       detalles: [
-        {
-          id_producto: 7777,
-          cantidad: 1
-        }
+        { id_producto: 7777, cantidad: 1 }
       ]
     };
 
@@ -93,12 +100,7 @@ describe('Pruebas funcionales – Módulo de Ventas', () => {
       .send({
         fecha: new Date().toISOString().slice(0, 10),
         id_cliente: 5555,
-        detalles: [
-          {
-            id_producto: 7777,
-            cantidad: 2
-          }
-        ]
+        detalles: [{ id_producto: 7777, cantidad: 2 }]
       });
 
     expect(res.statusCode).toBe(200);
