@@ -12,7 +12,7 @@ const tokenAdmin = jwt.sign(
 let testClienteId;
 
 beforeAll(async () => {
-  // Insertar usuario admin QA (si no existe)
+  await db.query(`DELETE FROM usuario WHERE email = 'adminqa@qa.com'`);
   await db.query(`
     INSERT INTO usuario (id, nombre, email, clave, rol)
     VALUES (9999, 'Admin QA', 'adminqa@qa.com', '$2b$10$abcdabcdabcdabcdabcdababcdefabcdefabcdefabcdefabcdef', 'admin')

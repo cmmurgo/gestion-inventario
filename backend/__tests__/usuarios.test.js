@@ -15,6 +15,7 @@ let testUserId;
 
 beforeAll(async () => {
   const hashed = await bcrypt.hash('clave123', 10);
+  await db.query(`DELETE FROM usuario WHERE email = 'adminqa@qa.com'`);
   await db.query(`
     INSERT INTO usuario (id, nombre, email, clave, rol)
     VALUES (9999, 'Admin QA', 'adminqa@qa.com', $1, 'admin')
