@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "cypress open",
+    "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "start": "react-scripts start"
   },
