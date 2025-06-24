@@ -65,7 +65,9 @@ export default function CrearProducto() {
         id_proveedor: ''
       });
     } catch (err) {
-      console.error(err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error(err);
+      }
       setMensaje('Error al crear producto');
       setTipoMensaje('error');
     }
@@ -139,7 +141,7 @@ export default function CrearProducto() {
         </div>
       </div>
 
-      <div className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}>
+      <div role="alert" className={`alert text-center mt-3 ${tipoMensaje === 'success' ? 'alert-success' : 'alert-danger'} ${mostrarMensaje ? 'show' : 'd-none'}`}>
         {tipoMensaje === 'success' ? '✅' : '❌'} {mensaje}
       </div>
 
