@@ -10,7 +10,10 @@ function CrearVenta() {
   const navigate = useNavigate();
   const [clientes, setClientes] = useState([]);
   const [productos, setProductos] = useState([]);
-  const [fecha, setFecha] = useState('');
+  const [fecha, setFecha] = useState(() => {
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0]; // formato YYYY-MM-DD
+  });
   const [idCliente, setIdCliente] = useState('');
   const [detalles, setDetalles] = useState([]);
   const [mensaje, setMensaje] = useState('');
@@ -182,7 +185,6 @@ function CrearVenta() {
       console.error('Error al obtener datos del producto:', error);
     }
   };
-  
 
   return (
     <div style={{ padding: '2rem' }}>
@@ -304,6 +306,13 @@ function CrearVenta() {
                 <p><strong>Stock disponible:</strong> {productoSeleccionado.stock_minimo}</p>
                 <p><strong>Nombre Promoción:</strong> {productoSeleccionado.promocion_nombre ?? ' - '}</p> 
                 <p><strong>Condiciones de Promoción:</strong> {productoSeleccionado.promocion_condiciones ?? ' - '}</p> 
+                <p>
+                  <strong>Estado de la Promoción:</strong>{' '}
+                  <span style={{ color: productoSeleccionado.estado_promocion === 'Activa' ? 'green' : 'red' }}>
+                    {productoSeleccionado.estado_promocion ?? ' - '}
+                  </span>
+                </p>
+ 
               </div>
               <div className="modal-footer">
                 <button
